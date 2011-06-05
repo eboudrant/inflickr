@@ -2,7 +2,9 @@
 
 require.paths.unshift('./node_modules/express/lib');
 require.paths.unshift('./lib');
+require.paths.unshift('./');
 
+var FlickrKeys = require('env').FlickrKeys;
 var FlickrAPI = require('flickr').FlickrAPI;
 var url = require("url");
 var express = require("express");
