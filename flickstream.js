@@ -2,17 +2,18 @@
 
 require.paths.unshift('./node_modules/express/lib');
 require.paths.unshift('./lib');
+require.paths.unshift('./');
 
+var FlickrKeys = require('env').FlickrKeys;
 var FlickrAPI = require('flickr').FlickrAPI;
 var url = require("url");
 var express = require("express");
 var http = require("http");
 
-var SECRET="422775555653c273";
-var API_KEY="5bed8006e6eddfa44bc50567bb166107";
 var crypto = require('crypto');
 
-var flickr = new FlickrAPI(API_KEY, SECRET);
+var keys = new FlickrKeys();
+var flickr = new FlickrAPI(keys.api_key, keys.shared_secret);
 
 var port = process.env.VMC_APP_PORT || process.env.C9_PORT || 8001;
 
@@ -61,9 +62,7 @@ app.get('/:tags?',function (req, res) {
     res.writeHead(200, {'Content-Type': 'text/html'});
     res.write('<!DOCTYPE html>\n');
     res.write('<meta charset=utf-8><title>inflickr | uri is a tag</title>\n');
-    
-    var sig = crypto.createHash('md5').update(SECRET+'api_key'+API_KEY+'permsread').digest("hex");
-    
+ 
     flickr.getLoginUrl('read', null, function(err, url, frob) {
         if(flickr.user) {
             res.write('Hi ' + flickr.user.username + ' !<br>');
