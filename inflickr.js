@@ -2,9 +2,9 @@
 
 require.paths.unshift('./node_modules/express/lib');
 require.paths.unshift('./lib');
-require.paths.unshift('./');
+//require.paths.unshift('./');
 
-var FlickrKeys = require('env').FlickrKeys;
+//var FlickrKeys = require('env').FlickrKeys;
 var FlickrAPI = require('flickr').FlickrAPI;
 var url = require("url");
 var express = require("express");
@@ -18,8 +18,6 @@ FlickrKeys.prototype._configure= function(api_key, shared_secret) {
     this.api_key= api_key;
     this.shared_secret= shared_secret;
 };
-
-exports.FlickrKeys = FlickrKeys;
 
 var crypto = require('crypto');
 
