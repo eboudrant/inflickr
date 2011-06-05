@@ -10,6 +10,17 @@ var url = require("url");
 var express = require("express");
 var http = require("http");
 
+var FlickrKeys = function FlickrKeys() {
+    this._configure("5bed8006e6eddfa44bc50567bb166107", "422775555653c273");
+};
+
+FlickrKeys.prototype._configure= function(api_key, shared_secret) { 
+    this.api_key= api_key;
+    this.shared_secret= shared_secret;
+};
+
+exports.FlickrKeys = FlickrKeys;
+
 var crypto = require('crypto');
 
 var keys = new FlickrKeys();
