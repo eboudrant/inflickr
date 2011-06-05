@@ -1,14 +1,11 @@
-// flickstream.js
+// inflickr.js
 
 require.paths.unshift('./node_modules/express/lib');
 require.paths.unshift('./lib');
-//require.paths.unshift('./');
 
-//var FlickrKeys = require('env').FlickrKeys;
 var FlickrAPI = require('flickr').FlickrAPI;
-var url = require("url");
 var express = require("express");
-var http = require("http");
+var url = require("url");
 
 var FlickrKeys = function FlickrKeys() {
     this._configure("5bed8006e6eddfa44bc50567bb166107", "422775555653c273");
@@ -18,8 +15,6 @@ FlickrKeys.prototype._configure= function(api_key, shared_secret) {
     this.api_key= api_key;
     this.shared_secret= shared_secret;
 };
-
-var crypto = require('crypto');
 
 var keys = new FlickrKeys();
 var flickr = new FlickrAPI(keys.api_key, keys.shared_secret);
@@ -64,8 +59,9 @@ app.get('/:tags?',function (req, res) {
     } else {
         console.log('[' + req.client.remoteAddress + '] [' + new Date() + '] someone look for ' + tags);
     }
+    
     if(!tags) {
-        tags = 'smile';
+        tags = 'cloud';
     }
 
     res.writeHead(200, {'Content-Type': 'text/html'});
