@@ -15,7 +15,6 @@ var crypto = require('crypto');
 var flickr = new FlickrAPI(API_KEY, SECRET);
 
 var port = process.env.VMC_APP_PORT || process.env.C9_PORT || 8001;
-var host = "flickstream.cloudfoundry.com";
 
 function fail (err) {
     console.log('processing request...error: ERR: ' + err.code + ' -  ' + err.message);
@@ -51,15 +50,9 @@ app.get('/:tags?',function (req, res) {
     var tags = req.params.tags;
     
     if(flickr.user) {
-<<<<<<< HEAD
-        console.log('[' + new Date() + '] ' + flickr.user.username  + ' look for ' + tags);
-    } else {
-        console.log('[' + new Date() + '] someone look for ' + tags);
-=======
         console.log('[' + req.client.remoteAddress + '] [' + new Date() + '] ' + flickr.user.username  + ' look for ' + tags);
     } else {
         console.log('[' + req.client.remoteAddress + '] [' + new Date() + '] someone look for ' + tags);
->>>>>>> da8d537c9a40dd817d40b2abdb765b98e112706e
     }
     if(!tags) {
         tags = 'smile';
@@ -67,7 +60,7 @@ app.get('/:tags?',function (req, res) {
 
     res.writeHead(200, {'Content-Type': 'text/html'});
     res.write('<!DOCTYPE html>\n');
-    res.write('<meta charset=utf-8><title>Flickstream | uri is a tag</title>\n');
+    res.write('<meta charset=utf-8><title>inflickr | uri is a tag</title>\n');
     
     var sig = crypto.createHash('md5').update(SECRET+'api_key'+API_KEY+'permsread').digest("hex");
     
@@ -103,5 +96,4 @@ app.get('/:tags?',function (req, res) {
 
 app.listen(port);
 
-console.log("Server listening "+ port +"...");
-    
+console.log("Audience is listening "+ port +"...");
