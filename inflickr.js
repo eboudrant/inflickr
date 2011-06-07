@@ -1,7 +1,7 @@
 // inflickr.js
 
-require.paths.unshift('./lib');
 require.paths.unshift('./node_modules/express/lib');
+require.paths.unshift('./flickrnode');
 
 var FlickrAPI = require('flickr').FlickrAPI;
 var express = require("express");
