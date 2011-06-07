@@ -8,7 +8,7 @@ var express = require("express");
 var url = require("url");
 
 var FlickrKeys = function FlickrKeys() {
-    this._configure("5bed8006e6eddfa44bc50567bb166107", "422775555653c273");
+    this._configure(process.env.API_KEY || "57ec3e4f99e66a342446fd0908e5fc3a", process.env.SECRET || "c08ba837c0e446ea");
 };
 
 FlickrKeys.prototype._configure= function(api_key, shared_secret) { 
