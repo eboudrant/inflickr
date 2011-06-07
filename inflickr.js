@@ -1,6 +1,6 @@
 // inflickr.js
 
-require.paths.unshift('./lib');
+require.paths.unshift('./flickrnode');
 require.paths.unshift('./node_modules/express/lib');
 
 var FlickrAPI = require('flickr').FlickrAPI;
@@ -8,7 +8,7 @@ var express = require("express");
 var url = require("url");
 
 var FlickrKeys = function FlickrKeys() {
-    this._configure(process.env.API_KEY || "57ec3e4f99e66a342446fd0908e5fc3a", process.env.SECRET || "c08ba837c0e446ea");
+    this._configure(process.env.API_KEY || "17f1d14ee2c43e10b94ebfd62915869d", process.env.SECRET || "2d965f23923aaebb");
 };
 
 FlickrKeys.prototype._configure= function(api_key, shared_secret) { 
