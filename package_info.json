@@ -1,5 +1,5 @@
 {
-    "name":"inflickr",
+	"name":"inflickr",
 	"version":"0.0.1",
     "author": "Emmanuel Boudrant <emmanuel.boudrant@gmail.com>",
 	"dependencies":{
@@ -7,6 +7,6 @@
         "flickr":""
     },
     "keywords": ["web", "flickr", "photo"],
-    "repository": "git@github.com/inflickr.git",
+    "repository": "git://github.com/visionmedia/express",
     "main": "inflickr"
 }
