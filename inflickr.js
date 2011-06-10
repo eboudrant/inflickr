@@ -27,14 +27,16 @@ function fail (err) {
 
 var app = express.createServer();
 
+app.use(express.cookieParser());
+app.use(express.session({ secret: "dexboys why not" }));
+
 app.get('/auth/', function(req, res){
-    
     flickr.auth.getToken(req.query.frob, function(err, results) {
         if(err) {
             console.log(err.code + " " + err.message);
         }
-        flickr.setAuthenticationToken(results.token);
-        flickr.setUser(results.user);
+        req.session.authenticationToken(results.token);
+        req.session.user(results.user);
         res.redirect('back');
     });    
 });
@@ -54,7 +56,7 @@ app.get('/:tags?',function (req, res) {
     var uri = url.parse(req.url);
     var tags = req.params.tags;
     
-    if(flickr.user) {
+    if(req.session.user) {
         console.log('[' + req.client.remoteAddress + '] [' + new Date() + '] ' + flickr.user.username  + ' look for ' + tags);
     } else {
         console.log('[' + req.client.remoteAddress + '] [' + new Date() + '] someone look for ' + tags);
@@ -69,10 +71,10 @@ app.get('/:tags?',function (req, res) {
     res.write('<meta charset=utf-8><title>inflickr | uri is a tag</title>\n');
  
     flickr.getLoginUrl('read', null, function(err, url, frob) {
-        if(flickr.user) {
-            res.write('Hi ' + flickr.user.username + ' !<br>');
+        if(req.session.user) {
+            res.write('Hi ' + req.session.user.username + ' !<br>');
         } else {    
-            //res.write('<a href=' + url + '>connect on flickr</a><br>');
+            res.write('<a href=' + url + '>connect on flickr</a><br>');
         }
         if(uri.pathname.length > 1) {
             tags = uri.pathname.substring(1);
