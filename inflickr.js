@@ -101,3 +101,24 @@ app.get('/:tags?',function (req, res) {
 app.listen(port);
 
 console.log("Audience is listening "+ port +"...");
+
+/**
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en" manifest="cache.appcache">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  	<title>Lazy Loader - Load HTML and Images on Window Scroll | jQuery Plugins</title>
+  	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<script type="text/javascript" src="lib/jquery-1.6.1.js"></script> 
+	<script type="text/javascript" src="lib/jquery.lazyloader.js"></script> 
+	<script type="text/javascript" > 
+		$(document).ready( function() {
+			$('pre.loadme').lazyLoad();
+			$('pre.morestuff').lazyLoad();
+		} );
+	</script> 
+</head>
+<body><li class="friend"><pre class="loadme" ><!-- <div class="friend_rec"><img src="" /></div> --></pre></li> 
+</body>
+</html>
+*/
