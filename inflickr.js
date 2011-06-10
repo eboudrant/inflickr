@@ -6,6 +6,17 @@ require.paths.unshift('./node_modules/express/lib');
 var FlickrAPI = require('flickr').FlickrAPI;
 var express = require("express");
 var url = require("url");
+var sys = require('sys'),
+var fs = require('fs'),
+
+var stream;
+fs.readFile('www/stream.html', function (err, data) {
+    if (err) {
+        throw err;
+    }
+    stream = data;
+});
+
 
 var FlickrKeys = function FlickrKeys() {
     this._configure(process.env.API_KEY || "17f1d14ee2c43e10b94ebfd62915869d", process.env.SECRET || "2d965f23923aaebb");
