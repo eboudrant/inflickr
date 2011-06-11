@@ -19,6 +19,9 @@ var size = 52;
 var perStrip = 4;
 
 console.log("Using " + keys.api_key + "/" + keys.shared_secret );
+console.log(process.env);
+console.log('VMC_APP_INSTANCE=' + process.env.VMC_APP_INSTANCE);
+console.log('HOME=' +process.env.HOME);
 
 function fail(err) {
     console.log('processing request...error: ERR: ' + err.code + ' -  ' + err.message);
@@ -38,10 +41,6 @@ app.get('/auth/', function(req, res) {
         res.redirect('back');
     });
 });
-
-console.log('VMC_APP_INSTANCE=' + process.env.VMC_APP_INSTANCE);
-console.log('HOME=' +process.env.HOME);
-console.log(process.env);
 
 var header = null;
 fs.readFile(process.env.HOME + '/www/fragments/header.html', function(err, data) {
