@@ -45,7 +45,7 @@ fs.readFile(process.env.HOME + '/www/fragments/header.html', function(err, data)
     console.log('www/fragments/header.html in cache\n' + data);
 });
 var footer = null;
-fs.readFile('www/fragments/footer.html', function(err, data) {
+fs.readFile(process.env.VMC_APP_INSTANCE.dir + '/www/fragments/footer.html', function(err, data) {
     if (err) throw err;
     footer = data;
     console.log('www/fragments/footer.html in cache\n' + data);
