@@ -20,12 +20,10 @@ var perStrip = 4;
 
 console.log("Using " + keys.api_key + "/" + keys.shared_secret );
 console.log(process.env);
-console.log('VMC_APP_INSTANCE=' + process.env.VMC_APP_INSTANCE);
-console.log('HOME=' +process.env.HOME);
 
 function fail(err) {
     console.log('processing request...error: ERR: ' + err.code + ' -  ' + err.message);
-}
+} 
 var app = express.createServer();
 app.use(express.cookieParser());
 app.use(express.session({
