@@ -42,16 +42,19 @@ var header = null;
 fs.readFile('www/fragments/header.html', function(err, data) {
     if (err) throw err;
     header = data;
+    console.log('www/fragments/header.html in cache');
 });
 var footer = null;
 fs.readFile('www/fragments/footer.html', function(err, data) {
     if (err) throw err;
     footer = data;
+    console.log('www/fragments/footer.html in cache');
 });
 var css = null;
 fs.readFile('www/lib/default.css', function(err, data) {
     if (err) throw err;
     css = data;
+    console.log('www/lib/default.css in cache');
 });
 app.get('/lib/style.css', function(req, res) {
     res.writeHead(200, {
@@ -63,6 +66,7 @@ var jquery = null;
 fs.readFile('www/lib/jquery-1.6.1.min.js', function(err, data) {
     if (err) throw err;
     jquery = data;
+    console.log('www/lib/jquery-1.6.1.min.js in cache');
 });
 app.get('/lib/jquery-1.6.1.min.js', function(req, res) {
     res.writeHead(200, {
@@ -74,6 +78,7 @@ var scrollTo = null;
 fs.readFile('www/lib/jquery.scrollTo.js', function(err, data) {
     if (err) throw err;
     scrollTo = data;
+    console.log('www/lib/jquery.scrollTo.js in cache');
 });
 app.get('/lib/jquery.scrollTo.js', function(req, res) {
     res.writeHead(200, {
@@ -85,6 +90,7 @@ var lazyloader = null;
 fs.readFile('www/lib/jquery.lazyloader.js', function(err, data) {
     if (err) throw err;
     lazyloader = data;
+    console.log('www/lib/jquery.lazyloader.js in cache');
 });
 app.get('/lib/jquery.lazyloader.min.js', function(req, res) {
     res.writeHead(200, {
