@@ -170,8 +170,8 @@ app.get('/:tags?', function(req, res) {
             res.write('Hi ' + req.session.user.username + ' !<br>');
         }
         else {
-            res.write('<a href=' + url + '>connect on flickr</a> | ');
-            res.write('<a href="#" onclick="$(document).scrollTo( \'100%\', 3000); autoScroll = true; return false;">To lazy to scroll</a><br>');
+            //res.write('<a href=' + url + '>connect on flickr</a> | ');
+            res.write('<a href="#" onclick="$(document).scrollTo( \'100%\', 3000); autoScroll = true; return false;">automatic scrolling</a><br>');
         }
         if (uri.pathname.length > 1) {
             tags = uri.pathname.substring(1);
