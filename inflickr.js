@@ -38,6 +38,11 @@ app.get('/auth/', function(req, res) {
         res.redirect('back');
     });
 });
+
+console.log(process.env.VMC_APP_INSTANCE);
+console.log(process.env.HOME);
+console.log(process.env);
+
 var header = null;
 fs.readFile(process.env.HOME + '/www/fragments/header.html', function(err, data) {
     if (err) throw err;
