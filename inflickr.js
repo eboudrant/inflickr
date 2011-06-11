@@ -212,6 +212,7 @@ app.get('/:tags?', function(req, res) {
                 }
                 res.write("</div>");
                 res.end(footer);
+                console.log('request ended');
             }
             else {
                 fail(err);
