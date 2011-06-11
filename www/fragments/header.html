@@ -9,28 +9,27 @@
     <script type="text/javascript" src="lib/jquery.lazyloader.min.js"></script>
     <script type="text/javascript" src="lib/jquery.scrollTo.js"></script>
 	<script type="text/javascript" > 
-            var autoScroll = false;
-            var counter = 0;
-            var page = 1;
-			$(document).ready( function()
-			{
-				$('pre.loadme').lazyLoad();
-				$('pre.morestuff').lazyLoad();
-			} );
-            function loadNext(tags) {
-            console.log('calling server...');
-               $.ajax({
-                    url: "/ajax?method=photos&tags="+tags+"&page=" + (++page),
-                    context: document.body,
-                    error : function() { console.log("error"); },
-                    success: function(data){ 
-                        console.log('append new photos to zone');
-                        $('.zone').append(data);
-                        $('pre.loadme').lazyLoad();
-                    }
-                });
-            }
+var autoScroll = false;
+var counter = 0;
+var page = 1;
+$(document).ready(function() {
+    $('pre.loadme').lazyLoad();
+    $('pre.morestuff').lazyLoad();
+});
+function loadNext(tags) {
+    $.ajax({
+        url: "/ajax?method=photos&tags=" + tags + "&page=" + (++page),
+        context: document.body,
+        error: function() {
+            console.log("error");
+        },
+        success: function(data) {
+            $('.zone').append(data);
+            $('pre.loadme').lazyLoad();
+        }
+    });
+}
 	</script> 
 </head>
-<body _onclick="autoScroll = !autoScroll;">
+<body>
 <center>

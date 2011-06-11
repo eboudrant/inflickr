@@ -18,6 +18,8 @@ var port = process.env.VMC_APP_PORT || process.env.C9_PORT || 8001;
 var size = 52;
 var perStrip = 4;
 
+console.log("Using " + keys.api_key + "/" + keys.shared_secret );
+
 function fail(err) {
     console.log('processing request...error: ERR: ' + err.code + ' -  ' + err.message);
 }
