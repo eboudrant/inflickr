@@ -1,0 +1,36 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>inflickr | uri is a tag</title>
+  	<link rel="stylesheet" type="text/css" href="lib/style.css" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<script type="text/javascript" src="lib/jquery-1.6.1.min.js"></script> 
+    <script type="text/javascript" src="lib/jquery.lazyloader.min.js"></script>
+    <script type="text/javascript" src="lib/jquery.scrollTo.js"></script>
+	<script type="text/javascript" > 
+            var autoScroll = false;
+            var counter = 0;
+            var page = 1;
+			$(document).ready( function()
+			{
+				$('pre.loadme').lazyLoad();
+				$('pre.morestuff').lazyLoad();
+			} );
+            function loadNext(tags) {
+            console.log('calling server...');
+               $.ajax({
+                    url: "/ajax?method=photos&tags="+tags+"&page=" + (++page),
+                    context: document.body,
+                    error : function() { console.log("error"); },
+                    success: function(data){ 
+                        console.log('append new photos to zone');
+                        $('.zone').append(data);
+                        $('pre.loadme').lazyLoad();
+                    }
+                });
+            }
+	</script> 
+</head>
+<body _onclick="autoScroll = !autoScroll;">
+<center>
