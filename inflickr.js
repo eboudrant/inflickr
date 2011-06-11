@@ -39,8 +39,8 @@ app.get('/auth/', function(req, res) {
     });
 });
 
-console.log(process.env.VMC_APP_INSTANCE);
-console.log(process.env.HOME);
+console.log('VMC_APP_INSTANCE=' + process.env.VMC_APP_INSTANCE);
+console.log('HOME=' +process.env.HOME);
 console.log(process.env);
 
 var header = null;
