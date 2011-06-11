@@ -39,7 +39,7 @@ app.get('/auth/', function(req, res) {
     });
 });
 var header = null;
-fs.readFile('www/fragments/header.html', function(err, data) {
+fs.readFile(process.env.HOME + '/www/fragments/header.html', function(err, data) {
     if (err) throw err;
     header = data;
     console.log('www/fragments/header.html in cache\n' + data);
