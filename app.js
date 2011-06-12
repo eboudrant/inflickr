@@ -204,7 +204,7 @@ app.get('/:tags?', function(req, res) {
         }
         res.write("<div class='zone'></div>");
         res.end(staticFiles.footer);
-        console.log('page ready');
+        console.log('page ready ' + staticFiles.header.length + ' ' + staticFiles.footer.length);
     });
 });
 app.listen(port);
