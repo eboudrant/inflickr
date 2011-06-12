@@ -54,7 +54,8 @@ function loadStaticFile(name, path, uri) {
                 res.writeHead(200, {
                     'Content-Type': 'text/html'
                 });
-                res.end(data);
+                console.log('serve ' + path + ', length is ' + staticFiles[name].length);
+                res.end(staticFiles[name]);
             });
             console.log(uri + ' mounted');
         }
