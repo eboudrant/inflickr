@@ -1,4 +1,4 @@
-// inflickr.js
+
 require.paths.unshift('./flickrnode');
 require.paths.unshift('./node_modules/express/lib');
 var FlickrAPI = require('flickr').FlickrAPI;
@@ -40,110 +40,120 @@ app.get('/auth/', function(req, res) {
     });
 });
 
-var header = null;
-fs.readFile('./www/fragments/header.html', function(err, data) {
-    if (err) throw err;
-    header = data;
-    console.log('./www/fragments/header.html in cache\n' + data);
-});
-var footer = null;
-fs.readFile('./www/fragments/footer.html', function(err, data) {
-    if (err) throw err;
-    footer = data;
-    console.log('www/fragments/footer.html in cache\n' + data);
-});
-var css = null;
-fs.readFile('./www/lib/default.css', function(err, data) {
-    if (err) throw err;
-    css = data;
-    console.log('www/lib/default.css in cache\n' + data);
-});
-app.get('/lib/style.css', function(req, res) {
-    res.writeHead(200, {
-        'Content-Type': 'text/stylesheet'
+var staticFiles = {};
+
+function loadStaticFile(name, path, uri) {
+    var header = null;
+    fs.readFile(path, function(err, data) {
+        if (err) throw err;
+        staticFiles[name] = data;
+        console.log(path + ' in cache, length is ' + data.length);
     });
-    res.end(css);
-});
-var jquery = null;
-fs.readFile('./www/lib/jquery-1.6.1.min.js', function(err, data) {
-    if (err) throw err;
-    jquery = data;
-    console.log('www/lib/jquery-1.6.1.min.js in cache\n' + data);
-});
-app.get('/lib/jquery-1.6.1.min.js', function(req, res) {
-    res.writeHead(200, {
-        'Content-Type': 'text/javascript'
-    });
-    res.end(jquery);
-});
-var scrollTo = null;
-fs.readFile('./www/lib/jquery.scrollTo.js', function(err, data) {
-    if (err) throw err;
-    scrollTo = data;
-    console.log('www/lib/jquery.scrollTo.js in cache\n' + data);
-});
-app.get('/lib/jquery.scrollTo.js', function(req, res) {
-    res.writeHead(200, {
-        'Content-Type': 'text/javascript'
-    });
-    res.end(scrollTo);
-});
-var lazyloader = null;
-fs.readFile('./www/lib/jquery.lazyloader.js', function(err, data) {
-    if (err) throw err;
-    lazyloader = data;
-    console.log('www/lib/jquery.lazyloader.js in cache\n' + data);
-});
-app.get('/lib/jquery.lazyloader.min.js', function(req, res) {
-    res.writeHead(200, {
-        'Content-Type': 'text/javascript'
-    });
-    res.end(lazyloader);
-});
+    if (uri) {
+        app.get(uri, function(req, res) {
+            res.writeHead(200, {
+                'Content-Type': 'text/html'
+            });
+            res.end(staticFiles[name]);
+        });
+    }
+}
+
+loadStaticFile('footer', './www/fragments/footer.html');
+loadStaticFile('header', './www/fragments/header.html');
+loadStaticFile('css', './www/lib/default.css', '/lib/style.css');
+loadStaticFile('jquery','./www/lib/jquery-1.6.1.min.js', '/lib/jquery-1.6.1.min.js');
+loadStaticFile('lazyloader','./www/lib/jquery.lazyloader.min.js', '/lib/jquery.lazyloader.min.js');
+loadStaticFile('scrollTo','./www/lib/jquery.scrollTo.js', '/lib/jquery.scrollTo.js');
+
 app.get('/favicon.ico', function(req, res) {
     res.writeHead(404, "Not found", {
         'Content-Type': 'text/html'
     });
     res.end();
 });
+app.get('/cache.appcache', function(req, res) {
+    res.writeHead(404, "Not found", {
+        'Content-Type': 'text/html'
+    });
+    res.end();
+});
+/*
+app.get('/cache.appcache', function(req, res) {
+    res.writeHead(200, {
+        'Content-Type': 'text/cache-manifest'
+    });
+    res.write('CACHE MANIFEST\n');
+    res.write('# version 0.0.4\n');
+    res.write('\n');
+    res.write('CACHE:\n');
+    res.write('/lib/jquery-1.6.1.min.js\n');
+    res.write('/lib/jquery.lazyloader.min.js\n');
+    res.write('/lib/jquery.scrollTo.js\n');
+    res.write('/lib/style.css\n');
+    res.end();
+});*/
+
 app.get('/ajax', function(req, res) {
     res.writeHead(200, {
         'Content-Type': 'text/html'
     });
     if (req.query.method == 'photos') {
         if (req.session.user) {
-            console.log('[' + req.client.remoteAddress + '] [' + new Date() + '] ' + flickr.user.username + ' more photos for ' + req.query.tags + ' (page ' + req.query.page + ')');
+            console.log('[' + req.client.remoteAddress + '] [' + new Date() + '] ' + flickr.user.username + ' more photos for ' + req.query.tags + '/' + req.query.plat + '/' + req.query.plon + ' (page ' + req.query.page + ')');
         }
         else {
-            console.log('[' + req.client.remoteAddress + '] [' + new Date() + '] more photos for ' + req.query.tags + ' (page ' + req.query.page + ')');
+            console.log('[' + req.client.remoteAddress + '] [' + new Date() + '] more photos for ' + req.query.tags + '/' + req.query.plat + '/' + req.query.plon + ' (page ' + req.query.page + ')');
         }
         var tags = req.query.tags;
+        var lat = req.query.lat;
+        var lon = req.query.lon;
         if (!tags) {
             tags = 'cloud';
         }
-        flickr.photos.search({
+        var parameters = {
             tags: tags,
             per_page: size,
             safe_search: 3,
             page: req.query.page
-        }, function(err, results) {
+        };
+        if (req.query.plat && req.query.plon) {
+            parameters = {
+                lat: req.query.plat,
+                lon: req.query.plon,
+                per_page: size,
+                safe_search: 3,
+                page: req.query.page
+            };
+        }
+        var preLoad = '\n<pre class=\'loadme\'><!-- ';
+        var postLoad = '</script>--></pre>\n';
+        if (req.query.page == 1) {
+            preLoad = '';
+            postLoad = '';
+        }
+        flickr.photos.search(parameters, function(err, results) {
             if (!err) {
                 var photos = results.photo;
-                for (var i = 0; i < photos.length; i++) {
-                    link = '\n<pre class=\'loadme\'><!-- <span style="display:block;width:' + (270 * perStrip) + 'px;height:240px;background-color:#000;vertical-align: middle;">';
+                for (var i = 0; i < photos.length;) {
+                    link = preLoad + '<span style="display:block;width:' + (270 * perStrip) + 'px;height:240px;background-color:#000;vertical-align: middle;">';
                     for (var j = 0; j < perStrip; j++) {
-                        if (i == 15) {
-                            res.write('<pre class=\'loadme\'><!-- \n<script type="text/javascript">loadNext("'+tags+'");</script>--></pre>\n');
+                        if (i == 10) {
+                            if (req.query.plat && req.query.plon) {
+                                res.write(preLoad + '\n<script type="text/javascript">loadNext();</script>' + postLoad);
+                            } else {
+                                res.write(preLoad + '\n<script type="text/javascript">loadNext("' + tags + '");</script>' + postLoad);
+                            }
                         }
                         var src = 'http://farm' + photos[i].farm + '.static.flickr.com/' + photos[i].server + '/' + photos[i].id + '_' + photos[i].secret + '_m.jpg';
                         var href = 'http://www.flickr.com/photos/' + photos[i].owner + '/' + photos[i].id + '/';
-                        link += '\n\t<a href=' + href + ' target=_BLANK><img src=\'' + src + '\' border=\'0\'/></a>';
+                        link += '\n\t<a id="p_' + i + '" href=' + href + ' target=_BLANK><img src=\'' + src + '\' border=\'0\'/></a>';
                         i++;
                         if (i >= photos.length) {
                             break;
                         }
                     }
-                    link += '</span> <script type="text/javascript">if(autoScroll) $(document).scrollTo( \'100%\', 2000); counter += 4;</script>--></pre>\n';
+                    link += '</span> <script type="text/javascript">if(autoScroll) $(document).scrollTo( \'100%\', 2000); counter += 4;</script>' + postLoad;
                     res.write(link);
                 }
                 res.end();
@@ -163,10 +173,10 @@ app.get('/:tags?', function(req, res) {
     var uri = url.parse(req.url);
     var tags = req.params.tags;
     if (req.session.user) {
-        console.log('[' + req.client.remoteAddress + '] [' + new Date() + '] ' + flickr.user.username + ' look for ' + tags);
+        console.log('[' + req.client.remoteAddress + '] [' + new Date() + '] ' + flickr.user.username + ' here');
     }
     else {
-        console.log('[' + req.client.remoteAddress + '] [' + new Date() + '] someone look for ' + tags);
+        console.log('[' + req.client.remoteAddress + '] [' + new Date() + '] someone look for here');
     }
     if (!tags) {
         tags = 'cloud';
@@ -174,53 +184,22 @@ app.get('/:tags?', function(req, res) {
     res.writeHead(200, {
         'Content-Type': 'text/html'
     });
-    res.write(header);
+    res.write(staticFiles.header);
     flickr.getLoginUrl('read', null, function(err, url, frob) {
         if (req.session.user) {
             res.write('Hi ' + req.session.user.username + ' !<br>');
         }
         else {
-            //res.write('<a href=' + url + '>connect on flickr</a> | ');
-            res.write('<a href="#" onclick="$(document).scrollTo( \'100%\', 3000); autoScroll = true; return false;">automatic scrolling</a><br>');
+            res.write('<a href=' + url + '>Connect on flickr</a>');
+            res.write(' | <a href="#" onclick="page = 1;loadNext(\'tokyo\'); return false;">Search</a>');
+            res.write(' | <a href="#" onclick="$(document).scrollTo( \'100%\', 3000); autoScroll = true; return false;">Run</a>');
+            res.write(' | <a href="#" onClick="myPosition(); return false;">Near my place</a><div id="myposition"></div><br>');
         }
         if (uri.pathname.length > 1) {
             tags = uri.pathname.substring(1);
         }
-        // Search for photos with some tags
-        flickr.photos.search({
-            tags: tags,
-            per_page: size,
-            safe_search: 3
-        }, function(err, results) {
-            if (!err) {
-                var photos = results.photo;
-                res.write("<div class='zone'>");
-                for (var i = 0; i < photos.length; i++) {
-                    link = '\n<pre class=\'loadme\'><!-- <span style="display:block;width:' + (270 * perStrip) + 'px;height:240px;background-color:#000;vertical-align: middle;">';
-                    for (var j = 0; j < perStrip; j++) {
-                        if (i == 15) {
-                            res.write('<script type="text/javascript">loadNext("'+tags+'");</script>');
-                        }
-                        var src = 'http://farm' + photos[i].farm + '.static.flickr.com/' + photos[i].server + '/' + photos[i].id + '_' + photos[i].secret + '_m.jpg';
-                        var href = 'http://www.flickr.com/photos/' + photos[i].owner + '/' + photos[i].id + '/';
-                        link += '\n\t<a href=' + href + ' target=_BLANK><img src=\'' + src + '\' border=\'0\'/></a>';
-                        i++;
-                        if (i >= photos.length) {
-                            break;
-                        }
-                    }
-                    link += '</span> <script type="text/javascript">if(autoScroll) $(document).scrollTo( \'100%\', 2000); counter += 4;</script>--></pre>\n';
-                    res.write(link);
-                }
-                res.write("</div>");
-                res.end(footer);
-                console.log('request ended');
-            }
-            else {
-                fail(err);
-                res.end(err.code + ' -  ' + err.message);
-            }
-        });
+        res.write("<div class='zone'></div>");
+        res.end(staticFiles.footer);
     });
 });
 app.listen(port);

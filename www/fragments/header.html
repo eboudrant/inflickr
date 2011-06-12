@@ -1,5 +1,5 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en" > <!-- manifest="/cache.appcache" -->
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>inflickr | uri is a tag</title>
@@ -16,20 +16,52 @@ $(document).ready(function() {
     $('pre.loadme').lazyLoad();
     $('pre.morestuff').lazyLoad();
 });
+
 function loadNext(tags) {
+    var vurl = "/ajax";
+    if (tags) {
+        vurl = "/ajax?method=photos&tags=" + tags + "&page=" + (page++);
+    }
+    else {
+        vurl = "/ajax?method=photos&plon=" + position.coords.longitude + "&plat=" + position.coords.latitude + "&page=" + (page++);
+    }
     $.ajax({
-        url: "/ajax?method=photos&tags=" + tags + "&page=" + (++page),
+        url: vurl,
         context: document.body,
-        error: function() {
-            console.log("error");
+        error: function(data) {
+            console.log("error: " + data);
         },
         success: function(data) {
             $('.zone').append(data);
             $('pre.loadme').lazyLoad();
+            document.getElementById("loader ").innerHTML = 'loading more...';
+        }
+    });
+    
+}
+function getPosition(position) {
+    var infoposition = " (" + position.coords.latitude + ", ";
+    infoposition += position.coords.longitude + ")";
+    document.getElementById("myposition").innerHTML = infoposition;
+    page = 1;
+    $.ajax({
+        url: "/ajax?method=photos&plon=" + position.coords.longitude + "&plat=" + position.coords.latitude + "&page=1",
+        context: document.body,
+        error: function(data) {
+            console.log("error : " + data);
+        },
+        success: function(data) {
+            $('.zone').append(data);
+            $('pre.loadme').lazyLoad();
+            document.getElementById("loader").innerHTML = 'loading more...';
         }
     });
 }
+
+function myPosition() {
+    navigator.geolocation.getCurrentPosition(getPosition);
+}
 	</script> 
 </head>
-<body>
+<body class="header">
 <center>
