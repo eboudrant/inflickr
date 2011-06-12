@@ -45,7 +45,7 @@ var staticFiles = {};
 function loadStaticFile(name, path, uri) {
     var header = null;
     if(process.env.VMC_APP_PORT) {
-        path = process.env.HOME + '/' + path;
+        path = process.env.HOME + '/app/' + path;
     }
     fs.readFile(path, function(err, data) {
         if (err) throw err;
