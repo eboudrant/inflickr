@@ -41,25 +41,24 @@ app.get('/auth/', function(req, res) {
 });
 
 var staticFiles = {};
-
 function loadStaticFile(name, path, uri) {
-    var header = null;
-    if(process.env.VMC_APP_PORT) {
+    if (process.env.VMC_APP_PORT) {
         path = process.env.HOME + '/app/' + path;
     }
     fs.readFile(path, function(err, data) {
         if (err) throw err;
         staticFiles[name] = data;
         console.log(path + ' in cache, length is ' + data.length);
-    });
-    if (uri) {
-        app.get(uri, function(req, res) {
-            res.writeHead(200, {
-                'Content-Type': 'text/html'
+        if (uri) {
+            console.log(uri + ' mounted');
+            app.get(uri, function(req, res) {
+                res.writeHead(200, {
+                    'Content-Type': 'text/html'
+                });
+                res.end(staticFiles[name]);
             });
-            res.end(staticFiles[name]);
-        });
-    }
+        }
+    });
 }
 
 loadStaticFile('footer', 'www/fragments/footer.html');
