@@ -44,6 +44,9 @@ var staticFiles = {};
 
 function loadStaticFile(name, path, uri) {
     var header = null;
+    if(process.env.VMC_APP_PORT) {
+        path = process.env.HOME + '/' + path;
+    }
     fs.readFile(path, function(err, data) {
         if (err) throw err;
         staticFiles[name] = data;
@@ -135,8 +138,9 @@ app.get('/ajax', function(req, res) {
         flickr.photos.search(parameters, function(err, results) {
             if (!err) {
                 var photos = results.photo;
+                console.log('got ' + photos.length + ' photos');
                 for (var i = 0; i < photos.length;) {
-                    link = preLoad + '<span style="display:block;width:' + (270 * perStrip) + 'px;height:240px;background-color:#000;vertical-align: middle;">';
+                    link = preLoad + '<span id=\'s_'+i+'\'style="display:block;width:' + (270 * perStrip) + 'px;height:240px;background-color:#000;vertical-align: middle;">';
                     for (var j = 0; j < perStrip; j++) {
                         if (i == 10) {
                             if (req.query.plat && req.query.plon) {
@@ -190,8 +194,8 @@ app.get('/:tags?', function(req, res) {
             res.write('Hi ' + req.session.user.username + ' !<br>');
         }
         else {
-            res.write('<a href=' + url + '>Connect on flickr</a>');
-            res.write(' | <a href="#" onclick="page = 1;loadNext(\'tokyo\'); return false;">Search</a>');
+            //res.write('<a href=' + url + '>Connect on flickr</a>');
+            res.write('<a href="#" onclick="page = 1;loadNext(\'street\'); return false;">Search</a>');
             res.write(' | <a href="#" onclick="$(document).scrollTo( \'100%\', 3000); autoScroll = true; return false;">Run</a>');
             res.write(' | <a href="#" onClick="myPosition(); return false;">Near my place</a><div id="myposition"></div><br>');
         }

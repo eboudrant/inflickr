@@ -23,7 +23,7 @@ function loadNext(tags) {
         vurl = "/ajax?method=photos&tags=" + tags + "&page=" + (page++);
     }
     else {
-        vurl = "/ajax?method=photos&plon=" + position.coords.longitude + "&plat=" + position.coords.latitude + "&page=" + (page++);
+        vurl = "/ajax?method=photos&plon=" + lon + "&plat=" + lat + "&page=" + (page++);
     }
     $.ajax({
         url: vurl,
@@ -34,18 +34,21 @@ function loadNext(tags) {
         success: function(data) {
             $('.zone').append(data);
             $('pre.loadme').lazyLoad();
-            document.getElementById("loader ").innerHTML = 'loading more...';
+            document.getElementById("loader").innerHTML = ' ';
         }
     });
-    
 }
+var lat = 0;
+var lon = 0;
 function getPosition(position) {
     var infoposition = " (" + position.coords.latitude + ", ";
     infoposition += position.coords.longitude + ")";
     document.getElementById("myposition").innerHTML = infoposition;
-    page = 1;
+    lat = position.coords.latitude;
+    lon = position.coords.longitude;
+    page = 2;
     $.ajax({
-        url: "/ajax?method=photos&plon=" + position.coords.longitude + "&plat=" + position.coords.latitude + "&page=1",
+        url: "/ajax?method=photos&plon=" + lon + "&plat=" + lat + "&page=1",
         context: document.body,
         error: function(data) {
             console.log("error : " + data);
@@ -53,7 +56,7 @@ function getPosition(position) {
         success: function(data) {
             $('.zone').append(data);
             $('pre.loadme').lazyLoad();
-            document.getElementById("loader").innerHTML = 'loading more...';
+            document.getElementById("loader").innerHTML = ' ';
         }
     });
 }
