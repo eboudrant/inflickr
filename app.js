@@ -62,12 +62,12 @@ function loadStaticFile(name, path, uri) {
     }
 }
 
-loadStaticFile('footer', './www/fragments/footer.html');
-loadStaticFile('header', './www/fragments/header.html');
-loadStaticFile('css', './www/lib/default.css', '/lib/style.css');
-loadStaticFile('jquery','./www/lib/jquery-1.6.1.min.js', '/lib/jquery-1.6.1.min.js');
-loadStaticFile('lazyloader','./www/lib/jquery.lazyloader.min.js', '/lib/jquery.lazyloader.min.js');
-loadStaticFile('scrollTo','./www/lib/jquery.scrollTo.js', '/lib/jquery.scrollTo.js');
+loadStaticFile('footer', 'www/fragments/footer.html');
+loadStaticFile('header', 'www/fragments/header.html');
+loadStaticFile('css', 'www/lib/default.css', '/lib/style.css');
+loadStaticFile('jquery','www/lib/jquery-1.6.1.min.js', '/lib/jquery-1.6.1.min.js');
+loadStaticFile('lazyloader','www/lib/jquery.lazyloader.min.js', '/lib/jquery.lazyloader.min.js');
+loadStaticFile('scrollTo','www/lib/jquery.scrollTo.js', '/lib/jquery.scrollTo.js');
 
 app.get('/favicon.ico', function(req, res) {
     res.writeHead(404, "Not found", {
