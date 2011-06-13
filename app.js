@@ -195,7 +195,7 @@ app.get('/:tags?', function(req, res) {
         }
         else {
             //res.write('<a href=' + url + '>Connect on flickr</a>');
-            res.write('<a href="#" onclick="page = 1;loadNext(\'street\'); return false;">Search</a>');
+            res.write('<a href="#" onclick="page = 1;loadNext(\'kagurazaka\'); return false;">Search</a>');
             res.write(' | <a href="#" onclick="$(document).scrollTo( \'100%\', 3000); autoScroll = true; return false;">Run</a>');
             res.write(' | <a href="#" onClick="myPosition(); return false;">Near my place</a><div id="myposition"></div><br>');
         }
