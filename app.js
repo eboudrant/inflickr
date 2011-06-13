@@ -111,7 +111,7 @@ app.get('/ajax', function(req, res) {
     if (req.query.method == 'photos') {
         var tags;
         if(req.query.tags) {
-            tags = req.query.tags.replace(' ', '+');
+            tags = req.query.tags.replace(/ /g, '+');
         }
         if (req.session.user) {
             console.log('[' + req.client.remoteAddress + '] [' + new Date() + '] ' + flickr.user.username + ' more photos for ' + tags + '/' + req.query.plat + '/' + req.query.plon + ' (page ' + req.query.page + ')');
