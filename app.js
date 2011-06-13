@@ -199,7 +199,7 @@ app.get('/:tags?', function(req, res) {
     }
     var uri = url.parse(req.url);
     var tags = req.params.tags;
-    if (req.session.user) {
+    if (req.session && req.session.user) {
         console.log('[' + req.client.remoteAddress + '] [' + new Date() + '] ' + flickr.user.username + ' here');
     }
     else {
