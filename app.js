@@ -16,13 +16,12 @@ var flickr = new FlickrAPI(keys.api_key, keys.shared_secret);
 var port = process.env.VMC_APP_PORT || process.env.C9_PORT || 8001;
 var size = 32;
 var perStrip = 4;
-
-console.log("Using " + keys.api_key + "/" + keys.shared_secret );
+console.log("Using " + keys.api_key + "/" + keys.shared_secret);
 console.log(process.env);
 
 function fail(err) {
     console.log('processing request...error: ERR: ' + err.code + ' -  ' + err.message);
-} 
+}
 var app = express.createServer();
 app.use(express.cookieParser());
 app.use(express.session({
@@ -38,8 +37,8 @@ app.get('/auth/', function(req, res) {
         res.redirect('back');
     });
 });
-
 var staticFiles = {};
+
 function loadStaticFile(name, path, uri) {
     if (process.env.VMC_APP_PORT) {
         path = process.env.HOME + '/app/' + path;
@@ -60,24 +59,21 @@ function loadStaticFile(name, path, uri) {
         }
     });
 }
-
 String.prototype.endsWith = function(str) {
-    return (this.match(str+"$")==str)
-}
+    return (this.match(str + "$") == str);
+};
 
 function mime(file) {
-    if(file.endsWith('.js')) return 'application/javascript';
-    if(file.endsWith('.html')) return 'text/html';
-    if(file.endsWith('.css')) return 'text/css';
+    if (file.endsWith('.js')) return 'application/javascript';
+    if (file.endsWith('.html')) return 'text/html';
+    if (file.endsWith('.css')) return 'text/css';
 }
-
 loadStaticFile('footer', 'www/fragments/footer.html');
 loadStaticFile('header', 'www/fragments/header.html');
 loadStaticFile('css', 'www/lib/default.css', '/lib/style.css');
-loadStaticFile('jquery','www/lib/jquery-1.6.1.min.js', '/lib/jquery-1.6.1.min.js');
-loadStaticFile('lazyloader','www/lib/jquery.lazyloader.min.js', '/lib/jquery.lazyloader.min.js');
-loadStaticFile('scrollTo','www/lib/jquery.scrollTo.js', '/lib/jquery.scrollTo.js');
-
+loadStaticFile('jquery', 'www/lib/jquery-1.6.1.min.js', '/lib/jquery-1.6.1.min.js');
+loadStaticFile('lazyloader', 'www/lib/jquery.lazyloader.min.js', '/lib/jquery.lazyloader.min.js');
+loadStaticFile('scrollTo', 'www/lib/jquery.scrollTo.js', '/lib/jquery.scrollTo.js');
 app.get('/favicon.ico', function(req, res) {
     res.writeHead(404, "Not found", {
         'Content-Type': 'text/html'
@@ -90,8 +86,7 @@ app.get('/cache.appcache', function(req, res) {
     });
     res.end();
 });
-
-app.get('/cache.appcache', function(req, res) {
+/*app.get('/cache.appcache', function(req, res) {
     res.writeHead(200, {
         'Content-Type': 'text/cache-manifest'
     });
@@ -107,20 +102,23 @@ app.get('/cache.appcache', function(req, res) {
     res.write('http://*\n');
     res.write('http://ajax/*\n');
     res.end();
-});
-
+});*/
 app.get('/ajax', function(req, res) {
     res.writeHead(200, {
-        'Content-Type': 'text/html', 'Cache-control': 'no-store'
+        'Content-Type': 'text/html',
+        'Cache-control': 'no-store'
     });
     if (req.query.method == 'photos') {
+        var tags;
+        if(req.query.tags) {
+            tags = req.query.tags.replace(' ', '+');
+        }
         if (req.session.user) {
-            console.log('[' + req.client.remoteAddress + '] [' + new Date() + '] ' + flickr.user.username + ' more photos for ' + req.query.tags + '/' + req.query.plat + '/' + req.query.plon + ' (page ' + req.query.page + ')');
+            console.log('[' + req.client.remoteAddress + '] [' + new Date() + '] ' + flickr.user.username + ' more photos for ' + tags + '/' + req.query.plat + '/' + req.query.plon + ' (page ' + req.query.page + ')');
         }
         else {
-            console.log('[' + req.client.remoteAddress + '] [' + new Date() + '] more photos for ' + req.query.tags + '/' + req.query.plat + '/' + req.query.plon + ' (page ' + req.query.page + ')');
+            console.log('[' + req.client.remoteAddress + '] [' + new Date() + '] more photos for ' + tags + '/' + req.query.plat + '/' + req.query.plon + ' (page ' + req.query.page + ')');
         }
-        var tags = req.query.tags;
         var lat = req.query.lat;
         var lon = req.query.lon;
         if (!tags) {
@@ -150,14 +148,19 @@ app.get('/ajax', function(req, res) {
         flickr.photos.search(parameters, function(err, results) {
             if (!err) {
                 var photos = results.photo;
-                console.log('got ' + photos.length + ' photos');
                 for (var i = 0; i < photos.length;) {
+                    if (i > 16 && preLoad == '') {
+                        preLoad = '\n<pre class=\'loadme\'><!-- ';
+                        postLoad = '</script>--></pre>\n';
+                        res.write('<script type="text/javascript">if(autoScroll) $(document).scrollTo( \'100%\', 2000);</script>');
+                    }
                     link = preLoad + '<span style="display:block;width:' + (270 * perStrip) + 'px;height:240px;background-color:rgba(255,255,255,1);vertical-align: middle;">';
                     for (var j = 0; j < perStrip; j++) {
                         if (i == 8) {
                             if (req.query.plat && req.query.plon) {
                                 res.write(preLoad + '\n<script type="text/javascript">loadNext();</script>' + postLoad);
-                            } else {
+                            }
+                            else {
                                 res.write(preLoad + '\n<script type="text/javascript">loadNext("' + tags + '");</script>' + postLoad);
                             }
                         }
@@ -168,13 +171,17 @@ app.get('/ajax', function(req, res) {
                         if (i >= photos.length) {
                             break;
                         }
-                        if(i > 6 && preLoad == '' ) {
-                            preLoad = '\n<pre class=\'loadme\'><!-- ';
-                            postLoad = '</script>--></pre>\n';
-                        }
                     }
-                    link += '</span> <script type="text/javascript">if(autoScroll) $(document).scrollTo( \'100%\', 2000); counter += 4;</script>' + postLoad;
+                    if (preLoad == '') {
+                        link += '</span>';
+                    } else {
+                        link += '</span> <script type="text/javascript">if(autoScroll) $(document).scrollTo( \'100%\', 2000); counter += 4;</script>' + postLoad;
+                    }
                     res.write(link);
+                }
+                if(photos.length < size) {
+                    console.log('the end');
+                    res.write("<script type='text/javascript'>document.getElementById('loader').innerHTML = 'the end';</script>");
                 }
                 res.end();
             }
@@ -202,25 +209,15 @@ app.get('/:tags?', function(req, res) {
         tags = 'cloud';
     }
     res.writeHead(200, {
-        'Content-Type': 'text/html', 'Cache-control': 'no-store'
+        'Content-Type': 'text/html',
+        'Cache-control': 'no-store'
     });
     res.write(staticFiles.header);
     flickr.getLoginUrl('read', null, function(err, url, frob) {
-        if (req.session.user) {
-            res.write('Hi ' + req.session.user.username + ' !<br>');
-        }
-        else {
-            //res.write('<a href=' + url + '>Connect on flickr</a>');
-            //res.write('<a href="#" onclick="page = 1;loadNext(\'kagurazaka\'); return false;">Search</a>');
-            //res.write(' | <a href="#" onclick="$(document).scrollTo( \'100%\', 3000); autoScroll = true; return false;">Run</a>');
-            //res.write(' | <a href="#" onClick="myPosition(); return false;">Near my place</a><div id="myposition"></div><br>');
-        }
-        if (uri.pathname.length > 1) {
-            tags = uri.pathname.substring(1);
-        }
-        //res.write("<div class='zone'></div>");
+        //if (req.session.user) {
+        //    res.write('Hi ' + req.session.user.username + ' !<br>');
+        //}
         res.end(staticFiles.footer);
-        console.log('page ready ' + staticFiles.header.length + ' ' + staticFiles.footer.length);
     });
 });
 app.listen(port);
