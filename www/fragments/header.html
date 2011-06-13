@@ -2,12 +2,27 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en" > <!-- manifest="/cache.appcache" -->
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>inflickr | uri is a tag</title>
+	<title>inflickr | uri is a tag</title>
   	<link rel="stylesheet" type="text/css" href="lib/style.css" />
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 	<script type="text/javascript" src="lib/jquery-1.6.1.min.js"></script> 
-    <script type="text/javascript" src="lib/jquery.lazyloader.min.js"></script>
-    <script type="text/javascript" src="lib/jquery.scrollTo.js"></script>
+	<script type="text/javascript" src="lib/jquery.lazyloader.min.js"></script>
+	<script type="text/javascript" src="lib/jquery.scrollTo.js"></script>
+	<link  href="http://fonts.googleapis.com/css?family=Annie+Use+Your+Telescope:regular" rel="stylesheet" type="text/css" >
+	<style>
+body {
+  font-family: 'Annie Use Your Telescope', serif;
+  font-size: 39px;
+  font-style: normal;
+  font-weight: 400;
+  text-shadow: 6px 6px 6px #ccc;
+  text-decoration: none;
+  text-transform: capitalize;
+  letter-spacing: -0.05em;
+  word-spacing: -0.2em;
+  line-height: 1.2;
+}
+	</style>
 	<script type="text/javascript" > 
 var autoScroll = false;
 var counter = 0;
@@ -16,7 +31,6 @@ $(document).ready(function() {
     $('pre.loadme').lazyLoad();
     $('pre.morestuff').lazyLoad();
 });
-
 function loadNext(tags) {
     var vurl = "/ajax";
     if (tags) {
@@ -60,7 +74,6 @@ function getPosition(position) {
         }
     });
 }
-
 function myPosition() {
     navigator.geolocation.getCurrentPosition(getPosition);
 }
