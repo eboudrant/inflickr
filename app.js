@@ -14,7 +14,7 @@ FlickrKeys.prototype._configure = function(api_key, shared_secret) {
 var keys = new FlickrKeys();
 var flickr = new FlickrAPI(keys.api_key, keys.shared_secret);
 var port = process.env.VMC_APP_PORT || process.env.C9_PORT || 8001;
-var size = 52;
+var size = 32;
 var perStrip = 4;
 
 console.log("Using " + keys.api_key + "/" + keys.shared_secret );
@@ -152,9 +152,9 @@ app.get('/ajax', function(req, res) {
                 var photos = results.photo;
                 console.log('got ' + photos.length + ' photos');
                 for (var i = 0; i < photos.length;) {
-                    link = preLoad + '<span id=\'s_'+i+'\'style="display:block;width:' + (270 * perStrip) + 'px;height:240px;background-color:#000;vertical-align: middle;">';
+                    link = preLoad + '<span style="display:block;width:' + (270 * perStrip) + 'px;height:240px;background-color:rgba(255,255,255,1);vertical-align: middle;">';
                     for (var j = 0; j < perStrip; j++) {
-                        if (i == 10) {
+                        if (i == 8) {
                             if (req.query.plat && req.query.plon) {
                                 res.write(preLoad + '\n<script type="text/javascript">loadNext();</script>' + postLoad);
                             } else {
@@ -167,6 +167,10 @@ app.get('/ajax', function(req, res) {
                         i++;
                         if (i >= photos.length) {
                             break;
+                        }
+                        if(i > 6 && preLoad == '' ) {
+                            preLoad = '\n<pre class=\'loadme\'><!-- ';
+                            postLoad = '</script>--></pre>\n';
                         }
                     }
                     link += '</span> <script type="text/javascript">if(autoScroll) $(document).scrollTo( \'100%\', 2000); counter += 4;</script>' + postLoad;
@@ -207,14 +211,14 @@ app.get('/:tags?', function(req, res) {
         }
         else {
             //res.write('<a href=' + url + '>Connect on flickr</a>');
-            res.write('<a href="#" onclick="page = 1;loadNext(\'kagurazaka\'); return false;">Search</a>');
-            res.write(' | <a href="#" onclick="$(document).scrollTo( \'100%\', 3000); autoScroll = true; return false;">Run</a>');
-            res.write(' | <a href="#" onClick="myPosition(); return false;">Near my place</a><div id="myposition"></div><br>');
+            //res.write('<a href="#" onclick="page = 1;loadNext(\'kagurazaka\'); return false;">Search</a>');
+            //res.write(' | <a href="#" onclick="$(document).scrollTo( \'100%\', 3000); autoScroll = true; return false;">Run</a>');
+            //res.write(' | <a href="#" onClick="myPosition(); return false;">Near my place</a><div id="myposition"></div><br>');
         }
         if (uri.pathname.length > 1) {
             tags = uri.pathname.substring(1);
         }
-        res.write("<div class='zone'></div>");
+        //res.write("<div class='zone'></div>");
         res.end(staticFiles.footer);
         console.log('page ready ' + staticFiles.header.length + ' ' + staticFiles.footer.length);
     });
