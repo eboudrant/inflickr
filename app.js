@@ -23,10 +23,10 @@ function fail(err) {
     console.log('processing request...error: ERR: ' + err.code + ' -  ' + err.message);
 }
 var app = express.createServer();
-app.use(express.cookieParser());
-app.use(express.session({
-    secret: "dexboys why not"
-}));
+//app.use(express.cookieParser());
+//app.use(express.session({
+//    secret: "dexboys why not"
+//}));
 app.get('/auth/', function(req, res) {
     flickr.auth.getToken(req.query.frob, function(err, results) {
         if (err) {
@@ -181,7 +181,7 @@ app.get('/ajax', function(req, res) {
                 }
                 if(photos.length < size) {
                     console.log('the end');
-                    res.write("<script type='text/javascript'>document.getElementById('loader').innerHTML = 'the end';</script>");
+                    res.write("<script type='text/javascript'>document.getElementById('loader').innerHTML = 'the <span style=\\'color:rgba(255,0,132,1);\\'>end</span><br/><br/><br/>';</script>");
                 }
                 res.end();
             }
