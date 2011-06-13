@@ -2,12 +2,41 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en" > <!-- manifest="/cache.appcache" -->
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>inflickr | uri is a tag</title>
+	<title>Inflicker ... Flickr For Lazy People</title>
   	<link rel="stylesheet" type="text/css" href="lib/style.css" />
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 	<script type="text/javascript" src="lib/jquery-1.6.1.min.js"></script> 
-    <script type="text/javascript" src="lib/jquery.lazyloader.min.js"></script>
-    <script type="text/javascript" src="lib/jquery.scrollTo.js"></script>
+	<script type="text/javascript" src="lib/jquery.lazyloader.min.js"></script>
+	<script type="text/javascript" src="lib/jquery.scrollTo.js"></script>
+	<link href="http://fonts.googleapis.com/css?family=Annie+Use+Your+Telescope:regular" rel="stylesheet" type="text/css" >
+	<style>
+body {
+  font-family: 'Annie Use Your Telescope', serif;
+  font-size: 39px;
+  font-style: normal;
+  font-weight: 400;
+  text-shadow: 6px 6px 6px #ccc;
+  text-decoration: none;
+  text-transform: capitalize;
+  letter-spacing: -0.05em;
+  word-spacing: -0.2em;
+  line-height: 1.2;
+  text-align: center;
+}
+p {
+  font-family: 'Annie Use Your Telescope', serif;
+  font-size: 20px;
+  font-style: bold;
+  font-weight: 200;
+  text-shadow: 6px 6px 6px #ccc;
+  text-decoration: none;
+  text-transform: capitalize;
+  letter-spacing: -0.05em;
+  word-spacing: -0.2em;
+  line-height: 1.2;
+  text-align: center;
+}
+	</style>
 	<script type="text/javascript" > 
 var autoScroll = false;
 var counter = 0;
@@ -16,7 +45,155 @@ $(document).ready(function() {
     $('pre.loadme').lazyLoad();
     $('pre.morestuff').lazyLoad();
 });
+function loadNext(tags) {
+    var vurl = "/ajax";
+    if (tags) {
+        vurl = "/ajax?method=photos&tags=" + tags + "&page=" + (page++);
+    }
+    else {
+        vurl = "/ajax?method=photos&plon=" + lon + "&plat=" + lat + "&page=" + (page++);
+    }
+    $.ajax({
+        url: vurl,
+        context: document.body,
+        error: function(data) {
+            console.log("error: " + data);
+        },
+        success: function(data) {
+            $('.zone').append(data);
+            $('pre.loadme').lazyLoad();
+            document.getElementById("loader").innerHTML = 'hi, still here, hold on...';
+        }
+    });
+}
+var lat = 0;
+var lon = 0;
+function getPosition(position) {
+    var infoposition = " (" + position.coords.latitude + ", ";
+    infoposition += position.coords.longitude + ")";
+    document.getElementById("myposition").innerHTML = infoposition;
+    lat = position.coords.latitude;
+    lon = position.coords.longitude;
+    page = 2;
+    $.ajax({
+        url: "/ajax?method=photos&plon=" + lon + "&plat=" + lat + "&page=1",
+        context: document.body,
+        error: function(data) {
+            console.log("error : " + data);
+        },
+        success: function(data) {
+            $('.zone').append(data);
+            $('pre.loadme').lazyLoad();
+            document.getElementById("loader").innerHTML = ' ';
+        }
+    });
+}
+function myPosition() {
+    navigator.geolocation.getCurrentPosition(getPosition);
+}
+	</script> 
+</head>
+<body class="header">
+<center>
+<div style="position:fixed;top:0%;width:100%;background:rgba(255,255,255,0.9)">
+Inflicker ... Flickr For Lazy People</br>
+<p>[  connect ][ tags : <input type="text"/>  ][  near my place  ]</p>
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+---------------------------------------------------------------
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en" > <!-- manifest="/cache.appcache" -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<title>Inflicker ... Flickr For Lazy People</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<script type="text/javascript" src="lib/jquery-1.6.1.min.js"></script> 
+	<script type="text/javascript" src="lib/jquery.lazyloader.min.js"></script>
+	<script type="text/javascript" src="lib/jquery.scrollTo.js"></script>
+	<link  href="http://fonts.googleapis.com/css?family=Slackey:regular" rel="stylesheet" type="text/css" >
+	<style>
+body {
+  font-family: 'Slackey', serif;
+  font-size: 40px;
+  font-style: normal;
+  font-weight: 400;
+  text-shadow: 6px 6px 6px #ccc;
+  text-decoration: none;
+  text-transform: none;
+  letter-spacing: -0.05em;
+  word-spacing: -0.2em;
+  line-height: 1.2;
+  text-align: center;
+  color:#3D76FC;
+}
+
+.normal {
+  font-family: 'Slackey', serif;
+  font-size: 20px;
+  font-style: bold;
+  font-weight: 200;
+  text-shadow: 6px 6px 6px #ccc;
+  text-decoration: none;
+  text-transform: node;
+  letter-spacing: -0.05em;
+  word-spacing: -0.2em;
+  line-height: 1.2;
+  text-align: center;
+  color:#3D76FC;
+}
+a {
+  color:#3D76FC;
+  font-style: normal;
+  text-decoration: none;
+}
+a:hover { 
+  color:#2E67eD;
+}
+input {
+  font-family: 'Slackey', serif;
+  font-size: 20px;
+  font-style: bold;
+  font-weight: 200;
+  text-shadow: 6px 6px 6px #ccc;
+  text-decoration: none;
+  text-transform: none;
+  letter-spacing: -0.05em;
+  word-spacing: -0.2em;
+  line-height: 1.2;
+  text-align: center;
+  border: none;
+  background-color:transparent;
+  color:#EB10CE;
+}
+	</style>
+	<script type="text/javascript" > 
+var autoScroll = false;
+var counter = 0;
+var page = 1;
+$(document).ready(function() {
+    $('pre.loadme').lazyLoad();
+    $('pre.morestuff').lazyLoad();
+});
 function loadNext(tags) {
     var vurl = "/ajax";
     if (tags) {
@@ -60,11 +237,101 @@ function getPosition(position) {
         }
     });
 }
-
 function myPosition() {
     navigator.geolocation.getCurrentPosition(getPosition);
+}
+var start = 6;
+function getNewLine() {
+    return "<pre class='loadme'><!--<span class='s" + (start++) + "' style='display:block;width:1080px;height:270px;background-color:#fff;vertical-align: middle;'><img src='http://images.instagram.com/media/2011/03/19/1e265320694548f585d70e8861bc0973_7.jpg' width='240' height='240'/><img src='http://images.instagram.com/media/2011/03/21/cc786e9f35314cef9fbad77dd14da3fe_7.jpg' width='240' height='240'/><img src='http://images.instagram.com/media/2011/03/11/1b2f6e53a6e547bd8df6e20c2b336dc0_7.jpg' width='240' height='240'/><img src='http://images.instagram.com/media/2011/03/19/05ab31f49d9d40a89c5273fcad38fdac_7.jpg' width='240' height='240'/></span><script type='text/javascript'>            $('.zone').append(getNewLine());             $('pre.loadme').lazyLoad();            document.getElementById('loader').innerHTML = 'hold on...';            $(document).scrollTo('100%', 3000);</script>--></pre>";
 }
 	</script> 
 </head>
 <body class="header">
+
+<div style="position:fixed;top:0%;width:100%;background:#fff;height:86px">
+In flick<span style='color:#EB10CE;'>r</span> ... The flick<span style='color:#EB10CE;'>r</span> For Lazy People</br>
+</div>
+
+
+<div style="position:fixed;top:86px;width:100%;background: -webkit-gradient(linear, left top, left bottom, from(white), to(rgba(255,255,255,0.0)));height:120px">
+</div>
+
+<div class='normal' style="position:fixed;top:50px;width:100%;height:60px">
+[  <a href='#'>connect</a> ]    [ tags : <input id='tags' type="text" onChange="$(document).scrollTo('100%', 3000); autoScroll = true; return false;"/>  ]    [  <a href='#'>near my place</a>  ]
+<script type="text/javascript">
+document.getElementById('tags').focus();
+</script>
+</div>
+
+<div style="position:fixed;bottom:24px;width:100%;background: -webkit-gradient(linear, left top, left bottom, from(rgba(255,255,255,0.0)), to(white));height:120px">
+</div>
+
+<div class='normal' style="position:fixed;bottom:0%;width:100%;background:#fff">
+copyright (c) 2011 - <a href='#'>ebtokyo</a> - <a href='#'>hosted on cloudfoundry</a>
+</div>
 <center>
+<span style="display:block;width:1080px;height:80px;background-color:#fff;vertical-align: middle;">
+</span>
+<div class='zone'>
+<span class='s0' style="display:block;width:1080px;height:270px;background-color:#fff;vertical-align: middle;">
+<img src='http://images.instagram.com/media/2011/03/19/1e265320694548f585d70e8861bc0973_7.jpg' width='240' height='240'/>
+<img src='http://images.instagram.com/media/2011/03/21/cc786e9f35314cef9fbad77dd14da3fe_7.jpg' width='240' height='240'/>
+<img src='http://images.instagram.com/media/2011/03/11/1b2f6e53a6e547bd8df6e20c2b336dc0_7.jpg' width='240' height='240'/>
+<img src='http://images.instagram.com/media/2011/03/19/05ab31f49d9d40a89c5273fcad38fdac_7.jpg' width='240' height='240'/>
+</span>
+
+<span class='s1' style="display:block;width:1080px;height:270px;background-color:#fff;vertical-align: middle;">
+<img src='http://images.instagram.com/media/2011/03/19/1e265320694548f585d70e8861bc0973_7.jpg' width='240' height='240'/>
+<img src='http://images.instagram.com/media/2011/03/21/cc786e9f35314cef9fbad77dd14da3fe_7.jpg' width='240' height='240'/>
+<img src='http://images.instagram.com/media/2011/03/11/1b2f6e53a6e547bd8df6e20c2b336dc0_7.jpg' width='240' height='240'/>
+<img src='http://images.instagram.com/media/2011/03/19/05ab31f49d9d40a89c5273fcad38fdac_7.jpg' width='240' height='240'/>
+</span>
+
+<span class='s2' style="display:block;width:1080px;height:270px;background-color:#fff;vertical-align: middle;">
+<img src='http://images.instagram.com/media/2011/03/19/1e265320694548f585d70e8861bc0973_7.jpg' width='240' height='240'/>
+<img src='http://images.instagram.com/media/2011/03/21/cc786e9f35314cef9fbad77dd14da3fe_7.jpg' width='240' height='240'/>
+<img src='http://images.instagram.com/media/2011/03/11/1b2f6e53a6e547bd8df6e20c2b336dc0_7.jpg' width='240' height='240'/>
+<img src='http://images.instagram.com/media/2011/03/19/05ab31f49d9d40a89c5273fcad38fdac_7.jpg' width='240' height='240'/>
+</span>
+
+<span class='s3' style="display:block;width:1080px;height:270px;background-color:#fff;vertical-align: middle;">
+<img src='http://images.instagram.com/media/2011/03/19/1e265320694548f585d70e8861bc0973_7.jpg' width='240' height='240'/>
+<img src='http://images.instagram.com/media/2011/03/21/cc786e9f35314cef9fbad77dd14da3fe_7.jpg' width='240' height='240'/>
+<img src='http://images.instagram.com/media/2011/03/11/1b2f6e53a6e547bd8df6e20c2b336dc0_7.jpg' width='240' height='240'/>
+<img src='http://images.instagram.com/media/2011/03/19/05ab31f49d9d40a89c5273fcad38fdac_7.jpg' width='240' height='240'/>
+</span>
+
+<pre class='loadme'><!--
+<span class='s4' style='display:block;width:1080px;height:270px;background-color:#fff;vertical-align: middle;'>
+<img src='http://images.instagram.com/media/2011/03/19/1e265320694548f585d70e8861bc0973_7.jpg' width='240' height='240'/>
+<img src='http://images.instagram.com/media/2011/03/21/cc786e9f35314cef9fbad77dd14da3fe_7.jpg' width='240' height='240'/>
+<img src='http://images.instagram.com/media/2011/03/11/1b2f6e53a6e547bd8df6e20c2b336dc0_7.jpg' width='240' height='240'/>
+<img src='http://images.instagram.com/media/2011/03/19/05ab31f49d9d40a89c5273fcad38fdac_7.jpg' width='240' height='240'/>
+</span>
+<script type='text/javascript'>
+            $('.zone').append(getNewLine());
+            $('pre.loadme').lazyLoad();
+            document.getElementById('loader').innerHTML = 'hold on...';
+            $(document).scrollTo('100%', 750);
+</script>--></pre>
+
+<pre class='loadme'><!--
+<span class='s5' style='display:block;width:1080px;height:270px;background-color:#fff;vertical-align: middle;'>
+<img src='http://images.instagram.com/media/2011/03/19/1e265320694548f585d70e8861bc0973_7.jpg' width='240' height='240'/>
+<img src='http://images.instagram.com/media/2011/03/21/cc786e9f35314cef9fbad77dd14da3fe_7.jpg' width='240' height='240'/>
+<img src='http://images.instagram.com/media/2011/03/11/1b2f6e53a6e547bd8df6e20c2b336dc0_7.jpg' width='240' height='240'/>
+<img src='http://images.instagram.com/media/2011/03/19/05ab31f49d9d40a89c5273fcad38fdac_7.jpg' width='240' height='240'/>
+</span>
+<script type='text/javascript'>
+            $('.zone').append(getNewLine());
+            $('pre.loadme').lazyLoad();
+            document.getElementById('loader').innerHTML = 'hold on...';
+            $(document).scrollTo('100%', 750);
+</script>--></pre>
+
+</div>
+</center>
+<span class="morestuff"><!-- --></span> 
+<center><div class='hidden' id='loader' style='color:#fff;background-color:#ffff;width:1080px;'>Hold on...</div></center>
+</body>
+</html>

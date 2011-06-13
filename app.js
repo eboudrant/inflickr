@@ -1,4 +1,3 @@
-
 require.paths.unshift('./flickrnode');
 require.paths.unshift('./node_modules/express/lib');
 var FlickrAPI = require('flickr').FlickrAPI;
@@ -52,7 +51,7 @@ function loadStaticFile(name, path, uri) {
         if (uri) {
             app.get(uri, function(req, res) {
                 res.writeHead(200, {
-                    'Content-Type': 'text/html'
+                    'Content-Type': mime(path)
                 });
                 console.log('serve ' + path + ', length is ' + staticFiles[name].length);
                 res.end(staticFiles[name]);
@@ -60,6 +59,16 @@ function loadStaticFile(name, path, uri) {
             console.log(uri + ' mounted');
         }
     });
+}
+
+String.prototype.endsWith = function(str) {
+    return (this.match(str+"$")==str)
+}
+
+function mime(file) {
+    if(file.endsWith('.js')) return 'application/javascript';
+    if(file.endsWith('.html')) return 'text/html';
+    if(file.endsWith('.css')) return 'text/css';
 }
 
 loadStaticFile('footer', 'www/fragments/footer.html');
@@ -81,7 +90,7 @@ app.get('/cache.appcache', function(req, res) {
     });
     res.end();
 });
-/*
+
 app.get('/cache.appcache', function(req, res) {
     res.writeHead(200, {
         'Content-Type': 'text/cache-manifest'
@@ -94,12 +103,15 @@ app.get('/cache.appcache', function(req, res) {
     res.write('/lib/jquery.lazyloader.min.js\n');
     res.write('/lib/jquery.scrollTo.js\n');
     res.write('/lib/style.css\n');
+    res.write('NETWORK\n');
+    res.write('http://*\n');
+    res.write('http://ajax/*\n');
     res.end();
-});*/
+});
 
 app.get('/ajax', function(req, res) {
     res.writeHead(200, {
-        'Content-Type': 'text/html'
+        'Content-Type': 'text/html', 'Cache-control': 'no-store'
     });
     if (req.query.method == 'photos') {
         if (req.session.user) {
@@ -186,7 +198,7 @@ app.get('/:tags?', function(req, res) {
         tags = 'cloud';
     }
     res.writeHead(200, {
-        'Content-Type': 'text/html'
+        'Content-Type': 'text/html', 'Cache-control': 'no-store'
     });
     res.write(staticFiles.header);
     flickr.getLoginUrl('read', null, function(err, url, frob) {
