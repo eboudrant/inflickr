@@ -99,7 +99,6 @@ setInterval(function() {
 }, 1000 * 60);
 
 app.get('/popular', function(req, res) {
-    console.log(req);
     res.writeHead(200, {
         'Content-Type': 'text/html',
         'Cache-control': 'no-store'
@@ -146,9 +145,6 @@ app.get('/popular', function(req, res) {
     res.end();
 });*/
 app.get('/ajax', function(req, res) {
-    
-    console.log(req);
-    
     res.writeHead(200, {
         'Content-Type': 'text/html',
         'Cache-control': 'no-store'
