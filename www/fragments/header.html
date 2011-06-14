@@ -77,12 +77,13 @@ function randomTag() {
         dataType: 'text',
         context: document.body,
         error: function(data) {
-            console.log('error ' + data);
             document.getElementById('tags').value = data;
         },
         success: function(data) {
-            console.log(data);
             document.getElementById('tags').value = data;
+            page = 1;
+            loadNext(document.getElementById('tags').value);
+            autoScroll = true;
         }
     });
 }
@@ -151,7 +152,7 @@ In flick<span style='color:rgba(255,0,132,1);'>r</span> ... The flick<span style
 <!--[  <a href='#'>connect</a> ]    -->
 [ tags : <input id='tags' type="text" onChange="document.getElementById('loader').innerHTML = 'Loading...'; document.getElementById('idzone').innerHTML = ''; page = 1;loadNext(document.getElementById('tags').value); autoScroll = true; return false;"/>  ]
 [  <a href='#' onclick="document.getElementById('loader').innerHTML = 'Loading...'; document.getElementById('idzone').innerHTML = ''; myPosition(); autoScroll = true; return false;">near my place</a>  ]
-[  <a href='#' onclick="document.getElementById('loader').innerHTML = 'Loading...'; document.getElementById('idzone').innerHTML = ''; randomTag(); page = 1;loadNext(document.getElementById('tags').value); autoScroll = true;">random</a>  ]
+[  <a href='#' onclick="document.getElementById('loader').innerHTML = 'Loading...'; document.getElementById('idzone').innerHTML = ''; randomTag(); return false;">random</a>  ]
 [  <a href='#' onclick="document.getElementById('loader').innerHTML = 'Loading...'; document.getElementById('idzone').innerHTML = ''; page = 1;document.getElementById('tags').value = 'day' + new Date().getDOY(); loadNext(document.getElementById('tags').value); autoScroll = true; return false;">today</a>  ]
 <script type="text/javascript">
 document.getElementById('tags').focus();
