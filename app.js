@@ -86,6 +86,40 @@ app.get('/cache.appcache', function(req, res) {
     });
     res.end();
 });
+var popular = null;
+setInterval(function() {
+    console.log('reload popular tags');
+    var parameters = {
+        count: 20,
+        period: 'week'
+    };
+    flickr.tags.getHotList(parameters, function(err, results) {
+        popular = results.tag;
+    });
+}, 1000 * 60);
+
+app.get('/popular', function(req, res) {
+    var randomNumber = Math.floor(Math.random()*21);
+        res.writeHead(200, {
+        'Content-Type': 'application/json'
+    });
+    if (!popular) {
+        console.log('load popular tags');
+        var parameters = {
+            count: 20,
+            period: 'week'
+        };
+        flickr.tags.getHotList(parameters, function(err, results) {
+            popular = results.tag;
+            console.log(randomNumber);
+            res.end(popular[randomNumber]._content);
+        });
+    } else {
+        console.log(randomNumber);
+        res.end(popular[randomNumber]._content);
+    }
+});
+
 /*app.get('/cache.appcache', function(req, res) {
     res.writeHead(200, {
         'Content-Type': 'text/cache-manifest'

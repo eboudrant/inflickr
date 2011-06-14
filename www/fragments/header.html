@@ -70,6 +70,20 @@ $(document).ready(function() {
     $('pre.loadme').lazyLoad();
     $('pre.morestuff').lazyLoad();
 });
+function popular() {
+    var vurl = "/popular";
+     $.ajax({
+        url: vurl,
+        context: document.body,
+        error: function(data) {
+            console.log(data);
+        },
+        success: function(data) {
+            console.log(data);
+            document.getElementById('tags').value = data;
+        }
+    });
+}
 function loadNext(tags) {
     var vurl = "/ajax";
     if (tags) {
@@ -115,7 +129,10 @@ function getPosition(position) {
 function myPosition() {
     navigator.geolocation.getCurrentPosition(getPosition);
 }
-
+Date.prototype.getDOY = function() {
+var onejan = new Date(this.getFullYear(),0,1);
+return Math.ceil((this - onejan) / 86400000);
+}
 	</script> 
 </head>
 <body class="header" style="overflow:hidden">
@@ -129,7 +146,11 @@ In flick<span style='color:rgba(255,0,132,1);'>r</span> ... The flick<span style
 </div>
 
 <div class='normal' style="position:fixed;top:50px;width:100%;height:60px">
-[  <a href='#'>connect</a> ]    [ tags : <input id='tags' type="text" onChange="document.getElementById('loader').innerHTML = 'Loading...'; document.getElementById('idzone').innerHTML = ''; page = 1;loadNext(document.getElementById('tags').value); autoScroll = true; return false;"/>  ]    [  <a href='#' onclick="document.getElementById('loader').innerHTML = 'Loading...'; document.getElementById('idzone').innerHTML = ''; myPosition(); autoScroll = true; return false;">near my place</a>  ]
+<!--[  <a href='#'>connect</a> ]    -->
+[ tags : <input id='tags' type="text" onChange="document.getElementById('loader').innerHTML = 'Loading...'; document.getElementById('idzone').innerHTML = ''; page = 1;loadNext(document.getElementById('tags').value); autoScroll = true; return false;"/>  ]
+[  <a href='#' onclick="document.getElementById('loader').innerHTML = 'Loading...'; document.getElementById('idzone').innerHTML = ''; myPosition(); autoScroll = true; return false;">near my place</a>  ]
+[  <a href='#' onclick="popular(); return false;">random</a>  ]
+[  <a href='#' onclick="document.getElementById('loader').innerHTML = 'Loading...'; document.getElementById('idzone').innerHTML = ''; page = 1;document.getElementById('tags').value = 'day' + new Date().getDOY(); loadNext(document.getElementById('tags').value); autoScroll = true; return false;">today</a>  ]
 <script type="text/javascript">
 document.getElementById('tags').focus();
 </script>

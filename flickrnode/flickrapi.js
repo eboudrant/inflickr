@@ -6,6 +6,7 @@ var Request= require("./request").Request,
     Photosets= require("./photosets").Photosets,
     Contacts= require("./contacts").Contacts,
     Feeds= require("./feeds").Feeds,
+    Tags= require("./tags").Tags,
     Urls= require("./urls").Urls;
 
 var FlickrAPI= function FlickrAPI(api_key, shared_secret, auth_token) {
@@ -24,6 +25,7 @@ FlickrAPI.prototype._configure= function(api_key, shared_secret, auth_token) {
     this.blogs= new Blogs(this._request);
     this.contacts= new Contacts(this._request);
     this.urls= new Urls(this._request);
+    this.tags= new Tags(this._request);
 
     this._feedRequest= new Request(api_key, shared_secret, auth_token, true);
     this.feeds= new Feeds(this._feedRequest);
