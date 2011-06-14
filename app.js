@@ -23,10 +23,10 @@ function fail(err) {
     console.log('processing request...error: ERR: ' + err.code + ' -  ' + err.message);
 }
 var app = express.createServer();
-//app.use(express.cookieParser());
-//app.use(express.session({
-//    secret: "dexboys why not"
-//}));
+app.use(express.cookieParser());
+app.use(express.session({
+    secret: "dexboys why not"
+}));
 app.get('/auth/', function(req, res) {
     flickr.auth.getToken(req.query.frob, function(err, results) {
         if (err) {
