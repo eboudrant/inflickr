@@ -100,7 +100,13 @@ setInterval(function() {
 
 app.get('/popular', function(req, res) {
     var randomNumber = Math.floor(Math.random()*21);
-        res.writeHead(200, {
+    if(randomNumber < 0) {
+        randomNumber = 0;
+    }
+    if(randomNumber > 19) {
+        randomNumber = 19;
+    }
+    res.writeHead(200, {
         'Content-Type': 'application/json'
     });
     if (!popular) {
@@ -112,11 +118,11 @@ app.get('/popular', function(req, res) {
         flickr.tags.getHotList(parameters, function(err, results) {
             popular = results.tag;
             console.log(randomNumber);
-            res.end(popular[randomNumber-1]._content);
+            res.end(popular[randomNumber]._content);
         });
     } else {
         console.log(randomNumber);
-        res.end(popular[randomNumber-1]._content);
+        res.end(popular[randomNumber]._content);
     }
 });
 
