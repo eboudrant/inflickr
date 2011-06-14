@@ -220,5 +220,6 @@ app.get('/:tags?', function(req, res) {
         res.end(staticFiles.footer);
     });
 });
+console.log("Opening " + port + "...");
 app.listen(port);
 console.log("Audience is listening " + port + "...");
