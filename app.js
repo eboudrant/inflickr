@@ -111,9 +111,6 @@ app.get('/popular', function(req, res) {
     if(randomNumber > 19) {
         randomNumber = 19;
     }
-    res.writeHead(200, {
-        'Content-Type': 'application/json'
-    });
     if (!popular) {
         console.log('load popular tags');
         var parameters = {
