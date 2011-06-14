@@ -99,6 +99,10 @@ setInterval(function() {
 }, 1000 * 60);
 
 app.get('/popular', function(req, res) {
+    res.writeHead(200, {
+        'Content-Type': 'text/html',
+        'Cache-control': 'no-store'
+    });
     var randomNumber = Math.floor(Math.random()*21);
     if(randomNumber < 0) {
         randomNumber = 0;
