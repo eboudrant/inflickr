@@ -112,11 +112,11 @@ app.get('/popular', function(req, res) {
         flickr.tags.getHotList(parameters, function(err, results) {
             popular = results.tag;
             console.log(randomNumber);
-            res.end(popular[randomNumber]._content);
+            res.end(popular[randomNumber-1]._content);
         });
     } else {
         console.log(randomNumber);
-        res.end(popular[randomNumber]._content);
+        res.end(popular[randomNumber-1]._content);
     }
 });
 
