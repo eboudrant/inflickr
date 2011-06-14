@@ -90,8 +90,8 @@ var popular = null;
 setInterval(function() {
     console.log('reload popular tags');
     var parameters = {
-        count: 20,
-        period: 'week'
+        count: 40,
+        period: 'day'
     };
     flickr.tags.getHotList(parameters, function(err, results) {
         popular = results.tag;
@@ -107,14 +107,14 @@ app.get('/popular', function(req, res) {
     if(randomNumber < 0) {
         randomNumber = 0;
     }
-    if(randomNumber > 19) {
-        randomNumber = 19;
+    if(randomNumber > 39) {
+        randomNumber = 39;
     }
     if (!popular) {
         console.log('load popular tags');
         var parameters = {
-            count: 20,
-            period: 'week'
+            count: 40,
+            period: 'day'
         };
         flickr.tags.getHotList(parameters, function(err, results) {
             popular = results.tag;
