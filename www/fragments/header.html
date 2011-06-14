@@ -74,6 +74,7 @@ function randomTag() {
     var vurl = "/popular";
      $.ajax({
         url: vurl,
+        dataType, 'text',
         context: document.body,
         error: function(data) {
             console.log('error ' + data);
