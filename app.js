@@ -144,6 +144,65 @@ app.get('/popular', function(req, res) {
     res.write('http://ajax/*\n');
     res.end();
 });*/
+
+var managePages = function(err, results, req, res, tags) {
+        if (req.query.page == 1) {
+            preLoad = '';
+            postLoad = '';
+        }
+        if (!err) {
+            var photos = results.photo;
+            
+            for (var i = 0; i < photos.length;) {
+                if (i > 16 && preLoad == '') {
+                    preLoad = '\n<pre class=\'loadme\'><!-- ';
+                    postLoad = '</script>--></pre>\n';
+                    res.write('<script type="text/javascript">if(autoScroll) $(document).scrollTo( \'100%\', 2000);</script>');
+                }
+                link = preLoad + '<span style="display:block;width:' + (270 * perStrip) + 'px;height:240px;background-color:rgba(255,255,255,1);vertical-align: middle;">';
+                var imagePreloading = '';
+                for (var j = 0; j < perStrip; j++) {
+                    if (i == 8) {
+                        if (req.query.interestingness) {
+                            res.write(preLoad + '\n<script type="text/javascript">interestingness();</script>' + postLoad);
+                        } else if (req.query.plat && req.query.plon) {
+                            res.write(preLoad + '\n<script type="text/javascript">loadNext();</script>' + postLoad);
+                        }
+                        else {
+                            res.write(preLoad + '\n<script type="text/javascript">loadNext("' + tags + '");</script>' + postLoad);
+                        }
+                    }
+                    var src = 'http://farm' + photos[i].farm + '.static.flickr.com/' + photos[i].server + '/' + photos[i].id + '_' + photos[i].secret + '_m.jpg';
+                    var href = 'http://www.flickr.com/photos/' + photos[i].owner + '/' + photos[i].id + '/';
+                    link += '\n\t<a id="p_' + i + '" href=' + href + ' target=_BLANK><img src=\'' + src + '\' border=\'0\'/></a>';
+                    i++;
+                    imagePreloading = 'heavyImage = new Image(); heavyImage.src = "'+src+'";\n';
+                    if (i >= photos.length) {
+                        break;
+                    }
+                }
+                if (preLoad == '') {
+                    link += '</span>';
+                }
+                else {
+                    link += '</span> <script type="text/javascript">if(autoScroll) $(document).scrollTo( \'100%\', 2000); counter += 4;</script>' + postLoad;
+                }
+                res.write(link);
+                res.write('<script type="text/javascript">' + imagePreloading + ' console.log("image preloading...");</script>');
+                console.log('<script type="text/javascript">' + imagePreloading + '</script>');
+            }
+            if (photos.length < size) {
+                console.log('the end');
+                res.write("<script type='text/javascript'>document.getElementById('loader').innerHTML = 'the <span style=\\'color:rgba(255,0,132,1);\\'>end</span><br/><br/><br/>';</script>");
+            }
+            res.end();
+        }
+        else {
+            fail(err);
+            res.end(err.code + ' -  ' + err.message);
+        }
+    }
+        
 app.get('/ajax', function(req, res) {
     res.writeHead(200, {
         'Content-Type': 'text/html',
@@ -156,10 +215,10 @@ app.get('/ajax', function(req, res) {
             tags = req.query.tags.replace(/ /g, '+');
         }
         if (req.session.user) {
-            console.log('[' + req.client.remoteAddress + '] [' + new Date() + '] ' + flickr.user.username + ' more photos for ' + tags + '/' + req.query.plat + '/' + req.query.plon + ' (page ' + req.query.page + ')');
+            console.log('[' + req.client.remoteAddress + '] [' + new Date() + '] ' + flickr.user.username + ' more photos for ' + tags + '/' + req.query.plat + '/' + req.query.plon + '/' + req.query.interestingness + ' (page ' + req.query.page + ')');
         }
         else {
-            console.log('[' + req.client.remoteAddress + '] [' + new Date() + '] more photos for ' + tags + '/' + req.query.plat + '/' + req.query.plon + ' (page ' + req.query.page + ')');
+            console.log('[' + req.client.remoteAddress + '] [' + new Date() + '] more photos for ' + tags + '/' + req.query.plat + '/' + req.query.plon + '/' + req.query.interestingness + ' (page ' + req.query.page + ')');
         }
         var lat = req.query.lat;
         var lon = req.query.lon;
@@ -181,60 +240,41 @@ app.get('/ajax', function(req, res) {
                 page: req.query.page
             };
         }
+        if (req.query.interestingness) {
+            var d = new Date ();
+            d.setDate(d.getDate()-1);
+            var curr_date = d.getDate();
+            var curr_month = d.getMonth();
+            if(curr_date<10) {
+                curr_date = '0' + curr_date;
+            }
+            if(curr_month<10) {
+                curr_month = '0' + curr_month;
+            }
+            var curr_year = d.getFullYear();
+
+            console.log(curr_date + "-" + curr_month + "-" + curr_year);
+            parameters = {
+                date : curr_year + "-" + curr_month + "-" + curr_date,
+                per_page: size,
+                page: req.query.page
+            };
+        }
         var preLoad = '\n<pre class=\'loadme\'><!-- ';
         var postLoad = '</script>--></pre>\n';
-        if (req.query.page == 1) {
-            preLoad = '';
-            postLoad = '';
+
+        var photoSearchCallback = function(err, results) {
+            managePages(err, results, req, res, tags);
         }
-        flickr.photos.search(parameters, function(err, results) {
-            if (!err) {
-                var photos = results.photo;
-                for (var i = 0; i < photos.length;) {
-                    if (i > 16 && preLoad == '') {
-                        preLoad = '\n<pre class=\'loadme\'><!-- ';
-                        postLoad = '</script>--></pre>\n';
-                        res.write('<script type="text/javascript">if(autoScroll) $(document).scrollTo( \'100%\', 2000);</script>');
-                    }
-                    link = preLoad + '<span style="display:block;width:' + (270 * perStrip) + 'px;height:240px;background-color:rgba(255,255,255,1);vertical-align: middle;">';
-                    for (var j = 0; j < perStrip; j++) {
-                        if (i == 8) {
-                            if (req.query.plat && req.query.plon) {
-                                res.write(preLoad + '\n<script type="text/javascript">loadNext();</script>' + postLoad);
-                            }
-                            else {
-                                res.write(preLoad + '\n<script type="text/javascript">loadNext("' + tags + '");</script>' + postLoad);
-                            }
-                        }
-                        var src = 'http://farm' + photos[i].farm + '.static.flickr.com/' + photos[i].server + '/' + photos[i].id + '_' + photos[i].secret + '_m.jpg';
-                        var href = 'http://www.flickr.com/photos/' + photos[i].owner + '/' + photos[i].id + '/';
-                        link += '\n\t<a id="p_' + i + '" href=' + href + ' target=_BLANK><img src=\'' + src + '\' border=\'0\'/></a>';
-                        i++;
-                        if (i >= photos.length) {
-                            break;
-                        }
-                    }
-                    if (preLoad == '') {
-                        link += '</span>';
-                    } else {
-                        link += '</span> <script type="text/javascript">if(autoScroll) $(document).scrollTo( \'100%\', 2000); counter += 4;</script>' + postLoad;
-                    }
-                    res.write(link);
-                }
-                if(photos.length < size) {
-                    console.log('the end');
-                    res.write("<script type='text/javascript'>document.getElementById('loader').innerHTML = 'the <span style=\\'color:rgba(255,0,132,1);\\'>end</span><br/><br/><br/>';</script>");
-                }
-                res.end();
-            }
-            else {
-                fail(err);
-                res.end(err.code + ' -  ' + err.message);
-            }
-        });
+        if (req.query.interestingness) {
+            flickr.interestingness.getList(parameters, photoSearchCallback);
+        } else { 
+            flickr.photos.search(parameters, photoSearchCallback);
+        }
     }
 });
 app.get('/:tags?', function(req, res) {
+    
     if (req.headers.host == 'flickstream.cloudfoundry.com') {
         res.redirect('http://inflickr.cloudfoundry.com/');
         return;

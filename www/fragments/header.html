@@ -62,7 +62,26 @@ input {
   color:rgba(255,0,132,1);
 }
 	</style>
-	<script type="text/javascript" > 
+	
+    <script type="text/javascript" charset="utf-8">
+  var is_ssl = ("https:" == document.location.protocol);
+  var asset_host = is_ssl ? "https://s3.amazonaws.com/getsatisfaction.com/" : "http://s3.amazonaws.com/getsatisfaction.com/";
+  document.write(unescape("%3Cscript src='" + asset_host + "javascripts/feedback-v2.js' type='text/javascript'%3E%3C/script%3E"));
+</script>
+
+<script type="text/javascript" charset="utf-8">
+  var feedback_widget_options = {};
+  feedback_widget_options.position = "fixed";
+  feedback_widget_options.display = "overlay";  
+  feedback_widget_options.company = "inflickr";
+  feedback_widget_options.placement = "left";
+  feedback_widget_options.color = "#222";
+  feedback_widget_options.style = "idea";
+  var feedback_widget = new GSFN.feedback_widget(feedback_widget_options);
+</script>
+    
+    <script type="text/javascript" > 
+    
 var autoScroll = false;
 var counter = 0;
 var page = 1;
@@ -84,6 +103,20 @@ function randomTag() {
             page = 1;
             loadNext(document.getElementById('tags').value);
             autoScroll = true;
+        }
+    });
+}
+function interestingness() {
+    var vurl = "/ajax?method=photos&interestingness=true&page=" + (page++) + "&currentSearch=" + currentSearch;
+    $.ajax({
+        url: vurl,
+        context: document.body,
+        error: function(data) {
+            console.log("error: " + data);
+        },
+        success: function(data) {
+            $('.zone').append(data);
+            $('pre.loadme').lazyLoad();
         }
     });
 }
@@ -151,10 +184,11 @@ In flick<span style='color:rgba(255,0,132,1);'>r</span> ... The flick<span style
 
 <div class='normal' style="position:fixed;top:50px;width:100%;height:60px">
 <!--[  <a href='#'>connect</a> ]    -->
-[ tags : <input id='tags' type="text" onChange="currentSearch++; document.getElementById('loader').innerHTML = 'Loading...'; document.getElementById('idzone').innerHTML = ''; page = 1;loadNext(document.getElementById('tags').value); autoScroll = true; return false;"/>  ]
-[  <a href='#' onclick="currentSearch++; document.getElementById('loader').innerHTML = 'Loading...'; document.getElementById('idzone').innerHTML = ''; myPosition(); autoScroll = true; return false;">near my place</a>  ]
+[  <a href='#' onclick="currentSearch++; document.getElementById('loader').innerHTML = 'Loading...'; document.getElementById('idzone').innerHTML = ''; interestingness(); autoScroll = true; return false; return false;"><span style='color:rgba(255,0,132,1);'>interesting</span>ness</a>  ]
 [  <a href='#' onclick="currentSearch++; document.getElementById('loader').innerHTML = 'Loading...'; document.getElementById('idzone').innerHTML = ''; randomTag(); return false;">random</a>  ]
+[ tags : <input id='tags' type="text" onChange="currentSearch++; document.getElementById('loader').innerHTML = 'Loading...'; document.getElementById('idzone').innerHTML = ''; page = 1;loadNext(document.getElementById('tags').value); autoScroll = true; return false;"/>  ]
 [  <a href='#' onclick="currentSearch++; document.getElementById('loader').innerHTML = 'Loading...'; document.getElementById('idzone').innerHTML = ''; page = 1;document.getElementById('tags').value = 'day' + new Date().getDOY(); loadNext(document.getElementById('tags').value); autoScroll = true; return false;">today</a>  ]
+[  <a href='#' onclick="currentSearch++; document.getElementById('loader').innerHTML = 'Loading...'; document.getElementById('idzone').innerHTML = ''; myPosition(); autoScroll = true; return false;">near my <span style='color:rgba(255,0,132,1);'>place</span></a>  ]
 <script type="text/javascript">
 document.getElementById('tags').focus();
 </script>
