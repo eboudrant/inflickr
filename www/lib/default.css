@@ -1,327 +1,53 @@
 
-/*
-Design by Free CSS Templates
-http://www.freecsstemplates.org
-Released for free under a Creative Commons Attribution 2.5 License
-*/
-
 body {
-    margin: 0px;
-	padding: 0px;
-	background: #ECF0EC url(images/img01.gif) repeat;
-	text-align: justify;
-	font: 13px Arial, Helvetica, sans-serif;
-	color: #787878;
+  font-family: 'Slackey', serif;
+  font-size: 40px;
+  font-style: normal;
+  font-weight: 400;
+  text-shadow: 6px 6px 6px #ccc;
+  text-decoration: none;
+  text-transform: none;
+  letter-spacing: -0.05em;
+  word-spacing: -0.2em;
+  line-height: 1.2;
+  text-align: center;
+  color:rgba(0,99,220,1);
 }
-
-h1, h2, h3 {
-	font: 1.82em;
-	font-weight: normal;
-	font-family: Arial, Helvetica, sans-serif;
-	letter-spacing: -1px;
-	color: #000000;
+.normal {
+  font-family: 'Slackey', serif;
+  font-size: 20px;
+  font-style: bold;
+  font-weight: 200;
+  text-shadow: 6px 6px 6px #ccc;
+  text-decoration: none;
+  text-transform: node;
+  letter-spacing: -0.05em;
+  word-spacing: -0.2em;
+  line-height: 1.2;
+  text-align: center;
+  color:rgba(0,99,220,1);
 }
-
-p, ol, ul {
-	line-height: 1.67em;
-}
-
 a {
-	color: #828170;
+  color:rgba(0,99,220,1);
+  font-style: normal;
+  text-decoration: none;
 }
-
-a:hover {
-	text-decoration: none;
+a:hover { 
+  color:#2E67eD;
 }
-
-hr {
-	display: none;
-}
-
-/* Header */
-
-#header {
-	width: 1000px;
-	height: 170px;
-	margin: 0px auto;
-}
-
-/* Logo */
-
-#logo {
-	float: left;
-	padding: 10px 0 0 130px;
-}
-
-#logo h1 {
-	margin: 0;
-	height: 160px;
-	padding: 40px 0 0 0px;
-	text-transform: lowercase;
-	letter-spacing: -2px;
-	font-size: 4em;
-	font-weight: normal;
-	color: #000000;
-}
-
-#logo h1 a {
-	display: block;
-	text-decoration: none;
-	color: #000000;
-}
-
-#logo p {
-	margin: -103px 0 0 2px;
-	text-transform: uppercase;
-	font-family: Tahoma, Arial, Helvetica, sans-serif;
-	font-weight: bold;
-	font-size: 11px;
-}
-
-#logo a {
-	display: block;
-	text-decoration: none;
-	color: #000000;
-}
-
-/* Menu */
-
-#menu {
-	float: right;
-}
-
-#menu ul {
-	margin: 0px;
-	padding: 130px 0px 0px 0px;
-	list-style: none;
-}
-
-#menu li {
-	display: inline;
-}
-
-#menu a {
-	display: block;
-	float: left;
-	margin-left: 5px;
-	padding: 5px 20px;
-	background: #F3F1E9;
-	text-decoration: none;
-	text-transform: uppercase;
-	border-top: 2px solid #EBEAD1;
-	font-family: Arial, Helvetica, sans-serif; 
-	font-weight: bold;
-	font-size: 11px;
-	color: #182C33;
-}
-
-#menu a:hover, .active a {
-}
-
-/* Page */
-
-
-#page {
-	width: 940px;
-	margin: 0px auto;
-	padding: 20px 0 0 0;
-}
-
-/* Content */
-
-#content {
-	float: left;
-	width: 650px;
-	margin-bottom: 10px;
-}
-
-/* Post */
-
-.post {
-	margin-top: 20px;
-}
-
-.post .date {
-	float: left;
-	width: 60px;
-	height: 50px;
-	margin: 0;
-	margin-top: 3px;
-	margin-right: 20px;
-	padding-top: 10px;
-	background: #EA8101;
-	line-height: normal;
-	text-transform: uppercase;
-	text-align: center;
-	font-size: 18px;
-	font-weight: bold;
-	color: #FFFFFF;
-}
-
-.post .date b {
-	margin: 0;
-	padding: 0;
-	display: block;
-	margin-top: -5px;
-	font-size: 24px;
-	color: #FFFFFF;
-	
-}
-
-.post .title {
-	margin: 0;
-	padding: 0px 0 0 0;
-	margin-left: 10px;
-	padding-left: 10px;
-	font-size: 2.8em;
-	color: #000000;
-}
-
-.post .title h2 {
-	padding: 0;
-	margin: 0;
-}
-
-.post .hr1 {
-}
-
-.post .meta {
-	margin: 0 0 10px 20px;
-	padding: 0;
-	line-height:normal;
-	text-transform: uppercase;
-	color: #434343;
-}
-
-.post .meta a {
-	color: #434343;
-}
-
-.post .entry {
-	margin: 0;
-	padding: 0 0 20px 80px;
-}
-
-/* Sidebar */
-
-#sidebar {
-	float: right;
-	width: 240px;
-	padding-top: 20px;
-	margin-bottom: 20px;
-}
-
-#sidebar ul {
-	margin: 0;
-	padding: 0;
-	list-style: none;
-}
-
-#sidebar li {
-	margin-bottom: 30px;
-}
-
-#sidebar li ul {
-}
-
-#sidebar li li {
-	margin: 0;
-	padding: 4px 0 4px 0;
-}
-
-#sidebar li li a {
-}
-
-#sidebar h2 {
-	padding: 10px 20px;
-	margin: 0 0 6px 0;
-	font-size: 1.4em;
-	background: #000000;
-	text-transform: uppercase;
-	color: #FFFFFF;
-}
-
-#sidebar a {
-	text-decoration: none;
-}
-
-#sidebar a:hover {
-	text-decoration: underline;
-}
-
-/* Calendar */
-
-#calendar_wrap {
-	border-top: 1px dashed #666633;
-}
-
-#calendar caption {
-	padding-top: 5px;
-	font-weight: bold;
-}
-
-#calendar table {
-	width: 100%;
-	border: 0px solid #E8E8E8;
-	font-family: Arial, Helvetica, sans-serif;
-}
-
-#calendar thead {
-	background: #000000;
-	text-align: center;
-	color: #FFFFFF;
-}
-
-#calendar tbody td {
-	border: 1px solid #514F42;
-	text-align: center;
-}
-
-#today {
-	font-weight: bold;
-}
-
-#prev {
-}
-
-#next {
-	text-align: right;
-}
-
-/* Footer */
-
-#wrapper2 {
-	background: #422C21;
-}
-
-#footer {
-	width: 940px;
-	margin: 0 auto;
-	padding-top: 20px;
-	padding-bottom: 20px;
-	text-transform: uppercase;
-	font-family: Tahoma, Arial, Helvetica, sans-serif;
-	color: #FFFFFF;
-}
-
-#footer a {
-	text-decoration: none;
-	font-size: 10px;
-	color: #FFFFFF;
-}
-
-#legal {
-	clear: both;
-	margin: 0;
-	padding: 10px 0;
-	text-align: center;
-	font-size: 10px;
-	color: #525252;
-	background: black;
-}
-
-#legal a {
-	border-bottom: 1px dotted #939393;
-	text-decoration: none;
-	color: #939393;
+input {
+  font-family: 'Slackey', serif;
+  font-size: 20px;
+  font-style: bold;
+  font-weight: 200;
+  text-shadow: 6px 6px 6px #ccc;
+  text-decoration: none;
+  text-transform: none;
+  letter-spacing: -0.05em;
+  word-spacing: -0.2em;
+  line-height: 1.2;
+  text-align: center;
+  border: none;
+  background-color:transparent;
+  color:rgba(255,0,132,1);
 }

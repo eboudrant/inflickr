@@ -1,0 +1,42 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en" > <!-- manifest="/cache.appcache" -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>inflic.kr ... flickr for lazy people</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<script type="text/javascript" src="lib/jquery-1.6.1.min.js"></script> 
+	<script type="text/javascript" src="lib/jquery.lazyloader.min.js"></script>
+    <script type="text/javascript" src="lib/jquery.scrollTo.js"></script>
+    <script type="text/javascript" src="lib/inflickr.js"></script>
+    <link  href="http://fonts.googleapis.com/css?family=Slackey:regular" rel="stylesheet" type="text/css" >
+    <link  href="lib/default.css" rel="stylesheet" type="text/css" >
+</head>
+<body class="header" style="overflow:hidden">
+<div style="position:fixed;top:0%;width:100%;background:#fff;height:86px">
+inflic.k<span style='color:rgba(255,0,132,1);'>r</span>...flick<span style='color:rgba(255,0,132,1);'>r</span> for lazy people <span style='font-weight: 50;font-size: 12px;color:rgba(255,0,132,1);'>[beta]</span></br>
+</div>
+<div style="position:fixed;top:86px;width:100%;background: -webkit-gradient(linear, left top, left bottom, from(white), to(rgba(255,255,255,0.0)));height:120px">
+</div>
+<div class='normal' style="position:fixed;top:50px;width:100%;height:60px">
+[  <a href='#' onclick="currentSearch++; document.getElementById('loader').innerHTML = 'Loading...'; document.getElementById('idzone').innerHTML = ''; interestingness(); autoScroll = true; return false; return false;"><span style='color:rgba(255,0,132,1);'>interesting</span>ness</a>  ]
+[  <a href='#' onclick="currentSearch++; document.getElementById('loader').innerHTML = 'Loading...'; document.getElementById('idzone').innerHTML = ''; randomTag(); return false;">random</a>  ]
+[ tags : <input id='tags' type="text" onChange="currentSearch++; document.getElementById('loader').innerHTML = 'Loading...'; document.getElementById('idzone').innerHTML = ''; page = 1;loadNext(document.getElementById('tags').value); autoScroll = true; return false;"/>  ]
+[  <a href='#' onclick="currentSearch++; document.getElementById('loader').innerHTML = 'Loading...'; document.getElementById('idzone').innerHTML = ''; page = 1;document.getElementById('tags').value = 'day' + new Date().getDOY(); loadNext(document.getElementById('tags').value); autoScroll = true; return false;">today</a>  ]
+[  <a href='#' onclick="currentSearch++; document.getElementById('loader').innerHTML = 'Loading...'; document.getElementById('idzone').innerHTML = ''; myPosition(); autoScroll = true; return false;">near my <span style='color:rgba(255,0,132,1);'>place</span></a>  ]
+<script type="text/javascript">
+document.getElementById('tags').focus();
+</script>
+</div>
+<div style="position:fixed;bottom:24px;width:100%;background: -webkit-gradient(linear, left top, left bottom, from(rgba(255,255,255,0.0)), to(white));height:120px">
+</div>
+<div class='normal' style="position:fixed;bottom:0%;width:100%;background:#fff">
+copyright (c) 2011 - <a href='http://about.me/emmanuel.boudrant' target='_BLANK'><span style='color:rgba(255,0,132,1);'>ebtokyo</span></a> - <a href='http://www.cloudfoundry.com' target='_BLANK'>hosted on cloudfoundry - <a href="http://twitter.com/inflickr" target="_BLANK">Follow <span style='color:rgba(255,0,132,1);'>@inflickr</span></a>
+</div>
+<center>
+<span style="display:block;width:1080px;height:80px;background-color:#fff;vertical-align: middle;">
+</span>
+<div id='idzone' class='zone'></div>
+</center><pre class="morestuff" ><!-- --></pre>    
+        <p id='loader'></p>
+        </body>
+</html>

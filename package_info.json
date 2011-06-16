@@ -1,5 +1,8 @@
 {
     "name":"inflickr",
-	"version":"0.0.1",
-	"dependencies":{"express":""}
+	"version":"0.0.2S",
+	"dependencies":{
+        "express":"",
+        "jade": ""
+    }
 }

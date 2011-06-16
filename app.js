@@ -27,6 +27,10 @@ app.use(express.cookieParser());
 app.use(express.session({
     secret: "dexboys why not"
 }));
+app.use(express.static(__dirname + '/www'));
+app.set('views', __dirname + '/views');
+app.set('view engine', 'jade');
+
 app.get('/auth/', function(req, res) {
     flickr.auth.getToken(req.query.frob, function(err, results) {
         if (err) {
@@ -37,55 +41,7 @@ app.get('/auth/', function(req, res) {
         res.redirect('back');
     });
 });
-var staticFiles = {};
 
-function loadStaticFile(name, path, uri) {
-    if (process.env.VMC_APP_PORT) {
-        path = process.env.HOME + '/app/' + path;
-    }
-    fs.readFile(path, function(err, data) {
-        if (err) throw err;
-        staticFiles[name] = data;
-        console.log(path + ' in cache, length is ' + data.length);
-        if (uri) {
-            app.get(uri, function(req, res) {
-                res.writeHead(200, {
-                    'Content-Type': mime(path)
-                });
-                console.log('serve ' + path + ', length is ' + staticFiles[name].length);
-                res.end(staticFiles[name]);
-            });
-            console.log(uri + ' mounted');
-        }
-    });
-}
-String.prototype.endsWith = function(str) {
-    return (this.match(str + "$") == str);
-};
-
-function mime(file) {
-    if (file.endsWith('.js')) return 'application/javascript';
-    if (file.endsWith('.html')) return 'text/html';
-    if (file.endsWith('.css')) return 'text/css';
-}
-loadStaticFile('footer', 'www/fragments/footer.html');
-loadStaticFile('header', 'www/fragments/header.html');
-loadStaticFile('css', 'www/lib/default.css', '/lib/style.css');
-loadStaticFile('jquery', 'www/lib/jquery-1.6.1.min.js', '/lib/jquery-1.6.1.min.js');
-loadStaticFile('lazyloader', 'www/lib/jquery.lazyloader.min.js', '/lib/jquery.lazyloader.min.js');
-loadStaticFile('scrollTo', 'www/lib/jquery.scrollTo.js', '/lib/jquery.scrollTo.js');
-app.get('/favicon.ico', function(req, res) {
-    res.writeHead(404, "Not found", {
-        'Content-Type': 'text/html'
-    });
-    res.end();
-});
-app.get('/cache.appcache', function(req, res) {
-    res.writeHead(404, "Not found", {
-        'Content-Type': 'text/html'
-    });
-    res.end();
-});
 var popular = null;
 setInterval(function() {
     console.log('reload popular tags');
@@ -126,24 +82,6 @@ app.get('/popular', function(req, res) {
         res.end(popular[randomNumber]._content);
     }
 });
-
-/*app.get('/cache.appcache', function(req, res) {
-    res.writeHead(200, {
-        'Content-Type': 'text/cache-manifest'
-    });
-    res.write('CACHE MANIFEST\n');
-    res.write('# version 0.0.4\n');
-    res.write('\n');
-    res.write('CACHE:\n');
-    res.write('/lib/jquery-1.6.1.min.js\n');
-    res.write('/lib/jquery.lazyloader.min.js\n');
-    res.write('/lib/jquery.scrollTo.js\n');
-    res.write('/lib/style.css\n');
-    res.write('NETWORK\n');
-    res.write('http://*\n');
-    res.write('http://ajax/*\n');
-    res.end();
-});*/
 
 var managePages = function(err, results, req, res, tags) {
         if (req.query.page == 1) {
@@ -273,35 +211,7 @@ app.get('/ajax', function(req, res) {
         }
     }
 });
-app.get('/:tags?', function(req, res) {
-    
-    if (req.headers.host == 'flickstream.cloudfoundry.com') {
-        res.redirect('http://inflickr.cloudfoundry.com/');
-        return;
-    }
-    var uri = url.parse(req.url);
-    var tags = req.params.tags;
-    if (req.session && req.session.user) {
-        console.log('[' + req.client.remoteAddress + '] [' + new Date() + '] ' + flickr.user.username + ' here');
-    }
-    else {
-        console.log('[' + req.client.remoteAddress + '] [' + new Date() + '] someone look for here');
-    }
-    if (!tags) {
-        tags = 'cloud';
-    }
-    res.writeHead(200, {
-        'Content-Type': 'text/html',
-        'Cache-control': 'no-store'
-    });
-    res.write(staticFiles.header);
-    flickr.getLoginUrl('read', null, function(err, url, frob) {
-        //if (req.session.user) {
-        //    res.write('Hi ' + req.session.user.username + ' !<br>');
-        //}
-        res.end(staticFiles.footer);
-    });
-});
+
 console.log("Opening " + port + "...");
 app.listen(port);
 console.log("Audience is listening " + port + "...");
