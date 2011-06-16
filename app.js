@@ -44,7 +44,6 @@ app.get('/auth/', function(req, res) {
 
 var popular = null;
 setInterval(function() {
-    console.log('reload popular tags');
     var parameters = {
         count: 40,
         period: 'day'
@@ -127,7 +126,6 @@ var managePages = function(err, results, req, res, tags) {
                 }
                 res.write(link);
                 res.write('<script type="text/javascript">' + imagePreloading + ' console.log("image preloading...");</script>');
-                console.log('<script type="text/javascript">' + imagePreloading + '</script>');
             }
             if (photos.length < size) {
                 console.log('the end');
@@ -190,8 +188,6 @@ app.get('/ajax', function(req, res) {
                 curr_month = '0' + curr_month;
             }
             var curr_year = d.getFullYear();
-
-            console.log(curr_date + "-" + curr_month + "-" + curr_year);
             parameters = {
                 date : curr_year + "-" + curr_month + "-" + curr_date,
                 per_page: size,
