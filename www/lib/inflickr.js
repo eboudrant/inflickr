@@ -1,7 +1,28 @@
-
 var autoScroll = false;
 var counter = 0;
 var page = 1;
+
+function gup(name) {
+    name = name.replace(/[\[]/, "\\\[").replace(/[\]]/, "\\\]");
+    var regexS = "[\\?&]" + name + "=([^&#]*)";
+    var regex = new RegExp(regexS);
+    var results = regex.exec(window.location.href);
+    if (results == null) return "";
+    else return results[1];
+}
+
+function init() {
+    var q = gup('q');
+    if (q) {
+        document.getElementById('tags').value = q;
+        currentSearch++;
+        document.getElementById('loader').innerHTML = 'Loading...';
+        document.getElementById('idzone').innerHTML = '';
+        page = 1;
+        loadNext(document.getElementById('tags').value);
+        autoScroll = true;
+    }
+}
 $(document).ready(function() {
     $('pre.loadme').lazyLoad();
     $('pre.morestuff').lazyLoad();
