@@ -86,6 +86,9 @@ var managePages = function(err, results, req, res, tags) {
         if (req.query.page == 1) {
             preLoad = '';
             postLoad = '';
+        } else {
+            preLoad = '\n<pre class=\'loadme\'><!-- ';
+            postLoad = '</script>--></pre>\n';
         }
         if (!err) {
             var photos = results.photo;
@@ -94,7 +97,7 @@ var managePages = function(err, results, req, res, tags) {
                 if (i > 16 && preLoad == '') {
                     preLoad = '\n<pre class=\'loadme\'><!-- ';
                     postLoad = '</script>--></pre>\n';
-                    res.write('<script type="text/javascript">if(autoScroll) $(document).scrollTo( \'100%\', 2000);</script>');
+                    res.write('<script type="text/javascript">if(autoScroll) scroll('+ req.query.sid +');</script>');
                 }
                 link = preLoad + '<span style="display:block;width:' + (270 * perStrip) + 'px;height:240px;background-color:rgba(255,255,255,1);vertical-align: middle;">';
                 var imagePreloading = '';
@@ -113,7 +116,7 @@ var managePages = function(err, results, req, res, tags) {
                     var href = 'http://www.flickr.com/photos/' + photos[i].owner + '/' + photos[i].id + '/';
                     link += '\n\t<a id="p_' + i + '" href=' + href + ' target=_BLANK><img src=\'' + src + '\' border=\'0\'/></a>';
                     i++;
-                    imagePreloading = 'heavyImage = new Image(); heavyImage.src = "'+src+'";\n';
+                    imagePreloading += 'heavyImage = new Image(); heavyImage.src = "'+src+'";\n';
                     if (i >= photos.length) {
                         break;
                     }
@@ -122,7 +125,7 @@ var managePages = function(err, results, req, res, tags) {
                     link += '</span>';
                 }
                 else {
-                    link += '</span> <script type="text/javascript">if(autoScroll) $(document).scrollTo( \'100%\', 2000); counter += 4;</script>' + postLoad;
+                    link += '</span> <script type="text/javascript">if(autoScroll) scroll('+ req.query.sid +'); counter += 4;</script>' + postLoad;
                 }
                 res.write(link);
                 res.write('<script type="text/javascript">' + imagePreloading + ' console.log("image preloading...");</script>');
@@ -137,13 +140,28 @@ var managePages = function(err, results, req, res, tags) {
             fail(err);
             res.end(err.code + ' -  ' + err.message);
         }
-    }
+    };
         
 app.get('/ajax', function(req, res) {
     res.writeHead(200, {
         'Content-Type': 'text/html',
         'Cache-control': 'no-store'
     });
+    
+    if (!req.query.sid) {
+        res.end('{"error": "no page sid"}');
+        return;
+    }
+    
+    if (!req.query.page) {
+        res.end('{"error": "no page defined"}');
+        return;
+    }
+    
+    if (!req.query.method) {
+        res.end('{"error": "no method defined"}');
+        return;
+    }
     
     if (req.query.method == 'photos') {
         var tags;

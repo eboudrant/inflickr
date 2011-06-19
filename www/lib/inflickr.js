@@ -28,6 +28,13 @@ $(document).ready(function() {
     $('pre.morestuff').lazyLoad();
 });
 
+function scroll(sid) {
+    console.log('sid=' + sid + ' and currentSearch = ' + currentSearch);
+    if(currentSearch == sid) {
+        $(document).scrollTo('100%', 2000);
+    }
+}
+
 function randomTag() {
     var vurl = "/popular";
     $.ajax({
@@ -47,7 +54,7 @@ function randomTag() {
 }
 
 function interestingness() {
-    var vurl = "/ajax?method=photos&interestingness=true&page=" + (page++) + "&currentSearch=" + currentSearch;
+    var vurl = "/ajax?method=photos&interestingness=true&page=" + (page++) + "&sid=" + currentSearch;
     $.ajax({
         url: vurl,
         context: document.body,
@@ -65,10 +72,10 @@ function interestingness() {
 function loadNext(tags) {
     var vurl = "/ajax";
     if (tags) {
-        vurl = "/ajax?method=photos&tags=" + tags + "&page=" + (page++) + "&currentSearch=" + currentSearch;
+        vurl = "/ajax?method=photos&tags=" + tags + "&page=" + (page++) + "&sid=" + currentSearch;
     }
     else {
-        vurl = "/ajax?method=photos&plon=" + lon + "&plat=" + lat + "&page=" + (page++) + "&currentSearch=" + currentSearch;
+        vurl = "/ajax?method=photos&plon=" + lon + "&plat=" + lat + "&page=" + (page++) + "&sid=" + currentSearch;
     }
     $.ajax({
         url: vurl,
@@ -94,7 +101,7 @@ function getPosition(position) {
     lon = position.coords.longitude;
     page = 2;
     $.ajax({
-        url: "/ajax?method=photos&plon=" + lon + "&plat=" + lat + "&page=1&currentSearch=" + currentSearch,
+        url: "/ajax?method=photos&plon=" + lon + "&plat=" + lat + "&page=1&sid=" + currentSearch,
         context: document.body,
         error: function(data) {
             console.log("error : " + data);
