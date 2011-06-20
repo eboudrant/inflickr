@@ -159,9 +159,11 @@ app.get('/pass', function(req, res) {
                 'Content-Type': 'image/jpeg'
             });
             response.on('data', function(chunk) {
+                console.log('write ' + req.query.path);
                 res.write(chunk);
             });
             response.on('end', function() {
+                console.log('end ' + req.query.path);
                 res.end();
             });
         });
