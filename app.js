@@ -158,16 +158,11 @@ app.get('/pass', function(req, res) {
         };
         var request = http.request(options);
         request.on('response', function(response) {
-            
             res.writeHead(200, response.headers);
-            
-            console.log(response.headers);
-            
             response.on('data', function(chunk) {
                 res.write(chunk);
             });
             response.on('end', function() {
-                console.log('end ' + req.query.path);
                 res.end();
             });
         });
