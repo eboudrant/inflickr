@@ -2,6 +2,7 @@ require.paths.unshift('./flickrnode');
 require.paths.unshift('./node_modules/express/lib');
 var FlickrAPI = require('flickr').FlickrAPI;
 var express = require("express");
+var http = require("http");
 var url = require("url");
 var fs = require("fs");
 var FlickrKeys = function FlickrKeys() {
@@ -113,6 +114,9 @@ var managePages = function(err, results, req, res, tags) {
                         }
                     }
                     var src = 'http://farm' + photos[i].farm + '.static.flickr.com/' + photos[i].server + '/' + photos[i].id + '_' + photos[i].secret + '_m.jpg';
+                    if(req.query.tunneling) {
+                        src = '/pass?farm=' + photos[i].farm + '&path=/' + photos[i].server + '/' + photos[i].id + '_' + photos[i].secret + '_m.jpg';
+                    }
                     var href = 'http://www.flickr.com/photos/' + photos[i].owner + '/' + photos[i].id + '/';
                     link += '\n\t<a id="p_' + i + '" href=' + href + ' target=_BLANK><img src=\'' + src + '\' border=\'0\'/></a>';
                     i++;
@@ -141,6 +145,35 @@ var managePages = function(err, results, req, res, tags) {
             res.end(err.code + ' -  ' + err.message);
         }
     };
+app.get('/pass', function(req, res) {
+    if (req.query.path && req.query.farm) {
+        var options = {
+            port: 80,
+            host: 'farm' + req.query.farm + '.static.flickr.com',
+            method: 'GET',
+            path: req.query.path
+        };
+        var request = http.request(options);
+        request.on('response', function(response) {
+            res.writeHead(200, {
+                'Content-Type': 'image/jpeg'
+            });
+            response.on('data', function(chunk) {
+                res.write(chunk);
+            });
+            response.on('end', function() {
+                res.end();
+            });
+        });
+        request.end();
+    } else {
+        res.writeHead(200, {
+            'Content-Type': 'text/html',
+            'Cache-control': 'no-store'
+        });
+        res.end('not found');
+    }
+});
         
 app.get('/ajax', function(req, res) {
     res.writeHead(200, {

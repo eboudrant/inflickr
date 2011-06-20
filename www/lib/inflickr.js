@@ -10,7 +10,7 @@ function gup(name) {
     if (results == null) return "";
     else return results[1];
 }
-
+var tunneling = '';
 function init() {
     var q = gup('q');
     if (q) {
@@ -22,6 +22,10 @@ function init() {
         loadNext(document.getElementById('tags').value);
         autoScroll = true;
     }
+    var t = gup('t');
+    if (t) {
+        tunneling = '&tunneling=true';
+    }
 }
 $(document).ready(function() {
     $('pre.loadme').lazyLoad();
@@ -29,7 +33,6 @@ $(document).ready(function() {
 });
 
 function scroll(sid) {
-    console.log('sid=' + sid + ' and currentSearch = ' + currentSearch);
     if(currentSearch == sid) {
         $(document).scrollTo('100%', 2000);
     }
@@ -54,7 +57,7 @@ function randomTag() {
 }
 
 function interestingness() {
-    var vurl = "/ajax?method=photos&interestingness=true&page=" + (page++) + "&sid=" + currentSearch;
+    var vurl = "/ajax?method=photos&interestingness=true&page=" + (page++) + "&sid=" + currentSearch + tunneling;
     $.ajax({
         url: vurl,
         context: document.body,
@@ -72,10 +75,10 @@ function interestingness() {
 function loadNext(tags) {
     var vurl = "/ajax";
     if (tags) {
-        vurl = "/ajax?method=photos&tags=" + tags + "&page=" + (page++) + "&sid=" + currentSearch;
+        vurl = "/ajax?method=photos&tags=" + tags + "&page=" + (page++) + "&sid=" + currentSearch + tunneling;
     }
     else {
-        vurl = "/ajax?method=photos&plon=" + lon + "&plat=" + lat + "&page=" + (page++) + "&sid=" + currentSearch;
+        vurl = "/ajax?method=photos&plon=" + lon + "&plat=" + lat + "&page=" + (page++) + "&sid=" + currentSearch + tunneling;
     }
     $.ajax({
         url: vurl,
@@ -101,7 +104,7 @@ function getPosition(position) {
     lon = position.coords.longitude;
     page = 2;
     $.ajax({
-        url: "/ajax?method=photos&plon=" + lon + "&plat=" + lat + "&page=1&sid=" + currentSearch,
+        url: "/ajax?method=photos&plon=" + lon + "&plat=" + lat + "&page=1&sid=" + currentSearch + tunneling,
         context: document.body,
         error: function(data) {
             console.log("error : " + data);
