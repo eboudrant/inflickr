@@ -158,11 +158,12 @@ app.get('/pass', function(req, res) {
         };
         var request = http.request(options);
         request.on('response', function(response) {
-            res.writeHead(200, {
-                'Content-Type': 'image/jpeg'
-            });
+            
+            res.writeHead(200, response.headers);
+            
+            console.log(response.headers);
+            
             response.on('data', function(chunk) {
-                //console.log('write ' + req.query.path);
                 res.write(chunk);
             });
             response.on('end', function() {
