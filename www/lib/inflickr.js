@@ -11,6 +11,7 @@ function gup(name) {
     else return results[1];
 }
 var tunneling = '';
+
 function init() {
     var q = gup('q');
     if (q) {
@@ -33,7 +34,7 @@ $(document).ready(function() {
 });
 
 function scroll(sid) {
-    if(currentSearch == sid) {
+    if (currentSearch == sid) {
         $(document).scrollTo('100%', 2000);
     }
 }
@@ -122,4 +123,17 @@ function myPosition() {
 Date.prototype.getDOY = function() {
     var onejan = new Date(this.getFullYear(), 0, 1);
     return Math.ceil((this - onejan) / 86400000);
+};
+
+function remove(image) {
+    console.log('cleanning ' + image);
+    image = image - 40;
+    for (i = 0; i < 4; i++) {
+        var pclass = '.i' + image;
+        if (image >= 0) {
+            console.log('remove ' + pclass);
+            $(pclass).remove();
+        }
+        image++;
+    }
 }

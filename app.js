@@ -86,7 +86,7 @@ app.get('/popular', function(req, res) {
 var managePages = function(err, results, req, res, tags) {
         if (req.query.page == 1) {
             preLoad = '';
-            postLoad = '';
+            postLoad = '</script>';
         } else {
             preLoad = '\n<pre class=\'loadme\'><!-- ';
             postLoad = '</script>--></pre>\n';
@@ -95,9 +95,9 @@ var managePages = function(err, results, req, res, tags) {
             var photos = results.photo;
             
             for (var i = 0; i < photos.length;) {
-                if (i > 16 && preLoad == '') {
+                if (i > 16 && preLoad === '') {
                     preLoad = '\n<pre class=\'loadme\'><!-- ';
-                    postLoad = '</script>--></pre>\n';
+                    postLoad = 'remove('+((req.query.page-1) * size + i)+'); </script>--></pre>\n';
                     res.write('<script type="text/javascript">if(autoScroll) scroll('+ req.query.sid +');</script>');
                 }
                 link = preLoad + '<span style="display:block;width:' + (270 * perStrip) + 'px;height:240px;background-color:rgba(255,255,255,1);vertical-align: middle;">';
@@ -105,12 +105,12 @@ var managePages = function(err, results, req, res, tags) {
                 for (var j = 0; j < perStrip; j++) {
                     if (i == 8) {
                         if (req.query.interestingness) {
-                            res.write(preLoad + '\n<script type="text/javascript">interestingness();</script>' + postLoad);
+                            res.write(preLoad + '\n<script type="text/javascript">interestingness();' + postLoad);
                         } else if (req.query.plat && req.query.plon) {
-                            res.write(preLoad + '\n<script type="text/javascript">loadNext();</script>' + postLoad);
+                            res.write(preLoad + '\n<script type="text/javascript">loadNext();' + postLoad);
                         }
                         else {
-                            res.write(preLoad + '\n<script type="text/javascript">loadNext("' + tags + '");</script>' + postLoad);
+                            res.write(preLoad + '\n<script type="text/javascript">loadNext("' + tags + '");' + postLoad);
                         }
                     }
                     var src = 'http://farm' + photos[i].farm + '.static.flickr.com/' + photos[i].server + '/' + photos[i].id + '_' + photos[i].secret + '_m.jpg';
@@ -118,21 +118,25 @@ var managePages = function(err, results, req, res, tags) {
                         src = '/pass?farm=' + photos[i].farm + '&path=/' + photos[i].server + '/' + photos[i].id + '_' + photos[i].secret + '_m.jpg';
                     }
                     var href = 'http://www.flickr.com/photos/' + photos[i].owner + '/' + photos[i].id + '/';
-                    link += '\n\t<a id="p_' + i + '" href=' + href + ' target=_BLANK><img src=\'' + src + '\' border=\'0\'/></a>';
+                    link += '\n\t<a class="i' + ((req.query.page-1) * size + i) + '" href=' + href + ' target=_BLANK><img src=\'' + src + '\' border=\'0\'/></a>';
+                    if(preLoad !== '') {
+                        link += '<script type="text/javascript">remove('+((req.query.page-1) * size + i)+');</script>';
+                    }
+                   
                     i++;
                     imagePreloading += 'heavyImage = new Image(); heavyImage.src = "'+src+'";\n';
                     if (i >= photos.length) {
                         break;
                     }
                 }
-                if (preLoad == '') {
+                if (preLoad === '') {
                     link += '</span>';
                 }
                 else {
-                    link += '</span> <script type="text/javascript">if(autoScroll) scroll('+ req.query.sid +'); counter += 4;</script>' + postLoad;
+                    link += '</span> <script type="text/javascript">if(autoScroll) scroll('+ req.query.sid +'); counter += 4;' + postLoad;
                 }
                 res.write(link);
-                res.write('<script type="text/javascript">' + imagePreloading + ' console.log("image preloading...");</script>');
+                res.write('<script type="text/javascript">' + imagePreloading + ' console.log("image preloading..."); </script>');
             }
             if (photos.length < size) {
                 console.log('the end');
@@ -145,6 +149,7 @@ var managePages = function(err, results, req, res, tags) {
             res.end(err.code + ' -  ' + err.message);
         }
     };
+    
 app.get('/pass', function(req, res) {
     if (req.query.path && req.query.farm) {
         var options = {
