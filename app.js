@@ -151,7 +151,10 @@ app.get('/pass', function(req, res) {
             port: 80,
             host: 'farm' + req.query.farm + '.static.flickr.com',
             method: 'GET',
-            path: req.query.path
+            path: req.query.path,
+            headers: {
+                'Connection': 'keep-alive'
+            }           
         };
         var request = http.request(options);
         request.on('response', function(response) {
@@ -159,7 +162,7 @@ app.get('/pass', function(req, res) {
                 'Content-Type': 'image/jpeg'
             });
             response.on('data', function(chunk) {
-                console.log('write ' + req.query.path);
+                //console.log('write ' + req.query.path);
                 res.write(chunk);
             });
             response.on('end', function() {
