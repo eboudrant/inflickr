@@ -1,0 +1,93 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en" > <!-- manifest="/cache.appcache" -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>infli·kr ... flickr for lazy people</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="description" content="flickr viewer infinit scroll" />
+    <meta name="keywords" content="flickr viewer infinit scroll photo nodejs interesting tag" />
+	<script type="text/javascript" src="lib/jquery-1.6.1.min.js"></script> 
+	<script type="text/javascript" src="lib/jquery.lazyloader.min.js"></script>
+    <script type="text/javascript" src="lib/jquery.scrollTo.js"></script>
+    <script type="text/javascript" src="lib/inflickr.js"></script>
+    <link  href="http://fonts.googleapis.com/css?family=Slackey:regular" rel="stylesheet" type="text/css" >
+    <link  href="lib/default.css" rel="stylesheet" type="text/css" >
+    <script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-13124995-3']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+</head>
+<body class="header" style="overflow:hidden">
+<div style="position:fixed;top:0%;left:0px;width:100%;background:#fff;height:86px"><a href='http://www.infli.kr'>
+infli·<span style='color:rgba(255,0,132,1);'>kr</span>...flick<span style='color:rgba(255,0,132,1);'>r</span> for lazy people <span class='normal'>[beta for <span style='color:rgba(255,0,132,1);'>chrome</span> and <span style='color:rgba(255,0,132,1);'>safari</span>]</span></br>
+</a></div>
+<div style="position:fixed;top:86px;left:0px;width:100%;background:-webkit-gradient(linear, left top, left bottom, from(white), to(rgba(255,255,255,0.0)));height:120px">
+</div>
+<div class='normal' style="position:fixed;top:50px;width:100%;height:60px">
+[  <a href='#' onclick="currentSearch++; document.getElementById('loader').innerHTML = 'Loading...'; document.getElementById('idzone').innerHTML = ''; page = 1;interestingness(); autoScroll = true; return false; return false;"><span style='color:rgba(255,0,132,1);'>interesting</span>ness</a>  ]
+[  <a href='#' onclick="currentSearch++; document.getElementById('loader').innerHTML = 'Loading...'; document.getElementById('idzone').innerHTML = ''; randomTag(); return false;">random</a>  ]
+[ tags : <input id='tags' type="text" onChange="currentSearch++; document.getElementById('loader').innerHTML = 'Loading...'; document.getElementById('idzone').innerHTML = ''; page = 1;loadNext(document.getElementById('tags').value); autoScroll = true; return false;"/>  ]
+[  <a href='#' onclick="currentSearch++; document.getElementById('loader').innerHTML = 'Loading...'; document.getElementById('idzone').innerHTML = ''; page = 1;document.getElementById('tags').value = 'day' + new Date().getDOY(); loadNext(document.getElementById('tags').value); autoScroll = true; return false;">today</a>  ]
+[  <a href='#' onclick="currentSearch++; document.getElementById('loader').innerHTML = 'Loading...'; document.getElementById('idzone').innerHTML = ''; myPosition(); autoScroll = true; return false;">near my <span style='color:rgba(255,0,132,1);'>place</span></a>  ]
+<script type="text/javascript">
+document.getElementById('tags').focus();
+</script>
+</div>
+<div style="position:fixed;left:0px;bottom:24px;width:100%;background:-webkit-gradient(linear, left top, left bottom, from(rgba(255,255,255,0.0)), to(white));height:120px">
+</div>
+<div class='normal' style="position:fixed;left:0px;bottom:0%;width:100%;background:#fff">
+copyright (c) 2011 - <a href='http://about.me/emmanuel.boudrant' target='_BLANK'><span style='color:rgba(255,0,132,1);'>ebtokyo</span></a> - <a href='http://www.cloudfoundry.com' target='_BLANK'>hosted on cloudfoundry - <a href="http://twitter.com/inflickr" target="_BLANK">Follow <span style='color:rgba(255,0,132,1);'>@inflickr</span></a>
+</div>
+<center>
+<span style="display:block;width:1080px;height:80px;left:0px;background-color:#fff;vertical-align: middle;">
+</span>
+<div id='idzone' class='zone'>
+
+<span id='strip0' style="z-index:-1;position:absolute;left:0px;top:200px;display:block;width:100%;height:240px;background-color:rgba(100,0,0,1);vertical-align: middle;">
+</span>
+<span id='strip1' style="z-index:-1;position:absolute;left:0px;top:460px;display:block;width:100%;height:240px;background-color:rgba(0,100,0,1);vertical-align: middle;">
+</span>
+<span id='strip2' style="z-index:-1;position:absolute;left:0px;top:720px;display:block;width:100%;height:240px;background-color:rgba(0,0,100,1);vertical-align: middle;">
+</span>
+<span id='strip3' style="z-index:-1;position:absolute;left:0px;top:980px;display:block;width:100%;height:240px;background-color:rgba(0,0,0,1);vertical-align: middle;">
+</span>
+<span id='strip4' style="z-index:-1;position:absolute;left:0px;top:1240px;display:block;width:100%;height:240px;background-color:rgba(0,0,0,1);vertical-align: middle;">
+</span>
+
+<script type="text/javascript">
+setInterval(function() { 
+    move('strip0');
+    move('strip1');
+    move('strip2');
+    move('strip3');
+    move('strip4');
+}, 30);
+
+function move(id) {
+    var top = parseInt(document.getElementById(id).style.top.replace('px', ''));
+    var newTop = (top - 2);
+    if(newTop < -174) {
+        newTop = 1124;
+    }
+    document.getElementById(id).style.top = newTop + 'px';
+}
+
+</script>
+
+</div>
+</center><pre class="morestuff" ><!-- --></pre>    
+        <p id='loader'></p>
+        </body>
+<script type="text/javascript">
+init();
+</script>
+</html>

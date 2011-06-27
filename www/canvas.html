@@ -1,0 +1,27 @@
+<html>
+<head>
+<canvas id="canvas" width="1000" height="1000"></canvas>
+<script>
+  var src = 'http://farm3.static.flickr.com/2508/5824317076_27c44e6eb7.jpg';
+  var context = document.getElementById("canvas").getContext("2d");
+  var x = 10;
+  var y = 10;
+  var img = new Image();
+  img.src = src;
+  img.onload = function() {
+    context.drawImage(img, 0, 0);
+  };
+  context.moveTo(10,10);
+  context.moveTo(20,10);
+  context.moveTo(30,10);
+  context.moveTo(40,10);
+  setInterval("scroll()", 500);
+  function scroll() {
+    context.moveTo(x, y++);
+    console.log('scroll');
+   }
+</script>
+</head>
+<body>
+</body>
+</html>
