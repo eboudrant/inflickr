@@ -1,27 +1,132 @@
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en" > <!-- manifest="/cache.appcache" -->
 <head>
-<canvas id="canvas" width="1000" height="1000"></canvas>
-<script>
-  var src = 'http://farm3.static.flickr.com/2508/5824317076_27c44e6eb7.jpg';
-  var context = document.getElementById("canvas").getContext("2d");
-  var x = 10;
-  var y = 10;
-  var img = new Image();
-  img.src = src;
-  img.onload = function() {
-    context.drawImage(img, 0, 0);
-  };
-  context.moveTo(10,10);
-  context.moveTo(20,10);
-  context.moveTo(30,10);
-  context.moveTo(40,10);
-  setInterval("scroll()", 500);
-  function scroll() {
-    context.moveTo(x, y++);
-    console.log('scroll');
-   }
-</script>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>infli·kr ... flickr for lazy people</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="description" content="flickr viewer infinit scroll" />
+    <meta name="keywords" content="flickr viewer infinit scroll photo nodejs interesting tag" />
+	<script type="text/javascript" src="lib/jquery-1.6.1.min.js"></script> 
+	<script type="text/javascript" src="lib/jquery.lazyloader.min.js"></script>
+    <script type="text/javascript" src="lib/jquery.scrollTo.js"></script>
+    <script type="text/javascript" src="lib/inflickr.js"></script>
+    <link  href="http://fonts.googleapis.com/css?family=Slackey:regular" rel="stylesheet" type="text/css" >
+    <link  href="lib/default.css" rel="stylesheet" type="text/css" >
+
 </head>
-<body>
-</body>
+<body class="header" style="overflow:hidden">
+<div style="position:fixed;top:0%;left:0px;width:100%;background:#fff;height:86px"><a href='http://www.infli.kr'>
+infli·<span style='color:rgba(255,0,132,1);'>kr</span>...flick<span style='color:rgba(255,0,132,1);'>r</span> for lazy people <span class='normal'>[beta for <span style='color:rgba(255,0,132,1);'>chrome</span> and <span style='color:rgba(255,0,132,1);'>safari</span>]</span></br>
+</a></div>
+<div style="position:fixed;top:86px;left:0px;width:100%;background:-webkit-gradient(linear, left top, left bottom, from(white), to(rgba(255,255,255,0.0)));height:120px">
+</div>
+<div class='normal' style="position:fixed;top:50px;width:100%;height:60px">
+[  <a href='#' onclick="currentSearch++; document.getElementById('loader').innerHTML = 'Loading...'; document.getElementById('idzone').innerHTML = ''; page = 1;interestingness(); autoScroll = true; return false; return false;"><span style='color:rgba(255,0,132,1);'>interesting</span>ness</a>  ]
+[  <a href='#' onclick="currentSearch++; document.getElementById('loader').innerHTML = 'Loading...'; document.getElementById('idzone').innerHTML = ''; randomTag(); return false;">random</a>  ]
+[ tags : <input id='tags' type="text" onChange="currentSearch++; document.getElementById('loader').innerHTML = 'Loading...'; document.getElementById('idzone').innerHTML = ''; page = 1;loadNext(document.getElementById('tags').value); autoScroll = true; return false;"/>  ]
+[  <a href='#' onclick="currentSearch++; document.getElementById('loader').innerHTML = 'Loading...'; document.getElementById('idzone').innerHTML = ''; page = 1;document.getElementById('tags').value = 'day' + new Date().getDOY(); loadNext(document.getElementById('tags').value); autoScroll = true; return false;">today</a>  ]
+[  <a href='#' onclick="currentSearch++; document.getElementById('loader').innerHTML = 'Loading...'; document.getElementById('idzone').innerHTML = ''; myPosition(); autoScroll = true; return false;">near my <span style='color:rgba(255,0,132,1);'>place</span></a>  ]
+<script type="text/javascript">
+document.getElementById('tags').focus();
+</script>
+</div>
+<div style="position:fixed;left:0px;bottom:24px;width:100%;background:-webkit-gradient(linear, left top, left bottom, from(rgba(255,255,255,0.0)), to(white));height:120px">
+</div>
+<div class='normal' style="position:fixed;left:0px;bottom:0%;width:100%;background:#fff">
+copyright (c) 2011 - <a href='http://about.me/emmanuel.boudrant' target='_BLANK'><span style='color:rgba(255,0,132,1);'>ebtokyo</span></a> - <a href='http://www.cloudfoundry.com' target='_BLANK'>hosted on cloudfoundry - <a href="http://twitter.com/inflickr" target="_BLANK">Follow <span style='color:rgba(255,0,132,1);'>@inflickr</span></a>
+</div>
+<center>
+<span style="display:block;width:1080px;height:80px;left:0px;background-color:#fff;vertical-align: middle;">
+</span>
+<div id='idzone' class='zone'>
+
+<canvas id='strip'>
+Your browser does not support HTML5 Canvas.
+</canvas>
+
+<script type="text/javascript">
+    var canvas = document.getElementById('strip');
+    canvas.width = document.width;
+    canvas.height = document.height;
+    var ctx = canvas.getContext('2d');
+    ctx.fillStyle = "rgb(200,0,0)";
+    var middle = canvas.width / 2;
+    var images = [];
+    
+    images[0] = {src: 'http://farm6.static.flickr.com/5104/5872564307_31876c874d_m.jpg', x: middle - 500, y: 100}
+    images[1] = {src: 'http://farm6.static.flickr.com/5150/5876683027_a7241a1fe8_m.jpg', x: middle - 250, y: 100}
+    images[2] = {src: 'http://farm7.static.flickr.com/6018/5876898386_a3dd763f0f_m.jpg', x: middle, y: 100}
+    images[3] = {src: 'http://farm7.static.flickr.com/6036/5871673649_61418ab4e2_m.jpg', x: middle + 250, y: 100}
+    
+    images[4] = {src: 'http://farm6.static.flickr.com/5104/5872564307_31876c874d_m.jpg', x: middle - 500, y: 350}
+    images[5] = {src: 'http://farm6.static.flickr.com/5150/5876683027_a7241a1fe8_m.jpg', x: middle - 250, y: 350}
+    images[6] = {src: 'http://farm7.static.flickr.com/6018/5876898386_a3dd763f0f_m.jpg', x: middle, y: 350}
+    images[7] = {src: 'http://farm7.static.flickr.com/6036/5871673649_61418ab4e2_m.jpg', x: middle + 250, y: 350}
+    
+    images[8] = {src: 'http://farm6.static.flickr.com/5104/5872564307_31876c874d_m.jpg', x: middle - 500, y: 600}
+    images[9] = {src: 'http://farm6.static.flickr.com/5150/5876683027_a7241a1fe8_m.jpg', x: middle - 250, y: 600}
+    images[10] = {src: 'http://farm7.static.flickr.com/6018/5876898386_a3dd763f0f_m.jpg', x: middle, y: 600}
+    images[11] = {src: 'http://farm7.static.flickr.com/6036/5871673649_61418ab4e2_m.jpg', x: middle + 250, y: 600}
+    
+    images[12] = {src: 'http://farm6.static.flickr.com/5104/5872564307_31876c874d_m.jpg', x: middle - 500, y: 850}
+    images[13] = {src: 'http://farm6.static.flickr.com/5150/5876683027_a7241a1fe8_m.jpg', x: middle - 250, y: 850}
+    images[14] = {src: 'http://farm7.static.flickr.com/6018/5876898386_a3dd763f0f_m.jpg', x: middle, y: 850}
+    images[15] = {src: 'http://farm7.static.flickr.com/6036/5871673649_61418ab4e2_m.jpg', x: middle + 250, y: 850}
+    
+    images[16] = {src: 'http://farm6.static.flickr.com/5104/5872564307_31876c874d_m.jpg', x: middle - 500, y: 1100}
+    images[17] = {src: 'http://farm6.static.flickr.com/5150/5876683027_a7241a1fe8_m.jpg', x: middle - 250, y: 1100}
+    images[18] = {src: 'http://farm7.static.flickr.com/6018/5876898386_a3dd763f0f_m.jpg', x: middle, y: 1100}
+    images[19] = {src: 'http://farm7.static.flickr.com/6036/5871673649_61418ab4e2_m.jpg', x: middle + 250, y: 1100}
+    
+    for(i=0;i<images.length;i++) {
+        images[i].image = drawImageFromSrc(images[i].src, images[i].x, images[i].y);
+    } 
+    
+    setInterval(function() { 
+        move('strip');
+    }, 30);
+
+function drawImageFromSrc(src, x, y) {
+    var img = new Image();
+    img.src = src;
+    img.onload = function() {
+        var w = (240 - this.width) / 2;
+        var h = (240 - this.height) / 2;
+        ctx.drawImage(img, x , y );
+    }
+    return img
+}
+
+function drawImage(img, x, y) {
+    var w = (240 - img.width) / 2;
+    var h = (240 - img.height) / 2;
+    ctx.drawImage(img, x + w, y + h);
+}
+
+function move() {
+    console.log('move');
+    
+    for(i=0;i<images.length;i++) {
+        
+        ctx.clearRect (images[i].x, images[i].y,  240, 240);
+    
+        images[i].y = images[i].y - 3
+        
+        if(images[i].y < -250) {
+            images[i].y = 1100-100;
+        }
+        
+        drawImage(images[i].image, images[i].x, images[i].y);
+    }
+}
+
+</script>
+
+</div>
+</center><pre class="morestuff" ><!-- --></pre>    
+        <p id='loader'></p>
+        </body>
+<script type="text/javascript">
+init();
+</script>
 </html>
