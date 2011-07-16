@@ -87,7 +87,7 @@ function scroll(sid) {
 }
 
 function randomTag() {
-    _track(page, 'random');
+    track(page, 'random');
     if(page == 1) updateSocial();
     var vurl = "/popular";
     $.ajax({
