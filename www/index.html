@@ -10,17 +10,22 @@
 	<script type="text/javascript" src="lib/jquery.lazyloader.min.js"></script>
     <script type="text/javascript" src="lib/jquery.scrollTo.js"></script>
     <script type="text/javascript" src="lib/inflickr.js"></script>
-    <script type="text/javascript" src="https://apis.google.com/js/plusone.js"></script>
+    <!--script type="text/javascript" src="https://apis.google.com/js/plusone.js"></script-->
+    <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
+    <!--script type="text/javascript" src="http://connect.facebook.net/en_US/all.js#appId=103035156462380&amp;xfbml=1"></script-->
     <link  href="http://fonts.googleapis.com/css?family=Slackey:regular" rel="stylesheet" type="text/css" >
     <link  href="lib/default.css" rel="stylesheet" type="text/css" >
-
 </head>
 <body class="header" style="overflow:hidden">
 <div style="position:fixed;top:0%;width:100%;background:#fff;height:86px"><a href='http://www.infli.kr'>
-infli·<span style='color:rgba(255,0,132,1);'>kr</span>...flick<span style='color:rgba(255,0,132,1);'>r</span> for lazy people <span class='normal'>[beta for <span style='color:rgba(255,0,132,1);'>chrome</span> and <span style='color:rgba(255,0,132,1);'>safari</span>]&nbsp;&nbsp;<g:plusone size="medium"></g:plusone></span></br>
+infli·<span style='color:rgba(255,0,132,1);'>kr</span>...flick<span style='color:rgba(255,0,132,1);'>r</span> for lazy people <span class='normal'>[beta for <span style='color:rgba(255,0,132,1);'>chrome</span> and <span style='color:rgba(255,0,132,1);'>safari</span>]</span></br>
 </a></div>
 <div style="position:fixed;top:86px;width:100%;background:-webkit-gradient(linear, left top, left bottom, from(white), to(rgba(255,255,255,0.0)));height:120px">
 </div>
+
+<div id='social' class="group social-sharing" style="position:fixed;left:0px;top:0px;width:300px;height:50px;align:left;"></div>
+<script>updateSocial();</script>
+
 <div class='normal' style="position:fixed;top:50px;width:100%;height:60px">
 [  <a href='#' onclick="currentSearch++; document.getElementById('loader').innerHTML = 'Loading...'; document.getElementById('idzone').innerHTML = ''; page = 1;interestingness(); autoScroll = true; return false; return false;"><span style='color:rgba(255,0,132,1);'>interesting</span>ness</a>  ]
 [  <a href='#' onclick="currentSearch++; document.getElementById('loader').innerHTML = 'Loading...'; document.getElementById('idzone').innerHTML = ''; randomTag(); return false;">random</a>  ]

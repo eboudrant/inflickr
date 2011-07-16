@@ -31,7 +31,6 @@ app.use(express.session({
 app.use(express.static(__dirname + '/www'));
 app.set('views', __dirname + '/views');
 app.set('view engine', 'jade');
-
 app.get('/auth/', function(req, res) {
     flickr.auth.getToken(req.query.frob, function(err, results) {
         if (err) {
@@ -42,7 +41,6 @@ app.get('/auth/', function(req, res) {
         res.redirect('back');
     });
 });
-
 var popular = null;
 setInterval(function() {
     var parameters = {
@@ -53,17 +51,16 @@ setInterval(function() {
         popular = results.tag;
     });
 }, 1000 * 60);
-
 app.get('/popular', function(req, res) {
     res.writeHead(200, {
         'Content-Type': 'text/html',
         'Cache-control': 'no-store'
     });
-    var randomNumber = Math.floor(Math.random()*21);
-    if(randomNumber < 0) {
+    var randomNumber = Math.floor(Math.random() * 21);
+    if (randomNumber < 0) {
         randomNumber = 0;
     }
-    if(randomNumber > 39) {
+    if (randomNumber > 39) {
         randomNumber = 39;
     }
     if (!popular) {
@@ -77,28 +74,28 @@ app.get('/popular', function(req, res) {
             console.log(randomNumber);
             res.end(popular[randomNumber]._content);
         });
-    } else {
+    }
+    else {
         console.log(randomNumber);
         res.end(popular[randomNumber]._content);
     }
 });
-
 var managePages = function(err, results, req, res, tags) {
         if (req.query.page == 1) {
             preLoad = '';
             postLoad = '</script>';
-        } else {
+        }
+        else {
             preLoad = '\n<pre class=\'loadme\'><!-- ';
             postLoad = '</script>--></pre>\n';
         }
         if (!err) {
             var photos = results.photo;
-            
             for (var i = 0; i < photos.length;) {
                 if (i > 16 && preLoad === '') {
                     preLoad = '\n<pre class=\'loadme\'><!-- ';
-                    postLoad = 'remove('+((req.query.page-1) * size + i)+'); </script>--></pre>\n';
-                    res.write('<script type="text/javascript">if(autoScroll) scroll('+ req.query.sid +');</script>');
+                    postLoad = 'remove(' + ((req.query.page - 1) * size + i) + '); </script>--></pre>\n';
+                    res.write('<script type="text/javascript">if(autoScroll) scroll(' + req.query.sid + ');</script>');
                 }
                 link = preLoad + '<span style="display:block;width:' + (270 * perStrip) + 'px;height:240px;background-color:rgba(255,255,255,1);vertical-align: middle;">';
                 var imagePreloading = '';
@@ -106,7 +103,8 @@ var managePages = function(err, results, req, res, tags) {
                     if (i == 8) {
                         if (req.query.interestingness) {
                             res.write(preLoad + '\n<script type="text/javascript">interestingness();' + postLoad);
-                        } else if (req.query.plat && req.query.plon) {
+                        }
+                        else if (req.query.plat && req.query.plon) {
                             res.write(preLoad + '\n<script type="text/javascript">loadNext();' + postLoad);
                         }
                         else {
@@ -114,17 +112,16 @@ var managePages = function(err, results, req, res, tags) {
                         }
                     }
                     var src = 'http://farm' + photos[i].farm + '.static.flickr.com/' + photos[i].server + '/' + photos[i].id + '_' + photos[i].secret + '_m.jpg';
-                    if(req.query.tunneling) {
+                    if (req.query.tunneling) {
                         src = '/pass?farm=' + photos[i].farm + '&path=/' + photos[i].server + '/' + photos[i].id + '_' + photos[i].secret + '_m.jpg';
                     }
                     var href = 'http://www.flickr.com/photos/' + photos[i].owner + '/' + photos[i].id + '/';
-                    link += '\n\t<a class="i' + ((req.query.page-1) * size + i) + '" href=' + href + ' target=_BLANK><img src=\'' + src + '\' border=\'0\'/></a>';
-                    if(preLoad !== '') {
-                        link += '<script type="text/javascript">remove('+((req.query.page-1) * size + i)+');</script>';
+                    link += '\n\t<a class="i' + ((req.query.page - 1) * size + i) + '" href=' + href + ' target=_BLANK><img src=\'' + src + '\' border=\'0\'/></a>';
+                    if (preLoad !== '') {
+                        link += '<script type="text/javascript">remove(' + ((req.query.page - 1) * size + i) + ');</script>';
                     }
-                   
                     i++;
-                    imagePreloading += 'heavyImage = new Image(); heavyImage.src = "'+src+'";trackImage();\n';
+                    imagePreloading += 'heavyImage = new Image(); heavyImage.src = "' + src + '";trackImage();\n';
                     if (i >= photos.length) {
                         break;
                     }
@@ -133,10 +130,10 @@ var managePages = function(err, results, req, res, tags) {
                     link += '</span>';
                 }
                 else {
-                    link += '</span> <script type="text/javascript">if(autoScroll) scroll('+ req.query.sid +'); counter += 4;' + postLoad;
+                    link += '</span> <script type="text/javascript">if(autoScroll) scroll(' + req.query.sid + '); counter += 4;' + postLoad;
                 }
                 res.write(link);
-                res.write('<script type="text/javascript">' + imagePreloading + ' console.log("image preloading..."); </script>');
+                res.write('<script type="text/javascript">' + imagePreloading + '</script>');
             }
             if (photos.length < size) {
                 console.log('the end');
@@ -149,7 +146,6 @@ var managePages = function(err, results, req, res, tags) {
             res.end(err.code + ' -  ' + err.message);
         }
     };
-    
 app.get('/pass', function(req, res) {
     if (req.query.path && req.query.farm) {
         var options = {
@@ -159,7 +155,7 @@ app.get('/pass', function(req, res) {
             path: req.query.path,
             headers: {
                 'Connection': 'keep-alive'
-            }           
+            }
         };
         var request = http.request(options);
         request.on('response', function(response) {
@@ -172,7 +168,8 @@ app.get('/pass', function(req, res) {
             });
         });
         request.end();
-    } else {
+    }
+    else {
         res.writeHead(200, {
             'Content-Type': 'text/html',
             'Cache-control': 'no-store'
@@ -180,31 +177,26 @@ app.get('/pass', function(req, res) {
         res.end('not found');
     }
 });
-        
 app.get('/ajax', function(req, res) {
     res.writeHead(200, {
         'Content-Type': 'text/html',
         'Cache-control': 'no-store'
     });
-    
     if (!req.query.sid) {
         res.end('{"error": "no page sid"}');
         return;
     }
-    
     if (!req.query.page) {
         res.end('{"error": "no page defined"}');
         return;
     }
-    
     if (!req.query.method) {
         res.end('{"error": "no method defined"}');
         return;
     }
-    
     if (req.query.method == 'photos') {
         var tags;
-        if(req.query.tags) {
+        if (req.query.tags) {
             tags = req.query.tags.replace(/ /g, '+');
         }
         if (req.session.user) {
@@ -233,38 +225,64 @@ app.get('/ajax', function(req, res) {
                 page: req.query.page
             };
         }
-        if (req.query.interestingness) {
-            var d = new Date ();
-            d.setDate(d.getDate()-1);
-            var curr_date = d.getDate();
-            var curr_month = d.getMonth();
-            if(curr_date<10) {
-                curr_date = '0' + curr_date;
-            }
-            if(curr_month<10) {
-                curr_month = '0' + curr_month;
-            }
-            var curr_year = d.getFullYear();
-            parameters = {
-                date : curr_year + "-" + curr_month + "-" + curr_date,
-                per_page: size,
-                page: req.query.page
-            };
+        if (req.query.tags && req.query.tags.replace(/%20/g, ' ').lastIndexOf('u:', 0) === 0) {
+            console.log("look for user " + req.query.tags.replace('u:', '').replace(/%20/g, ' '));
+            flickr.people.findByUsername(req.query.tags.replace('u:', '').replace(/%20/g, ' '), function(err, results) {
+                var parameters = {
+                    tags: req.query.tags.replace('u:', '').replace(/ /g, '%20'),
+                    per_page: size,
+                    safe_search: 3,
+                    page: req.query.page
+                };
+                if (results && results.id) {
+                    parameters = {
+                        user_id: results.id,
+                        per_page: size,
+                        safe_search: 3,
+                        page: req.query.page
+                    };
+                }
+                var preLoad = '\n<pre class=\'loadme\'><!-- ';
+                var postLoad = '</script>--></pre>\n';
+                var photoSearchCallback = function(err, results) {
+                        managePages(err, results, req, res, tags);
+                    }
+                flickr.photos.search(parameters, photoSearchCallback);
+            });
         }
-        var preLoad = '\n<pre class=\'loadme\'><!-- ';
-        var postLoad = '</script>--></pre>\n';
-
-        var photoSearchCallback = function(err, results) {
-            managePages(err, results, req, res, tags);
-        }
-        if (req.query.interestingness) {
-            flickr.interestingness.getList(parameters, photoSearchCallback);
-        } else { 
-            flickr.photos.search(parameters, photoSearchCallback);
+        else {
+            if (req.query.interestingness) {
+                var d = new Date();
+                d.setDate(d.getDate() - 1);
+                var curr_date = d.getDate();
+                var curr_month = d.getMonth();
+                if (curr_date < 10) {
+                    curr_date = '0' + curr_date;
+                }
+                if (curr_month < 10) {
+                    curr_month = '0' + curr_month;
+                }
+                var curr_year = d.getFullYear();
+                parameters = {
+                    date: curr_year + "-" + curr_month + "-" + curr_date,
+                    per_page: size,
+                    page: req.query.page
+                };
+            }
+            var preLoad = '\n<pre class=\'loadme\'><!-- ';
+            var postLoad = '</script>--></pre>\n';
+            var photoSearchCallback = function(err, results) {
+                    managePages(err, results, req, res, tags);
+                }
+            if (req.query.interestingness) {
+                flickr.interestingness.getList(parameters, photoSearchCallback);
+            }
+            else {
+                flickr.photos.search(parameters, photoSearchCallback);
+            }
         }
     }
 });
-
 console.log("Opening " + port + "...");
 app.listen(port);
 console.log("Audience is listening " + port + "...");

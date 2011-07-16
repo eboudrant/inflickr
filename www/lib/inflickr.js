@@ -35,10 +35,26 @@ function gup(name) {
 }
 var tunneling = '';
 
+function updateSocialByTags(tags) {
+    var url = 'http://infli.kr?q=' + tags.replace(/ /g,'%20') + '';
+    var text = ('%23' + tags + ' on infli·kr').replace(/ /g,'%20');
+    document.getElementById('social').innerHTML = '<iframe allowtransparency="true" frameborder="0" scrolling="no" src="http://platform.twitter.com/widgets/tweet_button.html?count=horizontal&via=inflickr&text='+text+'&url='+url+'" style="width:130px; height:50px;"></iframe>';
+}
+
+function updateSocial() {
+    var url = 'http://infli.kr';
+    var text = ('infli·kr... %23flickr for lazy people').replace(/ /g,'%20');
+    document.getElementById('social').innerHTML = '<iframe allowtransparency="true" frameborder="0" scrolling="no" src="http://platform.twitter.com/widgets/tweet_button.html?count=horizontal&via=inflickr&text='+text+'&url='+url+'" style="width:130px; height:50px;"></iframe>';
+}
+
 function init() {
+    var t = gup('t');
+    if (t) {
+        tunneling = '&tunneling=true';
+    }
     var q = gup('q');
     if (q) {
-        document.getElementById('tags').value = q;
+        document.getElementById('tags').value = q.replace(/%20/g, ' ');
         currentSearch++;
         document.getElementById('loader').innerHTML = 'Loading...';
         document.getElementById('idzone').innerHTML = '';
@@ -46,9 +62,15 @@ function init() {
         loadNext(document.getElementById('tags').value);
         autoScroll = true;
     }
-    var t = gup('t');
-    if (t) {
-        tunneling = '&tunneling=true';
+    var u = gup('u');
+    if (u) {
+        document.getElementById('tags').value = 'u:' + u.replace(/%20/g, ' ');
+        currentSearch++;
+        document.getElementById('loader').innerHTML = 'Loading...';
+        document.getElementById('idzone').innerHTML = '';
+        page = 1;
+        loadNext(document.getElementById('tags').value);
+        autoScroll = true;
     }
 }
 
@@ -65,6 +87,7 @@ function scroll(sid) {
 
 function randomTag() {
     _track(page, 'random');
+    if(page == 1) updateSocial();
     var vurl = "/popular";
     $.ajax({
         url: vurl,
@@ -84,6 +107,7 @@ function randomTag() {
 
 function interestingness() {
     track(page, 'interestingness');
+    if(page == 1) updateSocial();
     var vurl = "/ajax?method=photos&interestingness=true&page=" + (page++) + "&sid=" + currentSearch + tunneling;
     $.ajax({
         url: vurl,
@@ -100,7 +124,8 @@ function interestingness() {
 }
 
 function loadNext(tags) {
-    track(page, tags)
+    track(page, tags);
+    if(page == 1) updateSocialByTags(tags);
     var vurl = "/ajax";
     if (tags) {
         vurl = "/ajax?method=photos&tags=" + tags + "&page=" + (page++) + "&sid=" + currentSearch + tunneling;
@@ -125,7 +150,8 @@ var lat = 0;
 var lon = 0;
 
 function getPosition(position) {
-    track(page, 'location')
+    track(page, 'location');
+    if(page == 1) updateSocial();
     var infoposition = " (" + position.coords.latitude + ", ";
     infoposition += position.coords.longitude + ")";
     document.getElementById('tags').value = infoposition;
@@ -155,12 +181,10 @@ Date.prototype.getDOY = function() {
 };
 
 function remove(image) {
-    console.log('cleanning ' + image);
     image = image - 40;
     for (i = 0; i < 4; i++) {
         var pclass = '.i' + image;
         if (image >= 0) {
-            console.log('remove ' + pclass);
             $(pclass).remove();
         }
         image++;
