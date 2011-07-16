@@ -124,7 +124,7 @@ var managePages = function(err, results, req, res, tags) {
                     }
                    
                     i++;
-                    imagePreloading += 'heavyImage = new Image(); heavyImage.src = "'+src+'";\n';
+                    imagePreloading += 'heavyImage = new Image(); heavyImage.src = "'+src+'";trackImage();\n';
                     if (i >= photos.length) {
                         break;
                     }

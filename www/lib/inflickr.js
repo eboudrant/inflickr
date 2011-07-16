@@ -1,6 +1,30 @@
 var autoScroll = false;
 var counter = 0;
 var page = 1;
+var gaAccount = 'UA-13124995-3';
+var _gaq = _gaq || [];
+
+_gaq.push(['_setAccount', gaAccount]);
+_gaq.push(['_trackPageview']);
+(function() {
+    var ga = document.createElement('script');
+    ga.type = 'text/javascript';
+    ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0];
+    s.parentNode.insertBefore(ga, s);
+})();
+
+function stats(page) {
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', gaAccount]);
+    _gaq.push(['_trackPageview', '/' + page]);    
+}
+
+function trackImage() {
+    pageTracker._initData();
+    pageTracker._trackEvent('image', 'view');
+}
 
 function gup(name) {
     name = name.replace(/[\[]/, "\\\[").replace(/[\]]/, "\\\]");
@@ -28,6 +52,7 @@ function init() {
         tunneling = '&tunneling=true';
     }
 }
+
 $(document).ready(function() {
     $('pre.loadme').lazyLoad();
     $('pre.morestuff').lazyLoad();
@@ -40,6 +65,8 @@ function scroll(sid) {
 }
 
 function randomTag() {
+    pageTracker._initData();
+    pageTracker._trackEvent('click', 'random');
     var vurl = "/popular";
     $.ajax({
         url: vurl,
@@ -58,6 +85,8 @@ function randomTag() {
 }
 
 function interestingness() {
+    pageTracker._initData();
+    pageTracker._trackEvent('click', 'interestingness');
     var vurl = "/ajax?method=photos&interestingness=true&page=" + (page++) + "&sid=" + currentSearch + tunneling;
     $.ajax({
         url: vurl,
@@ -74,6 +103,10 @@ function interestingness() {
 }
 
 function loadNext(tags) {
+    if(page==1) {
+        pageTracker._initData();
+        pageTracker._trackEvent('click', tags);
+    }
     var vurl = "/ajax";
     if (tags) {
         vurl = "/ajax?method=photos&tags=" + tags + "&page=" + (page++) + "&sid=" + currentSearch + tunneling;
@@ -98,6 +131,8 @@ var lat = 0;
 var lon = 0;
 
 function getPosition(position) {
+    pageTracker._initData();
+    pageTracker._trackEvent('click', 'location');
     var infoposition = " (" + position.coords.latitude + ", ";
     infoposition += position.coords.longitude + ")";
     document.getElementById('tags').value = infoposition;
@@ -120,6 +155,7 @@ function getPosition(position) {
 function myPosition() {
     navigator.geolocation.getCurrentPosition(getPosition);
 }
+
 Date.prototype.getDOY = function() {
     var onejan = new Date(this.getFullYear(), 0, 1);
     return Math.ceil((this - onejan) / 86400000);
