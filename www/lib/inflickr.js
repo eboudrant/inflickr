@@ -36,7 +36,7 @@ function gup(name) {
 var tunneling = '';
 
 function updateSocialByTags(tags) {
-    var url = 'http://infli.kr?q=' + tags.replace(/ /g,'%20') + '';
+    var url = 'http://infli.kr%3Fq%3D' + tags.replace(/ /g,'%20') + '';
     var text = ('%23' + tags + ' on infli·kr').replace(/ /g,'%20');
     document.getElementById('social').innerHTML = '<iframe allowtransparency="true" frameborder="0" scrolling="no" src="http://platform.twitter.com/widgets/tweet_button.html?count=horizontal&via=inflickr&text='+text+'&url='+url+'" style="width:130px; height:50px;"></iframe>';
 }
