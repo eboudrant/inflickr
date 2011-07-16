@@ -3,7 +3,6 @@ var counter = 0;
 var page = 1;
 var gaAccount = 'UA-13124995-3';
 var _gaq = _gaq || [];
-
 _gaq.push(['_setAccount', gaAccount]);
 _gaq.push(['_trackPageview']);
 (function() {
@@ -15,15 +14,15 @@ _gaq.push(['_trackPageview']);
     s.parentNode.insertBefore(ga, s);
 })();
 
-function stats(page) {
-    var _gaq = _gaq || [];
-    _gaq.push(['_setAccount', gaAccount]);
-    _gaq.push(['_trackPageview', '/' + page]);    
+function trackImage() {
+    _gaq.push(['_trackEvent', 'image', 'view']);
 }
 
-function trackImage() {
-    pageTracker._initData();
-    pageTracker._trackEvent('image', 'view');
+function track(page, action) {
+    if(page==1) {
+        _gaq.push(['_trackEvent', 'click', action]);
+    }
+    _gaq.push(['_trackPageview']);
 }
 
 function gup(name) {
@@ -65,8 +64,7 @@ function scroll(sid) {
 }
 
 function randomTag() {
-    pageTracker._initData();
-    pageTracker._trackEvent('click', 'random');
+    _track(page, 'random');
     var vurl = "/popular";
     $.ajax({
         url: vurl,
@@ -85,8 +83,7 @@ function randomTag() {
 }
 
 function interestingness() {
-    pageTracker._initData();
-    pageTracker._trackEvent('click', 'interestingness');
+    track(page, 'interestingness');
     var vurl = "/ajax?method=photos&interestingness=true&page=" + (page++) + "&sid=" + currentSearch + tunneling;
     $.ajax({
         url: vurl,
@@ -103,10 +100,7 @@ function interestingness() {
 }
 
 function loadNext(tags) {
-    if(page==1) {
-        pageTracker._initData();
-        pageTracker._trackEvent('click', tags);
-    }
+    track(page, tags)
     var vurl = "/ajax";
     if (tags) {
         vurl = "/ajax?method=photos&tags=" + tags + "&page=" + (page++) + "&sid=" + currentSearch + tunneling;
@@ -131,8 +125,7 @@ var lat = 0;
 var lon = 0;
 
 function getPosition(position) {
-    pageTracker._initData();
-    pageTracker._trackEvent('click', 'location');
+    track(page, 'location')
     var infoposition = " (" + position.coords.latitude + ", ";
     infoposition += position.coords.longitude + ")";
     document.getElementById('tags').value = infoposition;
