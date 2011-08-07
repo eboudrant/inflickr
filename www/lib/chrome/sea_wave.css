@@ -12,12 +12,13 @@ body {
   position: absolute;
   height: 100%;
   width: 100%;
-  left: 0;
-  top: 100px;
+  left: 0px;
+  top: 0px;
   display: block;
   overflow: hidden;
-  background: -webkit-gradient(linear, left top, left bottom, from(#fff), to(#ccf));
-  background: -moz-linear-gradient(top, #fff, #ccf);
+  background: #778;
+  background: -webkit-gradient(linear, left top, left bottom, from(#fff), to(#01386b));
+  background: -moz-linear-gradient(top, #fff, #01386b);
 }
 
 .slides {
@@ -42,10 +43,9 @@ body {
   left: 50%;
   top: 50%;
   margin-top: -350px;
-  background-color: #eee;
-  background: -webkit-gradient(linear, left bottom, left top, from(#fff), to(#ccf));
-  background: -moz-linear-gradient(bottom, #fff, #ccf);
-  background: linear-gradient(bottom, #fff, #ccf);
+  border-radius: 10px;
+  border: 2px solid #aaa;
+  background-color: #fff;
   -webkit-transition: margin 0.25s ease-in-out;
   -moz-transition: margin 0.25s ease-in-out;
   -o-transition: margin-left 0.25s ease-in-out;
@@ -53,19 +53,9 @@ body {
 }
 
 .slide:nth-child(even) {
-  -moz-border-radius: 20px 0;
-  -khtml-border-radius: 20px 0;
-  border-radius: 20px 0; /* includes Opera 10.5+ */
-  -webkit-border-top-left-radius: 20px;
-  -webkit-border-bottom-right-radius: 20px;
 }
 
 .slide:nth-child(odd) {
-  -moz-border-radius: 0 20px;
-  -khtml-border-radius: 0 20px;
-  border-radius: 0 20px;
-  -webkit-border-top-right-radius: 20px;
-  -webkit-border-bottom-left-radius: 20px;
 }
 
 .slide p, .slide textarea {
@@ -256,11 +246,11 @@ body.three-d div.slides {
 }
 
 header {
-  font-family: 'Droid Sans';
+  color: #0055ab;
   font-weight: normal;
+  text-shadow: rgba(0, 0, 0, 0.2) 0 2px 5px;  
+  font-family: Arial;
   letter-spacing: -.05em;
-  color: black;
-  text-shadow: rgba(0, 0, 0, 0.2) 0 2px 5px;
   position: absolute;
   left: 30px;
   top: 25px;
@@ -278,7 +268,7 @@ h1 {
 }
 
 h2 {
-  font-family: 'Droid Sans';
+  font-family: Arial;
   color: black;
   font-size: 20px;
   padding: 0;
@@ -290,7 +280,7 @@ h2:first-child {
 }
 
 section, footer {
-  font-family: 'Droid Sans';
+  font-family: Arial;
   color: #3f3f3f;
   text-shadow: rgba(0, 0, 0, 0.2) 0 2px 5px;
   margin: 100px 30px 0;
@@ -308,6 +298,7 @@ a {
   display: inline-block;
   text-decoration: none;
   line-height: 110%;
+  border-bottom: 2px solid #3f3f3f;
 }
 
 .gmap a {
@@ -321,7 +312,7 @@ li {
 }
 
 button {
-  font-size: 10px;
+  font-size: 20px;
 }
 
 pre button {
@@ -365,14 +356,14 @@ section.middle {
 
 pre {
   text-align: left;
-  font-family: 'Droid Sans Mono', Courier;
+  font-family: 'Inconsolata', Courier;
   padding: 10px 20px;
-  background: rgba(255, 0, 0, 0.05);
-  -webkit-border-radius: 8px;
-  -khtml-border-radius: 8px;
-  -moz-border-radius: 8px;
-  border-radius: 8px;
-  border: 1px solid rgba(255, 0, 0, 0.2);
+  -webkit-border-radius: 10px;
+  -khtml-border-radius: 10px;
+  -moz-border-radius: 10px;
+  border-radius: 10px;
+  background: rgba(255, 150, 60, 0.08);
+  border: 2px solid rgba(255, 200, 0, 0.3);
 }
 
 pre select {
@@ -441,7 +432,7 @@ video {
 .js,
 .html,
 .key {
-  font-family: 'Droid Sans';
+  font-family: Arial;
   color: black;
   display: inline-block;
   padding: 6px 10px 3px 10px;
@@ -533,62 +524,6 @@ video {
 }
 
 .sidebar {
-  background-color: #EEE;
-  border-right: 5px solid #CCD;
-}
-
-body {
-  font-family: 'Slackey', serif;
-  font-size: 40px;
-  font-style: normal;
-  font-weight: 400;
-  text-shadow: 6px 6px 6px #ccc;
-  text-decoration: none;
-  text-transform: none;
-  letter-spacing: -0.05em;
-  word-spacing: -0.2em;
-  line-height: 1.2;
-  text-align: center;
-  color:rgba(0,99,220,1);
-}
-.normal {
-  font-family: 'Slackey', serif;
-  font-size: 20px;
-  font-style: bold;
-  font-weight: 200;
-  text-shadow: 6px 6px 6px #ccc;
-  text-decoration: none;
-  text-transform: node;
-  letter-spacing: -0.05em;
-  word-spacing: -0.2em;
-  line-height: 1.2;
-  text-align: center;
-  color:rgba(0,99,220,1);
-}
-
-a {
-  color:rgba(0,99,220,1);
-  font-style: normal;
-  text-decoration: none;
-}
-
-a:hover { 
-  color:#2E67eD;
-}
-
-input {
-  font-family: 'Slackey', serif;
-  font-size: 20px;
-  font-style: bold;
-  font-weight: 200;
-  text-shadow: 6px 6px 6px #ccc;
-  text-decoration: none;
-  text-transform: none;
-  letter-spacing: -0.05em;
-  word-spacing: -0.2em;
-  line-height: 1.2;
-  text-align: center;
-  border: none;
-  background-color:transparent;
-  color:rgba(255,0,132,1);
+  background-color: #F8F8F8;
+  border-right: 5px solid #AAA;
 }

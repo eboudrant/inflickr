@@ -1,28 +1,33 @@
+
+
 require.paths.unshift('./flickrnode');
 require.paths.unshift('./node_modules/express/lib');
+
 var FlickrAPI = require('flickr').FlickrAPI;
 var express = require("express");
 var http = require("http");
 var url = require("url");
 var fs = require("fs");
+
 var FlickrKeys = function FlickrKeys() {
         this._configure(process.env.API_KEY || "17f1d14ee2c43e10b94ebfd62915869d", process.env.SECRET || "2d965f23923aaebb");
     };
+    
 FlickrKeys.prototype._configure = function(api_key, shared_secret) {
     this.api_key = api_key;
     this.shared_secret = shared_secret;
 };
+
 var keys = new FlickrKeys();
 var flickr = new FlickrAPI(keys.api_key, keys.shared_secret);
 var port = process.env.VMC_APP_PORT || process.env.C9_PORT || 8001;
 var size = 32;
 var perStrip = 4;
+
+
 console.log("Using " + keys.api_key + "/" + keys.shared_secret);
 console.log(process.env);
 
-function fail(err) {
-    console.log('processing request...error: ERR: ' + err.code + ' -  ' + err.message);
-}
 var app = express.createServer();
 app.use(express.cookieParser());
 app.use(express.session({
@@ -31,16 +36,7 @@ app.use(express.session({
 app.use(express.static(__dirname + '/www'));
 app.set('views', __dirname + '/views');
 app.set('view engine', 'jade');
-app.get('/auth/', function(req, res) {
-    flickr.auth.getToken(req.query.frob, function(err, results) {
-        if (err) {
-            console.log(err.code + " " + err.message);
-        }
-        req.session.authenticationToken(results.token);
-        req.session.user(results.user);
-        res.redirect('back');
-    });
-});
+
 var popular = null;
 setInterval(function() {
     var parameters = {
@@ -71,12 +67,10 @@ app.get('/popular', function(req, res) {
         };
         flickr.tags.getHotList(parameters, function(err, results) {
             popular = results.tag;
-            console.log(randomNumber);
             res.end(popular[randomNumber]._content);
         });
     }
     else {
-        console.log(randomNumber);
         res.end(popular[randomNumber]._content);
     }
 });
@@ -136,7 +130,6 @@ var managePages = function(err, results, req, res, tags) {
                 res.write('<script type="text/javascript">' + imagePreloading + '</script>');
             }
             if (photos.length < size) {
-                console.log('the end');
                 res.write("<script type='text/javascript'>document.getElementById('loader').innerHTML = 'the <span style=\\'color:rgba(255,0,132,1);\\'>end</span><br/><br/><br/>';</script>");
             }
             res.end();
@@ -146,6 +139,10 @@ var managePages = function(err, results, req, res, tags) {
             res.end(err.code + ' -  ' + err.message);
         }
     };
+    
+/**
+ * Flick farm proxy path
+ */
 app.get('/pass', function(req, res) {
     if (req.query.path && req.query.farm) {
         var options = {
@@ -177,11 +174,19 @@ app.get('/pass', function(req, res) {
         res.end('not found');
     }
 });
+
+/**
+ * Entry point for jquery/ajax invocations
+ */
 app.get('/ajax', function(req, res) {
     res.writeHead(200, {
         'Content-Type': 'text/html',
         'Cache-control': 'no-store'
     });
+    if(req.query.connect) {
+        return;    
+    }
+    
     if (!req.query.sid) {
         res.end('{"error": "no page sid"}');
         return;
@@ -200,10 +205,10 @@ app.get('/ajax', function(req, res) {
             tags = req.query.tags.replace(/ /g, '+');
         }
         if (req.session.user) {
-            console.log('[' + req.client.remoteAddress + '] [' + new Date() + '] ' + flickr.user.username + ' more photos for ' + tags + '/' + req.query.plat + '/' + req.query.plon + '/' + req.query.interestingness + ' (page ' + req.query.page + ')');
+            console.log('[' + req.client.remoteAddress + '] [' + new Date() + '] ' + flickr.user.username + ' more photos for ' + tags + '/' + req.query.plat + ',' + req.query.plon + '/' + req.query.interestingness + ' (page ' + req.query.page + ')');
         }
         else {
-            console.log('[' + req.client.remoteAddress + '] [' + new Date() + '] more photos for ' + tags + '/' + req.query.plat + '/' + req.query.plon + '/' + req.query.interestingness + ' (page ' + req.query.page + ')');
+            console.log('[' + req.client.remoteAddress + '] [' + new Date() + '] more photos for ' + tags + '/' + req.query.plat + ',' + req.query.plon + '/' + req.query.interestingness + ' (page ' + req.query.page + ')');
         }
         var lat = req.query.lat;
         var lon = req.query.lon;
@@ -211,15 +216,21 @@ app.get('/ajax', function(req, res) {
             tags = 'cloud';
         }
         var parameters = {
-            tags: tags,
+            text: tags,
             per_page: size,
             safe_search: 3,
-            page: req.query.page
+            page: req.query.page,
+            sort: 'date-taken-asc'
         };
+        if(tags.startWith('#')) {
+            parameters.tags = tags;
+            paramaters.text = undefined;
+        }
         if (req.query.plat && req.query.plon) {
             parameters = {
                 lat: req.query.plat,
                 lon: req.query.plon,
+                sort : undefined,
                 per_page: size,
                 safe_search: 3,
                 page: req.query.page
@@ -278,11 +289,36 @@ app.get('/ajax', function(req, res) {
                 flickr.interestingness.getList(parameters, photoSearchCallback);
             }
             else {
+                if(req.query.tags && req.query.tags == '<today>') {       
+                    parameters.min_taken_date = '2011-08-06%2023:59:59';
+                    parameters.max_taken_date = '2011-08-07%2023:59:59';
+                    parameters.text = '';
+                    parameters.sort = 'date-taken-asc';
+                }
                 flickr.photos.search(parameters, photoSearchCallback);
+                
             }
         }
     }
 });
 console.log("Opening " + port + "...");
+
+
 app.listen(port);
 console.log("Audience is listening " + port + "...");
+
+function connect() {
+    // Authentication process. get the frob/token
+    var oauth_nonce = '';
+    var oauth_timestamp = '1305583298'
+    var oauth_callback = '';
+    var oauthUrl = 'http://www.flickr.com/services/oauth/request_token' + '?oauth_callback=' + oauth_callback + '&oauth_consumer_key=' + keys.api_key + '&oauth_nonce=' + oauth_nonce + '&oauth_signature_method=HMAC-SHA1' + '&oauth_timestamp=' + oauth_timestamp + '&oauth_version=1.0' + '';
+
+    var encoded = str_sha1('GET&' + oauthUrl);
+    
+    
+}
+
+function fail(err) {
+    console.log('processing request...error: ERR: ' + err.code + ' -  ' + err.message);
+}

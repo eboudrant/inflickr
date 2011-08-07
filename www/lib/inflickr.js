@@ -35,6 +35,10 @@ function gup(name) {
 }
 var tunneling = '';
 
+function connect() {
+    document.getElementById('connect').innerHTML = "<b>Hello</b>";
+}
+
 function updateSocialByTags(tags) {
     var url = 'http://infli.kr%3Fq%3D' + tags.replace(/ /g,'+') + '';
     console.log(url);

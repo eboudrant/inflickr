@@ -1,0 +1,326 @@
+
+<!DOCTYPE html> 
+<!--
+  Copyright 2011 Google Inc.
+ 
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+ 
+     http://www.apache.org/licenses/LICENSE-2.0
+ 
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+ 
+  Original slides: Marcin Wichary (mwichary@google.com)
+  Modifications: Chrome DevRel Team (chrome-devrel@googlegroups.com)
+                 Alex Russell (slightlyoff@chromium.org)
+                 Brad Neuberg
+--> 
+<html> 
+  <head> 
+    <meta charset="utf-8" /> 
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge;chrome=1" /> 
+    <title>HTML5 Presentation</title> 
+    <link href="http://fonts.googleapis.com/css?family=Droid+Sans|Droid+Sans+Mono" rel="stylesheet" type="text/css" /> 
+    <link id="prettify-link" href="lib/prettify.css" rel="stylesheet" disabled /> 
+    <link href="lib/chrome/moon.css" class="theme" rel="stylesheet" /> 
+    <link href="lib/chrome/sand.css" class="theme" rel="stylesheet" /> 
+    <link href="lib/chrome/sea_wave.css" class="theme" rel="stylesheet" /> 
+    <link href="lib/chrome/default.css" class="theme" rel="stylesheet" media="screen"  /> 
+    <link href="lib/chrome/common.css" rel="stylesheet" media="screen" /> 
+  </head> 
+  <body> 
+    <nav id="helpers"> 
+      <button title="Previous slide" id="nav-prev" class="nav-prev">⇽</button> 
+      <button title="Jump to a random slide" id="slide-no">5</button> 
+      <button title="Next slide" id="nav-next" class="nav-next">⇾</button> 
+      <menu> 
+        <button type="checkbox" data-command="toc" title="Table of Contents" class="toc">TOC</button> 
+        <!-- <button type="checkbox" data-command="resources" title="View Related Resources">☆</button> --> 
+        <button type="checkbox" data-command="notes" title="View Slide Notes">✏</button> 
+        <button type="checkbox" data-command="source" title="View slide source">↻</button> 
+        <button type="checkbox" data-command="help" title="View Help">?</button> 
+      </menu> 
+    </nav> 
+    <div class="presentation"> 
+      <div id="presentation-counter">Loading...</div> 
+      <div class="slides"> 
+        <div class="slide" id="landing-slide"> 
+          <style> 
+            #landing-slide p {
+              font-size: 35px;
+            }
+            p#disclaimer-message {
+              font-size: 20px;
+            }
+          </style> 
+          <section class="middle"> 
+            <p>This presentation is an HTML5 website</p> 
+            <p>Press <span id="left-init-key" class="key">&rarr;</span> key to advance.</p> 
+            <p id="disclaimer-message">Having issues seeing the presentation? Read the <a href="disclaimer.html">disclaimer</a></p> 
+          </section> 
+          <aside class="note"> 
+            <section> 
+              Welcome! (This field is for presenter notes and commentary.)
+            </section> 
+          </aside> 
+        </div> 
+ 
+        <div class="slide" id="controls-slide"> 
+          <header>Slides controls</header> 
+          <style> 
+            #controls-slide li, #controls-slide p {
+              font-size: 32px;
+            }
+            #controls-slide .key {
+              bottom: 2px;
+            }
+          </style> 
+          <section> 
+            <ul> 
+              <li><span class="key">&larr;</span> and <span class="key">&rarr;</span> to move around.</li> 
+              <li><span class="key">Ctrl/Command</span> and <span class="key">+</span> or <span class="key">-</span> to zoom in and out if slides don’t fit.</li> 
+              <li><span class="key">S</span> to view page source.</li> 
+              <li><span class="key">T</span> to change the theme.</li> 
+              <li><span class="key">H</span> to toggle syntax highlight.</li> 
+              <li><span class="key">N</span> to toggle speaker notes.</li> 
+              <li><span class="key">3</span> to toggle 3D effect.</li> 
+              <li><span class="key">0</span> to toggle help.</li> 
+            </ul> 
+          </section> 
+        </div> 
+         <div class="slide transitionSlide" id="css3-title"> 
+          <section class="middle"> 
+            <h2>CSS3</h2> 
+            <p>Presentation &amp; Styling</p> 
+          </section> 
+        </div> 
+        <div class="slide" id="title-slide"> 
+          <style> 
+            #title-slide h1, #title-slide h2 {
+              color: black;
+            }
+            #title-slide h1 {
+              letter-spacing: -2px;
+              font-size: 96px;
+            }
+            #title-slide h2 {
+              margin-top: -5px;
+              font-size: 40px;
+              letter-spacing: -1px;
+            }
+          </style> 
+          <section class="middle"> 
+            <hgroup> 
+              <h1> 
+                HTML5*
+              </h1> 
+              <h2> 
+                Web Development to the next level
+              </h2> 
+            </hgroup> 
+            <p>*Including other next generation technologies of the Web Development stack</p> 
+          </section> 
+        </div> 
+ 
+ 
+        <div class="slide" id="timeline-slide">           <style> 
+            #title-slide h1, #title-slide h2 {
+              color: black;
+            }
+            #title-slide h1 {
+              letter-spacing: -2px;
+              font-size: 96px;
+            }
+            #title-slide h2 {
+              margin-top: -5px;
+              font-size: 40px;
+              letter-spacing: -1px;
+            }
+          </style> 
+          <section class="middle"> 
+            <hgroup> 
+              <h1> 
+                1
+              </h1> 
+              <h2> 
+                Web Development to the next level
+              </h2> 
+            </hgroup> 
+            <p>*Including other next generation technologies of the Web Development stack</p> 
+          </section>
+        </div> 
+ 
+ 
+        <div class="slide" id="formula-intro-slide">           <style> 
+            #title-slide h1, #title-slide h2 {
+              color: black;
+            }
+            #title-slide h1 {
+              letter-spacing: -2px;
+              font-size: 96px;
+            }
+            #title-slide h2 {
+              margin-top: -5px;
+              font-size: 40px;
+              letter-spacing: -1px;
+            }
+          </style> 
+          <section class="middle"> 
+            <hgroup> 
+              <h1> 
+                2*
+              </h1> 
+              <h2> 
+                Web Development to the next level
+              </h2> 
+            </hgroup> 
+            <p>*Including other next generation technologies of the Web Development stack</p> 
+          </section>
+        </div> 
+ 
+ 
+        <div class="slide" id="table-of-contents">           <style> 
+            #title-slide h1, #title-slide h2 {
+              color: black;
+            }
+            #title-slide h1 {
+              letter-spacing: -2px;
+              font-size: 96px;
+            }
+            #title-slide h2 {
+              margin-top: -5px;
+              font-size: 40px;
+              letter-spacing: -1px;
+            }
+          </style> 
+          <section class="middle"> 
+            <hgroup> 
+              <h1> 
+                HTML5*
+              </h1> 
+              <h2> 
+                Web Development to the next level
+              </h2> 
+            </hgroup> 
+            <p>*Including other next generation technologies of the Web Development stack</p> 
+          </section>
+        </div> 
+ 
+        <div class="slide transitionSlide" id="offline-storage-title"> 
+          <section class="middle"> 
+            <h2>Offline / Storage</h2> 
+            <p>Expect the unexpected</p> 
+          </section> 
+        </div> 
+ 
+        <div class="slide offline-storage" id="web-storage">  
+          <section class="middle"> 
+            <h2>Offline / Storage</h2> 
+            <p>Expect the unexpected</p> 
+          </section>
+        </div> 
+ 
+        <div class="slide offline-storage" id="web-sql-db">  
+          <section class="middle"> 
+            <h2>Offline / Storage</h2> 
+            <p>Expect the unexpected</p> 
+          </section>
+      </div> 
+ 
+      <div class="slide offline-storage" id="indexed-db">  
+          <section class="middle"> 
+            <h2>Offline / Storage</h2> 
+            <p>Expect the unexpected</p> 
+          </section>
+      </div> 
+ 
+        <div class="slide offline-storage" id="app-cache">  
+          <section class="middle"> 
+            <h2>Offline / Storage</h2> 
+            <p>Expect the unexpected</p> 
+          </section>
+        </div> 
+ 
+        <div class="slide transitionSlide" id="realtime-title"> 
+          <section class="middle"> 
+            <h2>Realtime / Communication</h2> 
+            <p>Stay connected</p> 
+            <img src="http://www.html5rocks.com/static/images/identity/classes_64/HTML5_Connectivity_64.png" title="HTML5 Realtime &amp; Communication" alt="HTML5 Realtime &amp; Communication"> 
+          </section> 
+        </div> 
+ 
+ 
+        <div class="slide realtime-communication" id="web-workers">  
+          <section class="middle"> 
+            <h2>Offline / Storage</h2> 
+            <p>Expect the unexpected</p> 
+          </section>
+        </div> 
+ 
+ 
+        <div class="slide realtime-communication" id="web-sockets">  
+          <section class="middle"> 
+            <h2>Offline / Storage</h2> 
+            <p>Expect the unexpected</p> 
+          </section>
+        </div> 
+ 
+ 
+      </div> <!-- slides --> 
+      <div id="speaker-note" class="invisible" style="display: none;"> 
+      </div> <!-- speaker note --> 
+      <aside id="help" class="sidebar invisible" style="display: hidden;"> 
+        <table> 
+          <caption>Help</caption> 
+          <tbody> 
+            <tr> 
+              <th>Move Around</th> 
+              <td>&larr;&nbsp;&rarr;</td> 
+            </tr> 
+            <tr> 
+              <th>Source File</th> 
+              <td>s</td> 
+            </tr> 
+            <tr> 
+              <th>Change Theme</th> 
+              <td>t</td> 
+            </tr> 
+            <tr> 
+              <th>Syntax Highlight</th> 
+              <td>h</td> 
+            </tr> 
+            <tr> 
+              <th>Speaker Notes</th> 
+              <td>n</td> 
+            </tr> 
+            <tr> 
+              <th>Toggle 3D</th> 
+              <td>3</td> 
+            </tr> 
+            <tr> 
+              <th>Help</th> 
+              <td>0</td> 
+            </tr> 
+          </tbody> 
+        </table> 
+      </aside> 
+    </div> <!-- presentation --> 
+ 
+    <!--[if lt IE 9]>
+    <script 
+      src="http://ajax.googleapis.com/ajax/libs/chrome-frame/1/CFInstall.min.js">
+    </script>
+    <script>CFInstall.check({ mode: "overlay" });</script>
+    <![endif]--> 
+ 
+    <script src="lib/prettify.js" onload="prettyPrint();" defer></script> 
+    <script src="lib/utils.js"></script> 
+    <script src="http://maps.google.com/maps/api/js?sensor=true"></script> 
+    
+  </body> 
+</html>

@@ -6,18 +6,18 @@ body {
   height: 100%;
   position: absolute;
   left: 0px; top: 0px;
+  background: #654;
 }
 
 .presentation {
   position: absolute;
   height: 100%;
   width: 100%;
-  left: 0;
-  top: 100px;
+  left: 0px;
+  top: 0px;
   display: block;
   overflow: hidden;
-  background: -webkit-gradient(linear, left top, left bottom, from(#fff), to(#ccf));
-  background: -moz-linear-gradient(top, #fff, #ccf);
+  background: inherit;
 }
 
 .slides {
@@ -43,9 +43,8 @@ body {
   top: 50%;
   margin-top: -350px;
   background-color: #eee;
-  background: -webkit-gradient(linear, left bottom, left top, from(#fff), to(#ccf));
-  background: -moz-linear-gradient(bottom, #fff, #ccf);
-  background: linear-gradient(bottom, #fff, #ccf);
+  background: -webkit-gradient(linear, left bottom, left top, from(#dcb), to(#fff));
+  -webkit-box-shadow: 0 5px 8px rgba(0, 0, 0, .2);
   -webkit-transition: margin 0.25s ease-in-out;
   -moz-transition: margin 0.25s ease-in-out;
   -o-transition: margin-left 0.25s ease-in-out;
@@ -240,27 +239,30 @@ body.three-d div.slides {
   default, pre, input - 16px
 */
 
+@font-face { font-family: 'Inconsolata'; src: url('/src/fonts/inconsolata/Inconsolata.ttf'); }
+
 @font-face {
-  font-family: 'JunctionRegular';
-  src: url('/src/fonts/junction02/junction02-webfont.eot');
-  src: local('â˜º'), url('/src/fonts/junction02/junction02-webfont.woff') format('woff'), url('/src/fonts/junction02/junction02-webfont.ttf') format('truetype'), url('/src/fonts/junction02/junction02-webfont.svg#webfontwzJOjWvv') format('svg');
-  font-weight: normal;
-  font-style: normal;
+    font-family: 'JunctionRegular';
+	src: url('/src/fonts/junction02/junction02-webfont.eot');
+	src: local('â˜º'), url('/src/fonts/junction02/junction02-webfont.woff') format('woff'), url('/src/fonts/junction02/junction02-webfont.ttf') format('truetype'), url('/src/fonts/junction02/junction02-webfont.svg#webfontwzJOjWvv') format('svg');
+	font-weight: normal;
+	font-style: normal;
 }
 @font-face {
-  font-family: 'LeagueGothicRegular';
-  src: url('/src/fonts/leaguegothic/leaguegothic-webfont.eot');
-  src: local('â˜º'), url('/src/fonts/leaguegothic/leaguegothic-webfont.woff') format('woff'), url('/src/fonts/leaguegothic/leaguegothic-webfont.ttf') format('truetype'), url('/src/fonts/leaguegothic/leaguegothic-webfont.svg#webfontWgfhmMGx') format('svg');
-  font-weight: normal;
-  font-style: normal;
+	font-family: 'LeagueGothicRegular';
+	src: url('/src/fonts/leaguegothic/leaguegothic-webfont.eot');
+	src: local('â˜º'), url('/src/fonts/leaguegothic/leaguegothic-webfont.woff') format('woff'), url('/src/fonts/leaguegothic/leaguegothic-webfont.ttf') format('truetype'), url('/src/fonts/leaguegothic/leaguegothic-webfont.svg#webfontWgfhmMGx') format('svg');
+	font-weight: normal;
+	font-style: normal;
 }
 
 header {
-  font-family: 'Droid Sans';
+  font-family: 'Arial';
+  letter-spacing: -.03em;
+  text-shadow: rgba(0, 0, 0, 0.3) 0 1px 3px;
   font-weight: normal;
   letter-spacing: -.05em;
   color: black;
-  text-shadow: rgba(0, 0, 0, 0.2) 0 2px 5px;
   position: absolute;
   left: 30px;
   top: 25px;
@@ -270,6 +272,8 @@ header {
 }
 
 h1 {
+  letter-spacing: -.05em;
+  font-family: 'Arial';
   font-size: 100%;
   display: inline;
   font-weight: normal;
@@ -278,7 +282,7 @@ h1 {
 }
 
 h2 {
-  font-family: 'Droid Sans';
+  font-family: 'Arial';
   color: black;
   font-size: 20px;
   padding: 0;
@@ -290,7 +294,7 @@ h2:first-child {
 }
 
 section, footer {
-  font-family: 'Droid Sans';
+  font-family: 'Arial';
   color: #3f3f3f;
   text-shadow: rgba(0, 0, 0, 0.2) 0 2px 5px;
   margin: 100px 30px 0;
@@ -308,6 +312,7 @@ a {
   display: inline-block;
   text-decoration: none;
   line-height: 110%;
+  border-bottom: 2px solid #3f3f3f;
 }
 
 .gmap a {
@@ -321,7 +326,7 @@ li {
 }
 
 button {
-  font-size: 10px;
+  font-size: 20px;
 }
 
 pre button {
@@ -364,15 +369,17 @@ section.middle {
 }
 
 pre {
+  font-family: 'Inconsolata', Courier;
+  letter-spacing: 1px;  
+  background: rgba(255, 64, 0, 0.05);
+  border: 1px solid rgba(255, 64, 0, 0.2);    
   text-align: left;
   font-family: 'Droid Sans Mono', Courier;
   padding: 10px 20px;
-  background: rgba(255, 0, 0, 0.05);
   -webkit-border-radius: 8px;
   -khtml-border-radius: 8px;
   -moz-border-radius: 8px;
   border-radius: 8px;
-  border: 1px solid rgba(255, 0, 0, 0.2);
 }
 
 pre select {
@@ -441,7 +448,7 @@ video {
 .js,
 .html,
 .key {
-  font-family: 'Droid Sans';
+  font-family: 'Arial';
   color: black;
   display: inline-block;
   padding: 6px 10px 3px 10px;
@@ -533,62 +540,6 @@ video {
 }
 
 .sidebar {
-  background-color: #EEE;
-  border-right: 5px solid #CCD;
-}
-
-body {
-  font-family: 'Slackey', serif;
-  font-size: 40px;
-  font-style: normal;
-  font-weight: 400;
-  text-shadow: 6px 6px 6px #ccc;
-  text-decoration: none;
-  text-transform: none;
-  letter-spacing: -0.05em;
-  word-spacing: -0.2em;
-  line-height: 1.2;
-  text-align: center;
-  color:rgba(0,99,220,1);
-}
-.normal {
-  font-family: 'Slackey', serif;
-  font-size: 20px;
-  font-style: bold;
-  font-weight: 200;
-  text-shadow: 6px 6px 6px #ccc;
-  text-decoration: none;
-  text-transform: node;
-  letter-spacing: -0.05em;
-  word-spacing: -0.2em;
-  line-height: 1.2;
-  text-align: center;
-  color:rgba(0,99,220,1);
-}
-
-a {
-  color:rgba(0,99,220,1);
-  font-style: normal;
-  text-decoration: none;
-}
-
-a:hover { 
-  color:#2E67eD;
-}
-
-input {
-  font-family: 'Slackey', serif;
-  font-size: 20px;
-  font-style: bold;
-  font-weight: 200;
-  text-shadow: 6px 6px 6px #ccc;
-  text-decoration: none;
-  text-transform: none;
-  letter-spacing: -0.05em;
-  word-spacing: -0.2em;
-  line-height: 1.2;
-  text-align: center;
-  border: none;
-  background-color:transparent;
-  color:rgba(255,0,132,1);
+  background-color: #EFE7DF;
+  border-right: 5px solid #987;
 }

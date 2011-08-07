@@ -12,12 +12,11 @@ body {
   position: absolute;
   height: 100%;
   width: 100%;
-  left: 0;
-  top: 100px;
+  left: 0px;
+  top: 0px;
   display: block;
   overflow: hidden;
-  background: -webkit-gradient(linear, left top, left bottom, from(#fff), to(#ccf));
-  background: -moz-linear-gradient(top, #fff, #ccf);
+  background: #778;
 }
 
 .slides {
@@ -43,9 +42,9 @@ body {
   top: 50%;
   margin-top: -350px;
   background-color: #eee;
-  background: -webkit-gradient(linear, left bottom, left top, from(#fff), to(#ccf));
-  background: -moz-linear-gradient(bottom, #fff, #ccf);
-  background: linear-gradient(bottom, #fff, #ccf);
+  background: -webkit-gradient(linear, left bottom, left top, from(#bbd), to(#fff));
+  background: -moz-linear-gradient(bottom, #bbd, #fff);
+  background: linear-gradient(bottom, #bbd, #fff);
   -webkit-transition: margin 0.25s ease-in-out;
   -moz-transition: margin 0.25s ease-in-out;
   -o-transition: margin-left 0.25s ease-in-out;
@@ -308,6 +307,7 @@ a {
   display: inline-block;
   text-decoration: none;
   line-height: 110%;
+  border-bottom: 2px solid #3f3f3f;
 }
 
 .gmap a {
@@ -321,7 +321,7 @@ li {
 }
 
 button {
-  font-size: 10px;
+  font-size: 20px;
 }
 
 pre button {
@@ -535,60 +535,4 @@ video {
 .sidebar {
   background-color: #EEE;
   border-right: 5px solid #CCD;
-}
-
-body {
-  font-family: 'Slackey', serif;
-  font-size: 40px;
-  font-style: normal;
-  font-weight: 400;
-  text-shadow: 6px 6px 6px #ccc;
-  text-decoration: none;
-  text-transform: none;
-  letter-spacing: -0.05em;
-  word-spacing: -0.2em;
-  line-height: 1.2;
-  text-align: center;
-  color:rgba(0,99,220,1);
-}
-.normal {
-  font-family: 'Slackey', serif;
-  font-size: 20px;
-  font-style: bold;
-  font-weight: 200;
-  text-shadow: 6px 6px 6px #ccc;
-  text-decoration: none;
-  text-transform: node;
-  letter-spacing: -0.05em;
-  word-spacing: -0.2em;
-  line-height: 1.2;
-  text-align: center;
-  color:rgba(0,99,220,1);
-}
-
-a {
-  color:rgba(0,99,220,1);
-  font-style: normal;
-  text-decoration: none;
-}
-
-a:hover { 
-  color:#2E67eD;
-}
-
-input {
-  font-family: 'Slackey', serif;
-  font-size: 20px;
-  font-style: bold;
-  font-weight: 200;
-  text-shadow: 6px 6px 6px #ccc;
-  text-decoration: none;
-  text-transform: none;
-  letter-spacing: -0.05em;
-  word-spacing: -0.2em;
-  line-height: 1.2;
-  text-align: center;
-  border: none;
-  background-color:transparent;
-  color:rgba(255,0,132,1);
 }
