@@ -216,15 +216,16 @@ app.get('/ajax', function(req, res) {
             tags = 'cloud';
         }
         var parameters = {
-            text: tags,
             per_page: size,
             safe_search: 3,
             page: req.query.page,
             sort: 'date-taken-asc'
         };
-        if(tags.startWith('#')) {
-            parameters.tags = tags;
-            paramaters.text = undefined;
+        if(tags.length > 0 && tags.charAt(0) == '$') {
+            parameters.tags = tags.replace(/\+\$/g, ',').replace(/\$/g, '');
+            parameters.tag_mode = 'all';
+        } else {
+            parameters.text = tags.replace(/\+/g, '%20');
         }
         if (req.query.plat && req.query.plon) {
             parameters = {
@@ -283,18 +284,30 @@ app.get('/ajax', function(req, res) {
             var preLoad = '\n<pre class=\'loadme\'><!-- ';
             var postLoad = '</script>--></pre>\n';
             var photoSearchCallback = function(err, results) {
-                    managePages(err, results, req, res, tags);
-                }
-            if (req.query.interestingness) {
-                flickr.interestingness.getList(parameters, photoSearchCallback);
+                managePages(err, results, req, res, tags);
             }
-            else {
-                if(req.query.tags && req.query.tags == '<today>') {       
-                    parameters.min_taken_date = '2011-08-06%2023:59:59';
-                    parameters.max_taken_date = '2011-08-07%2023:59:59';
-                    parameters.text = '';
-                    parameters.sort = 'date-taken-asc';
-                }
+            var matches=req.query.tags.match(/([0-9.-]+).+?([0-9.-]+)/);
+            console.log(matches);
+            if(matches) {
+                var lat=parseFloat(matches[1]);
+                var lon=parseFloat(matches[2]);
+                parameters = {
+                    //min_date_taken: '2008-02-02',
+                    radius: 20,
+                    lat: lat,
+                    lon: lon,
+                    sort : undefined,
+                    per_page: size,
+                    safe_search: 3,
+                    page: req.query.page
+                };
+            }
+            if (req.query.tags && req.query.tags == '<recent>') {
+                flickr.photos.getRecent(parameters, photoSearchCallback);
+            } else if (req.query.tags && req.query.tags == '<interestingness>') {
+                flickr.interestingness.getList(parameters, photoSearchCallback);
+            } else {
+                console.log(parameters);
                 flickr.photos.search(parameters, photoSearchCallback);
                 
             }

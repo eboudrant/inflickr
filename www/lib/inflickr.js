@@ -25,6 +25,27 @@ function track(page, action) {
     _gaq.push(['_trackPageview']);
 }
 
+function trackLocation(page, action) {
+    if(page==1) {
+        _gaq.push(['_trackEvent', 'location', action]);
+    }
+    _gaq.push(['_trackPageview']);
+}
+
+function trackRandom(page, action) {
+    if(page==1) {
+        _gaq.push(['_trackEvent', 'random', action]);
+    }
+    _gaq.push(['_trackPageview']);
+}
+
+function trackInterestingness(page, action) {
+    if(page==1) {
+        _gaq.push(['_trackEvent', 'interestingness', action]);
+    }
+    _gaq.push(['_trackPageview']);
+}
+
 function gup(name) {
     name = name.replace(/[\[]/, "\\\[").replace(/[\]]/, "\\\]");
     var regexS = "[\\?&]" + name + "=([^&#]*)";
@@ -91,7 +112,6 @@ function scroll(sid) {
 }
 
 function randomTag() {
-    track(page, 'random');
     if(page == 1) updateSocial();
     var vurl = "/popular";
     $.ajax({
@@ -99,37 +119,20 @@ function randomTag() {
         dataType: 'text',
         context: document.body,
         error: function(data) {
-            document.getElementById('tags').value = data;
+            document.getElementById('tags').value = '#' + data;
         },
         success: function(data) {
-            document.getElementById('tags').value = data;
+            document.getElementById('tags').value = '#' + data;
             page = 1;
-            loadNext(document.getElementById('tags').value);
+            trackRandom(page, '#' + data);
+            loadNextInternal(document.getElementById('tags').value);
             autoScroll = true;
         }
     });
 }
 
-function interestingness() {
-    track(page, 'interestingness');
-    if(page == 1) updateSocial();
-    var vurl = "/ajax?method=photos&interestingness=true&page=" + (page++) + "&sid=" + currentSearch + tunneling;
-    $.ajax({
-        url: vurl,
-        context: document.body,
-        error: function(data) {
-            console.log("error: " + data);
-        },
-        success: function(data) {
-            document.getElementById('tags').value = '';
-            $('.zone').append(data);
-            $('pre.loadme').lazyLoad();
-        }
-    });
-}
-
-function loadNext(tags) {
-    track(page, tags);
+function loadNextInternal(tags) {
+    tags = tags.replace(/#/g, '$')
     if(page == 1) updateSocialByTags(tags);
     var vurl = "/ajax";
     if (tags) {
@@ -150,30 +153,20 @@ function loadNext(tags) {
         }
     });
 }
+
+function loadNext(tags) {
+    track(page, tags);
+    loadNextInternal(tags);
+}
 var currentSearch = 0;
 var lat = 0;
 var lon = 0;
 
 function getPosition(position) {
-    track(page, 'location');
-    if(page == 1) updateSocial();
-    var infoposition = " (" + position.coords.latitude + ", ";
-    infoposition += position.coords.longitude + ")";
-    document.getElementById('tags').value = infoposition;
-    lat = position.coords.latitude;
-    lon = position.coords.longitude;
-    page = 2;
-    $.ajax({
-        url: "/ajax?method=photos&plon=" + lon + "&plat=" + lat + "&page=1&sid=" + currentSearch + tunneling,
-        context: document.body,
-        error: function(data) {
-            console.log("error : " + data);
-        },
-        success: function(data) {
-            $('.zone').append(data);
-            $('pre.loadme').lazyLoad();
-        }
-    });
+    var geo = position.coords.latitude + ',' + position.coords.longitude;
+    document.getElementById('tags').value = geo;
+    trackLocation(page, 'location', geo);
+    loadNextInternal(geo);
 }
 
 function myPosition() {
