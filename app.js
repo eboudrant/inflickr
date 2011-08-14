@@ -308,9 +308,7 @@ app.get('/ajax', function(req, res) {
             } else if (req.query.tags && req.query.tags == '<interestingness>') {
                 flickr.interestingness.getList(parameters, photoSearchCallback);
             } else {
-                console.log(parameters);
                 flickr.photos.search(parameters, photoSearchCallback);
-                
             }
         }
     }
