@@ -80,7 +80,7 @@ function init() {
     }
     var q = gup('q');
     if (q) {
-        document.getElementById('tags').value = q.replace(/%20/g, ' ');
+        document.getElementById('tags').value = q.replace(/%20/g, ' ').replace(/%2#/g, '#');
         currentSearch++;
         document.getElementById('loader').innerHTML = 'Loading...';
         document.getElementById('idzone').innerHTML = '';
