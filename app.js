@@ -288,7 +288,6 @@ app.get('/ajax', function(req, res) {
                 managePages(err, results, req, res, tags);
             }
             var matches=req.query.tags.match(/([0-9.-]+).+?([0-9.-]+)/);
-            console.log(matches);
             if(matches) {
                 var lat=parseFloat(matches[1]);
                 var lon=parseFloat(matches[2]);
