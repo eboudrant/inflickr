@@ -219,11 +219,12 @@ app.get('/ajax', function(req, res) {
             per_page: size,
             safe_search: 3,
             page: req.query.page,
-            sort: 'date-taken-asc'
+            sort: 'interestingness-desc'
         };
         if(tags.length > 0 && tags.charAt(0) == '$') {
             parameters.tags = tags.replace(/\+\$/g, ',').replace(/\$/g, '');
             parameters.tag_mode = 'all';
+            parameters.sort = 'relevance';
         } else {
             parameters.text = tags.replace(/\+/g, '%20');
         }

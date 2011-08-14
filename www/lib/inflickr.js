@@ -39,9 +39,9 @@ function trackRandom(page, action) {
     _gaq.push(['_trackPageview']);
 }
 
-function trackInterestingness(page, action) {
+function trackInterestingness(page) {
     if(page==1) {
-        _gaq.push(['_trackEvent', 'interestingness', action]);
+        _gaq.push(['_trackEvent', 'interestingness']);
     }
     _gaq.push(['_trackPageview']);
 }
