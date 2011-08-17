@@ -239,10 +239,12 @@ app.get('/ajax', function(req, res) {
             };
         }
         if (req.query.tags && req.query.tags.replace(/%20/g, ' ').lastIndexOf('u:', 0) === 0) {
-            console.log("look for user " + req.query.tags.replace('u:', '').replace(/%20/g, ' '));
-            flickr.people.findByUsername(req.query.tags.replace('u:', '').replace(/%20/g, ' '), function(err, results) {
+            req.query.tags = req.query.tags.replace(/u:/g, '@')
+        }
+        if (req.query.tags && req.query.tags.replace(/%20/g, ' ').lastIndexOf('@', 0) === 0) {
+            flickr.people.findByUsername(req.query.tags.replace('@', '').replace(/ /g, '+'), function(err, results) {
                 var parameters = {
-                    tags: req.query.tags.replace('u:', '').replace(/ /g, '%20'),
+                    tags: req.query.tags.replace(/ /g, '%20'),
                     per_page: size,
                     safe_search: 3,
                     page: req.query.page
