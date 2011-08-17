@@ -314,11 +314,11 @@ app.get('/ajax', function(req, res) {
         }
     }
 });
-console.log("Opening " + port + "...");
+console.log('[' + new Date() + '] Opening ' + port + '...');
 
 
 app.listen(port);
-console.log("Audience is listening " + port + "...");
+console.log('[' + new Date() + '] Audience is listening ' + port + '...');
 
 function connect() {
     // Authentication process. get the frob/token
