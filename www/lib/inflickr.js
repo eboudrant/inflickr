@@ -106,11 +106,7 @@ $(document).ready(function() {
     $('pre.morestuff').lazyLoad();
 });
 
-function scroll(sid) {
-    if (currentSearch == sid && stopScrolling != true) {
-        $(document).scrollTo('100%', 2000);
-    }
-}
+
 
 function randomTag() {
     if(page == 1) updateSocial();
@@ -189,13 +185,27 @@ function remove(image) {
         image++;
     }
 }
+var initialized = false;
+
+function scroll(sid, percent, duration) {
+    if(!initialized) {
+        initialized = true;
+        console.log('Hook the scroller');
+        setInterval(function()  {
+            if(stopScrolling == false) {
+                $(document).scrollTo('+=440px', 3000);
+            }
+        }, 3000);
+    }
+}
 
 function zoom(imgSrc) {
     stopScrolling = true;
-    console.log('open ' + imgSrc);
+    $(document).scrollTo('+=1px', 0 );
+    console.log('stop');
 }
 
 function dezoom() {
     stopScrolling = false;
-    console.log('close');
+    console.log('resume');
 }
