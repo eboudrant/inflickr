@@ -1,4 +1,5 @@
 var autoScroll = false;
+var stopScrolling = false;
 var counter = 0;
 var page = 1;
 var gaAccount = 'UA-13124995-3';
@@ -80,7 +81,7 @@ function init() {
     }
     var q = gup('q');
     if (q) {
-        document.getElementById('tags').value = q.replace(/%20/g, ' ').replace(/%23/g, '#');
+        document.getElementById('tags').value = q.replace(/%20/g, ' ').replace(/%23/g, '#').replace(/%3C/g, '<').replace(/%3E/g, '>');
         currentSearch++;
         document.getElementById('loader').innerHTML = 'Loading...';
         document.getElementById('idzone').innerHTML = '';
@@ -106,7 +107,7 @@ $(document).ready(function() {
 });
 
 function scroll(sid) {
-    if (currentSearch == sid) {
+    if (currentSearch == sid && stopScrolling != true) {
         $(document).scrollTo('100%', 2000);
     }
 }
@@ -187,4 +188,14 @@ function remove(image) {
         }
         image++;
     }
+}
+
+function zoom(imgSrc) {
+    stopScrolling = true;
+    console.log('open ' + imgSrc);
+}
+
+function dezoom() {
+    stopScrolling = false;
+    console.log('close');
 }

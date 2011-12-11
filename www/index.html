@@ -29,10 +29,10 @@ infli·<span style='color:rgba(255,0,132,1);'>kr</span>...flick<span style='colo
 
 <div class='normal' style="position:fixed;top:50px;width:100%;height:60px">
 <!--[  <a href='#' onclick="connect()"><span style='color:rgba(255,0,132,1);'>con</span>nect</a>  ]-->
-[  <a href='#' onclick="currentSearch++; document.getElementById('loader').innerHTML = 'Loading...'; document.getElementById('idzone').innerHTML = ''; page = 1;document.getElementById('tags').value = '<interestingness>'; trackInterestingness(); loadNextInternal(document.getElementById('tags').value); autoScroll = true; return false;"><span style='color:rgba(255,0,132,1);'>interesting</span>ness</a>  ]
+[  <a href='?q=<interestingness>'><span style='color:rgba(255,0,132,1);'>interesting</span>ness</a>  ]
 [  <a href='#' onclick="currentSearch++; document.getElementById('loader').innerHTML = 'Loading...'; document.getElementById('idzone').innerHTML = ''; randomTag(); return false;">random <span style='color:rgba(255,0,132,1);'>tag</span></a>  ]
 [  <input id='tags' type="text" onChange="currentSearch++; document.getElementById('loader').innerHTML = 'Loading...'; document.getElementById('idzone').innerHTML = ''; page = 1;loadNext(document.getElementById('tags').value); autoScroll = true; return false;"/>  ]
-[  <a href='#' onclick="currentSearch++; document.getElementById('loader').innerHTML = 'Loading...'; document.getElementById('idzone').innerHTML = ''; page = 1;document.getElementById('tags').value = '<recent>'; loadNext(document.getElementById('tags').value); autoScroll = true; return false;">recent</a>  ]
+[  <a href='?q=<recent>'>recent</a>  ]
 [  <a href='#' onclick="currentSearch++; document.getElementById('loader').innerHTML = 'Loading...'; document.getElementById('idzone').innerHTML = ''; myPosition(); autoScroll = true; return false;">near my <span style='color:rgba(255,0,132,1);'>place</span></a>  ]
 <script type="text/javascript">
 document.getElementById('tags').focus();
