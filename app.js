@@ -1,24 +1,31 @@
 require.paths.unshift('./flickrnode');
 require.paths.unshift('./node_modules/express/lib');
+
 var FlickrAPI = require('flickr').FlickrAPI;
 var express = require("express");
 var http = require("http");
-var url = require("url");
-var fs = require("fs");
 var FlickrKeys = function FlickrKeys() {
-        this._configure(process.env.API_KEY || "17f1d14ee2c43e10b94ebfd62915869d", process.env.SECRET || "2d965f23923aaebb");
+        this._configure(INFLICKR_APP.api_key, INFLICKR_APP.api_secret);
     };
 FlickrKeys.prototype._configure = function(api_key, shared_secret) {
     this.api_key = api_key;
     this.shared_secret = shared_secret;
 };
-var keys = new FlickrKeys();
-var flickr = new FlickrAPI(keys.api_key, keys.shared_secret);
-var port = process.env.VMC_APP_PORT || process.env.C9_PORT || 8001;
-var size = 32;
-var perStrip = 4;
-console.log("Using " + keys.api_key + "/" + keys.shared_secret);
+
+var INFLICKR_APP = {};
+INFLICKR_APP.port = process.env.VMC_APP_PORT || process.env.C9_PORT || 8001;
+INFLICKR_APP.api_key = process.env.API_KEY || "17f1d14ee2c43e10b94ebfd62915869d";
+INFLICKR_APP.api_secret = process.env.SECRET || "2d965f23923aaebb";
+INFLICKR_APP.size = 32;
+INFLICKR_APP.perStrip = 4;
+INFLICKR_APP.popular = null;
+INFLICKR_APP.keys = new FlickrKeys();
+
+var flickr = new FlickrAPI(INFLICKR_APP.keys.api_key, INFLICKR_APP.keys.shared_secret);
+
+console.log("Using " + INFLICKR_APP.keys.api_key + "/" + INFLICKR_APP.keys.shared_secret);
 console.log(process.env);
+
 var app = express.createServer();
 app.use(express.cookieParser());
 app.use(express.session({
@@ -27,16 +34,17 @@ app.use(express.session({
 app.use(express.static(__dirname + '/www'));
 app.set('views', __dirname + '/views');
 app.set('view engine', 'jade');
-var popular = null;
+
 setInterval(function() {
     var parameters = {
         count: 40,
         period: 'day'
     };
     flickr.tags.getHotList(parameters, function(err, results) {
-        popular = results.tag;
+        INFLICKR_APP.popular = results.tag;
     });
 }, 1000 * 60);
+
 app.get('/popular', function(req, res) {
     res.writeHead(200, {
         'Content-Type': 'text/html',
@@ -49,29 +57,22 @@ app.get('/popular', function(req, res) {
     if (randomNumber > 39) {
         randomNumber = 39;
     }
-    if (!popular) {
+    if (!INFLICKR_APP.popular) {
         console.log('load popular tags');
         var parameters = {
             count: 40,
             period: 'day'
         };
         flickr.tags.getHotList(parameters, function(err, results) {
-            popular = results.tag;
-            res.end(popular[randomNumber]._content);
+            INFLICKR_APP.popular = results.tag;
+            res.end(INFLICKR_APP.popular[randomNumber]._content);
         });
     }
     else {
-        res.end(popular[randomNumber]._content);
+        res.end(INFLICKR_APP.popular[randomNumber]._content);
     }
 });
 
-if (typeof Object.create !== 'function') {
-    Object.create = function(o) {
-        var F = function() {};
-        F.prototype = o;
-        return new F();
-    };
-}
 var managePages = function(err, results, req, res, tags) {
         var preLoad = '\n<pre class=\'loadme\'><!-- ';
         var postLoad = '</script>--></pre>\n';
@@ -88,14 +89,14 @@ var managePages = function(err, results, req, res, tags) {
                 
                 if (i>16 && preLoad === '') {
                     preLoad = '\n<pre class=\'loadme\'><!-- ';
-                    postLoad = 'remove(' + ((req.query.page - 1) * size + i) + ');\n</script>--></pre>\n';
+                    postLoad = 'remove(' + ((req.query.page - 1) * INFLICKR_APP.size + i) + ');\n</script>--></pre>\n';
                     if (req.query.page == 1) {
                         res.write('\n<script type="text/javascript">if(autoScroll) scroll(' + req.query.sid + ', 100, 2000);</script>');
                     }
                 }
-                var link = preLoad + '\n<span style="display:block;width:' + (270 * perStrip) + 'px;height:240px;background-color:rgba(255,255,255,1);vertical-align: middle;">';
+                var link = preLoad + '\n<span style="display:block;width:' + (270 * INFLICKR_APP.perStrip) + 'px;height:240px;background-color:rgba(255,255,255,1);vertical-align: middle;">';
                 
-                for (var j = 0; j < perStrip; j++) {
+                for (var j = 0; j < INFLICKR_APP.perStrip; j++) {
                     
                     
                     var flickrPhoto = photos[i];
@@ -108,7 +109,7 @@ var managePages = function(err, results, req, res, tags) {
                     flickrPhoto.medium = preUrl + '_m.jpg';
                     flickrPhoto.big = preUrl + '_m.jpg';
                     flickrPhoto.href = 'http://www.flickr.com/photos/' + flickrPhoto.owner + '/' + flickrPhoto.id + '/';
-
+                    
                     if (i == 8) {
                         if (req.query.interestingness) {
                             res.write(preLoad + '\n<script type="text/javascript">interestingness();' + postLoad);
@@ -120,9 +121,9 @@ var managePages = function(err, results, req, res, tags) {
                             res.write(preLoad + '\n<script type="text/javascript">loadNext("' + tags + '");' + postLoad);
                         }
                     }
-                    link += '\n\t<a class="i' + ((req.query.page - 1) * size + i) + '" href=' + flickrPhoto.href + ' onmouseover=\'zoom("' + flickrPhoto.big + '");\' onmouseout=\'dezoom();\' target=_BLANK><img src=\'' + flickrPhoto.medium + '\' border=\'0\'/></a>';
+                    link += '\n\t<a class="i' + ((req.query.page - 1) * INFLICKR_APP.size + i) + '" href=' + flickrPhoto.href + ' onmouseover=\'zoom("' + flickrPhoto.big + '");\' onmouseout=\'dezoom();\' target=_BLANK><img src=\'' + flickrPhoto.medium + '\' border=\'0\'/></a>';
                     if (preLoad !== '') {
-                        link += '\n<script type="text/javascript">remove(' + ((req.query.page - 1) * size + i) + ');</script>';
+                        link += '\n<script type="text/javascript">remove(' + ((req.query.page - 1) * INFLICKR_APP.size + i) + ');</script>';
                     }
                     i++;
                     imagePreloading += '\nheavyImage.src = "' + flickrPhoto.medium + '";trackImage();';
@@ -139,7 +140,7 @@ var managePages = function(err, results, req, res, tags) {
                 }
                 res.write(link);
             }
-            if (photos.length < size) {
+            if (photos.length < INFLICKR_APP.size) {
                 res.write("<script type='text/javascript'>document.getElementById('loader').innerHTML = 'the <span style=\\'color:rgba(255,0,132,1);\\'>end</span><br/><br/><br/>';</script>");
             }
             res.end();
@@ -222,7 +223,7 @@ app.get('/ajax', function(req, res) {
             tags = 'cloud';
         }
         var parameters = {
-            per_page: size,
+            per_page: INFLICKR_APP.size,
             safe_search: 3,
             page: req.query.page,
             sort: 'interestingness-desc'
@@ -240,7 +241,7 @@ app.get('/ajax', function(req, res) {
                 lat: req.query.plat,
                 lon: req.query.plon,
                 sort: undefined,
-                per_page: size,
+                per_page: INFLICKR_APP.size,
                 safe_search: 3,
                 page: req.query.page
             };
@@ -252,14 +253,14 @@ app.get('/ajax', function(req, res) {
             flickr.people.findByUsername(req.query.tags.replace('@', '').replace(/ /g, '+'), function(err, results) {
                 var parameters = {
                     tags: req.query.tags.replace(/ /g, '%20'),
-                    per_page: size,
+                    per_page: INFLICKR_APP.size,
                     safe_search: 3,
                     page: req.query.page
                 };
                 if (results && results.id) {
                     parameters = {
                         user_id: results.id,
-                        per_page: size,
+                        per_page: INFLICKR_APP.size,
                         safe_search: 3,
                         page: req.query.page
                     };
@@ -285,7 +286,7 @@ app.get('/ajax', function(req, res) {
                 var curr_year = d.getFullYear();
                 parameters = {
                     date: curr_year + "-" + curr_month + "-" + curr_date,
-                    per_page: size,
+                    per_page: INFLICKR_APP.size,
                     page: req.query.page
                 };
             }
@@ -302,7 +303,7 @@ app.get('/ajax', function(req, res) {
                     lat: parsedLat,
                     lon: parsedLon,
                     sort: undefined,
-                    per_page: size,
+                    per_page: INFLICKR_APP.size,
                     safe_search: 3,
                     page: req.query.page
                 };
@@ -319,9 +320,9 @@ app.get('/ajax', function(req, res) {
         }
     }
 });
-console.log('[' + new Date() + '] Opening ' + port + '...');
-app.listen(port);
-console.log('[' + new Date() + '] Audience is listening ' + port + '...');
+console.log('[' + new Date() + '] Opening ' + INFLICKR_APP.port + '...');
+app.listen(INFLICKR_APP.port);
+console.log('[' + new Date() + '] Audience is listening ' + INFLICKR_APP.port + '...');
 
 function connect() {
     // Authentication process. get the frob/token
