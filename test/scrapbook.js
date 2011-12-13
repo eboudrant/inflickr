@@ -1,9 +1,7 @@
 var stooge = {
     "fn": "Jerome",
-    "ln": "Howard"
-};
-stooge.getName = function() {
-    return this.fn + ' ' + this.ln;
+    "ln": "Howard",
+    "getName": function() { return this.fn + ' ' + this.ln; }
 };
 
 console.log(stooge.getName());
@@ -11,7 +9,7 @@ console.log(stooge.getName());
 var x = stooge;
 x.nickname = 'Curly';
 
-delete stooge.fn
+delete stooge.fn;
 
 console.log(stooge);
 

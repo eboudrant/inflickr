@@ -1,24 +1,25 @@
 require.paths.unshift('./flickrnode');
 require.paths.unshift('./node_modules/express/lib');
 
-var FlickrAPI = require('flickr').FlickrAPI;
-var express = require("express");
-var http = require("http");
-var FlickrKeys = function FlickrKeys() {
-        this._configure(INFLICKR_APP.api_key, INFLICKR_APP.api_secret);
-    };
-FlickrKeys.prototype._configure = function(api_key, shared_secret) {
-    this.api_key = api_key;
-    this.shared_secret = shared_secret;
-};
-
 var INFLICKR_APP = {};
 INFLICKR_APP.port = process.env.VMC_APP_PORT || process.env.C9_PORT || 8001;
 INFLICKR_APP.api_key = process.env.API_KEY || "17f1d14ee2c43e10b94ebfd62915869d";
 INFLICKR_APP.api_secret = process.env.SECRET || "2d965f23923aaebb";
 INFLICKR_APP.size = 32;
 INFLICKR_APP.perStrip = 4;
-INFLICKR_APP.popular = null;
+INFLICKR_APP.popular = undefined;
+
+var FlickrAPI = require('flickr').FlickrAPI;
+var express = require("express");
+var http = require("http");
+var FlickrKeys = function FlickrKeys() {
+    this._configure(INFLICKR_APP.api_key, INFLICKR_APP.api_secret);
+};
+FlickrKeys.prototype._configure = function(api_key, shared_secret) {
+    this.api_key = api_key;
+    this.shared_secret = shared_secret;
+};
+
 INFLICKR_APP.keys = new FlickrKeys();
 
 var flickr = new FlickrAPI(INFLICKR_APP.keys.api_key, INFLICKR_APP.keys.shared_secret);
