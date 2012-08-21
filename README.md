@@ -1,7 +1,7 @@
 # Access
 
-In.Flickr website available here http://infli.kr
-Or you can get it from Chrome webstore : http://bit.ly/uSwyni
+In.Flickr website available here http://inflickr.cloudfoundry.com
+
 
 # About
 
