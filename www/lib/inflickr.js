@@ -62,14 +62,14 @@ function connect() {
 }
 
 function updateSocialByTags(tags) {
-    var url = 'http://infli.kr%3Fq%3D' + tags.replace(/ /g,'+') + '';
+    var url = 'http://inflickr.cloudfoundry.com%3Fq%3D' + tags.replace(/ /g,'+') + '';
     console.log(url);
     var text = ('%23' + tags + ' on infli·kr').replace(/ /g,'%20');
     document.getElementById('social').innerHTML = '<iframe allowtransparency="true" frameborder="0" scrolling="no" src="http://platform.twitter.com/widgets/tweet_button.html?count=horizontal&via=inflickr&text='+text+'&url='+url+'" style="width:130px; height:50px;"></iframe>';
 }
 
 function updateSocial() {
-    var url = 'http://infli.kr';
+    var url = 'http://inflickr.cloudfoundry.com';
     var text = ('infli·kr... %23flickr for lazy people').replace(/ /g,'%20');
     document.getElementById('social').innerHTML = '<iframe allowtransparency="true" frameborder="0" scrolling="no" src="http://platform.twitter.com/widgets/tweet_button.html?count=horizontal&via=inflickr&text='+text+'&url='+url+'" style="width:130px; height:50px;"></iframe>';
 }
