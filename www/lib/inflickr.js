@@ -77,26 +77,33 @@ function init() {
     var t = gup('t');
     if (t) {
         tunneling = '&tunneling=true';
-    }
+    } 
     var q = gup('q');
     if (q) {
-        document.getElementById('tags').value = q.replace(/%20/g, ' ').replace(/%23/g, '#').replace(/%3C/g, '<').replace(/%3E/g, '>');
-        currentSearch++;
-        document.getElementById('loader').innerHTML = 'Loading...';
-        document.getElementById('idzone').innerHTML = '';
-        page = 1;
-        loadNext(document.getElementById('tags').value);
-        autoScroll = true;
+		setTimeout(function(){
+			document.getElementById('tags').value = q.replace(/%20/g, ' ').replace(/%23/g, '#').replace(/%3C/g, '<').replace(/%3E/g, '>');
+	        currentSearch++;
+	        document.getElementById('loader').innerHTML = 'Loading...';
+	        document.getElementById('idzone').innerHTML = '';
+	        page = 1;
+	        loadNext(document.getElementById('tags').value);
+	        autoScroll = true;
+			document.getElementById('android').style.display = 'none';
+		},5000);
+        
     }
     var u = gup('u');
     if (u) {
-        document.getElementById('tags').value = 'u:' + u.replace(/%20/g, ' ');
-        currentSearch++;
-        document.getElementById('loader').innerHTML = 'Loading...';
-        document.getElementById('idzone').innerHTML = '';
-        page = 1;
-        loadNext(document.getElementById('tags').value);
-        autoScroll = true;
+		setTimeout(function(){
+			document.getElementById('android').style.display = 'none';
+			document.getElementById('tags').value = 'u:' + u.replace(/%20/g, ' ');
+	        currentSearch++;
+	        document.getElementById('loader').innerHTML = 'Loading...';
+	        document.getElementById('idzone').innerHTML = '';
+	        page = 1;
+	        loadNext(document.getElementById('tags').value);
+	        autoScroll = true;
+		},5000);
     }
 }
 
@@ -108,6 +115,7 @@ $(document).ready(function() {
 
 
 function randomTag() {
+	document.getElementById('android').style.display = 'none';
     if(page == 1) updateSocial();
     var vurl = "/popular";
     $.ajax({
@@ -118,6 +126,7 @@ function randomTag() {
             document.getElementById('tags').value = '#' + data;
         },
         success: function(data) {
+	        document.getElementById('android').style.display = 'none';
             document.getElementById('tags').value = '#' + data;
             page = 1;
             trackRandom(page, '#' + data);
@@ -128,6 +137,7 @@ function randomTag() {
 }
 
 function loadNextInternal(tags) {
+	document.getElementById('android').style.display = 'none';
     tags = tags.replace(/#/g, '$')
     if(page == 1) updateSocialByTags(tags);
     var vurl = "/ajax";
